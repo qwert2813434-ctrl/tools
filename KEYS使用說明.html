@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KEYS 關鍵影格助手 — 使用說明</title>
+<style>
+  /* 🌑 暗房（預設・護眼）— 變數名沿用舊稱，只換值 */
+  :root {
+    --bg: #0F0E12;
+    --card: #201D24;
+    --card2: #29252F;
+    --gold: #FF4D85;
+    --gold-dim: #B8447A;
+    --text: #F3F1F4;
+    --muted: #B8B4BE;
+    --line: #312D38;
+    --green: #7DC98F;
+  }
+  /* 📐 圖紙（米白・理性） */
+  :root[data-theme="light"] {
+    --bg: #F4F1E8;
+    --card: #FFFFFF;
+    --card2: #FBFAF5;
+    --gold: #3A5A8C;
+    --gold-dim: #5A76A0;
+    --text: #26251F;
+    --muted: #6B6659;
+    --line: #DAD5C6;
+    --green: #4A8C5F;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", "PingFang TC", "Noto Sans TC", -apple-system, sans-serif;
+    line-height: 1.7;
+    padding: 40px 20px 80px;
+    transition: background .35s ease, color .35s ease;
+  }
+  .theme-toggle {
+    position: fixed; top: 20px; right: 20px; z-index: 100;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--card); border: 1px solid var(--line);
+    color: var(--text); font-size: 17px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform .15s, border-color .2s;
+  }
+  .theme-toggle:hover { transform: scale(1.08); border-color: var(--gold); }
+  .wrap { max-width: 860px; margin: 0 auto; }
+
+  /* 頁首 */
+  header { border-bottom: 2px solid var(--gold); padding-bottom: 24px; margin-bottom: 32px; }
+  .brand { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+  h1 { font-size: 42px; letter-spacing: 4px; color: var(--gold); font-weight: 700; }
+  .ver-badge {
+    background: var(--gold); color: #111;
+    font-weight: 700; font-size: 15px;
+    padding: 2px 14px; border-radius: 20px;
+  }
+  .subtitle { color: var(--muted); margin-top: 6px; font-size: 15px; }
+  .updated { color: var(--gold-dim); font-size: 13px; margin-top: 4px; }
+
+  h2 {
+    color: var(--gold); font-size: 20px; letter-spacing: 2px;
+    margin: 40px 0 16px; padding-left: 12px;
+    border-left: 4px solid var(--gold);
+  }
+
+  /* 功能卡片 */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 10px; padding: 18px 20px;
+  }
+  .card h3 { font-size: 17px; color: var(--text); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .card p { color: var(--muted); font-size: 14px; margin-top: 8px; }
+  .card .tip { color: var(--gold-dim); font-size: 13px; margin-top: 8px; }
+
+  /* 鍵帽 */
+  kbd {
+    display: inline-block; min-width: 26px; text-align: center;
+    background: var(--card2); color: var(--gold);
+    border: 1px solid #3a3a44; border-bottom-width: 3px;
+    border-radius: 6px; padding: 1px 8px;
+    font-family: "SF Mono", Menlo, monospace; font-size: 13px;
+  }
+
+  /* 表格 */
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+  th { color: var(--gold-dim); font-weight: 600; letter-spacing: 1px; white-space: nowrap; }
+  td:first-child { white-space: nowrap; }
+
+  /* 步驟 */
+  ol.steps { list-style: none; counter-reset: step; }
+  ol.steps li {
+    counter-increment: step; position: relative;
+    padding: 8px 0 8px 44px; color: var(--text); font-size: 15px;
+  }
+  ol.steps li::before {
+    content: counter(step);
+    position: absolute; left: 0; top: 8px;
+    width: 28px; height: 28px; line-height: 28px; text-align: center;
+    background: var(--gold); color: #111; font-weight: 700;
+    border-radius: 50%; font-size: 14px;
+  }
+  code.path {
+    background: var(--card2); color: var(--green);
+    padding: 1px 8px; border-radius: 5px;
+    font-family: "SF Mono", Menlo, monospace; font-size: 13px;
+    word-break: break-all;
+  }
+
+  /* 提示與限制 */
+  ul.plain { list-style: none; }
+  ul.plain li { padding: 6px 0 6px 24px; position: relative; color: var(--muted); font-size: 14px; }
+  ul.plain li::before { content: "◆"; position: absolute; left: 4px; color: var(--gold-dim); font-size: 10px; top: 12px; }
+
+  /* 更新紀錄 */
+  .log { border-left: 2px solid var(--line); margin-left: 8px; padding-left: 24px; }
+  .log-entry { position: relative; padding-bottom: 24px; }
+  .log-entry::before {
+    content: ""; position: absolute; left: -30px; top: 8px;
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--gold); box-shadow: 0 0 8px rgba(212,175,106,.6);
+  }
+  .log-entry.old::before { background: var(--line); box-shadow: none; }
+  .log-ver { color: var(--gold); font-weight: 700; font-size: 16px; }
+  .log-date { color: var(--muted); font-size: 13px; margin-left: 10px; }
+  .log-new {
+    display: inline-block; background: rgba(125,201,143,.15); color: var(--green);
+    font-size: 12px; padding: 0 8px; border-radius: 10px; margin-left: 8px;
+  }
+  .log-entry ul { list-style: none; margin-top: 6px; }
+  .log-entry ul li { color: var(--text); font-size: 14px; padding: 3px 0 3px 20px; position: relative; }
+  .log-entry ul li::before { content: "＋"; position: absolute; left: 0; color: var(--green); }
+
+  footer { margin-top: 60px; color: var(--muted); font-size: 12px; text-align: center; border-top: 1px solid var(--line); padding-top: 20px; }
+</style>
+</head>
+<body>
+  <button class="theme-toggle" onclick="toggleTheme()" title="切換主題">🌙</button>
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <h1>KEYS</h1>
+      <span class="ver-badge">v0.7</span>
+    </div>
+    <div class="subtitle">關鍵影格助手 — 加速你的關鍵影格操作（KEYboard 復刻強化・原創重寫）</div>
+    <div class="updated">最後更新：2026-07-12｜每次發版本頁同步更新，開頭永遠是最新狀態</div>
+  </header>
+
+  <h2>功能總覽</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>轉場 ×3 <span style="color:var(--gold);font-size:13px">v0.7 新增</span></h3>
+      <p>選圖層、時間指針站好，從指針開始烘焙關鍵影格（長度＝格數欄）。<strong style="color:var(--text)">閃</strong>＝爆閃轉場（HOLD 硬切，點=瞬閃亮起、⌥=瞬閃消失）、<strong style="color:var(--text)">淡</strong>＝淡入/⌥淡出、<strong style="color:var(--text)">彈</strong>＝縮放彈入（0→108%→100）/⌥彈出。</p>
+      <div class="tip">閃的節奏是不等距爆閃，比規律閃更有機。多選圖層可以一次全部套用。</div>
+    </div>
+    <div class="card">
+      <h3>快速表達式 ×6 <span style="color:var(--gold);font-size:13px">v0.6 新增</span></h3>
+      <p>選好屬性直接掛，免關鍵影格。<strong style="color:var(--text)">抖動</strong>（wiggle 手持感）、<strong style="color:var(--text)">閃爍</strong>（點=規律開關、⌥=隨機壞燈感，掛不透明度）、<strong style="color:var(--text)">自轉</strong>（幅度=度/秒）、<strong style="color:var(--text)">循環</strong>（cycle／⌥ pingpong／⌘ offset）、<strong style="color:var(--text)">呼吸</strong>（正弦律動，掛縮放或不透明度）、<strong style="color:var(--text)">清除</strong>。頻率/幅度兩欄控制參數。</p>
+      <div class="tip">霓虹燈=閃爍⌥、待機 logo=呼吸、無限走位=循環⌘ offset。原「動畫助手」面板的功能已全數收編於此。</div>
+    </div>
+    <div class="card">
+      <h3>VALUE 批量改值 <span style="color:var(--gold);font-size:13px">v0.5 新增</span></h3>
+      <p>在「值」欄輸入 N，對選取的關鍵影格批量運算：點＝全部 <strong style="color:var(--text)">+N</strong>（負數=減）、<kbd>⌥</kbd>＝全部 <strong style="color:var(--text)">×N</strong>（1.2＝放大 20%）、<kbd>⇧</kbd>＝每顆<strong style="color:var(--text)">隨機 ±N</strong>。</p>
+      <div class="tip">整段動畫平移 50px、振幅放大 1.5 倍、位置加隨機抖動——原生要逐顆改或開曲線編輯器拉。</div>
+    </div>
+    <div class="card">
+      <h3>BOUNCE 彈性 <span style="color:var(--gold);font-size:13px">v0.4 新增</span></h3>
+      <p>在最後一顆選取關鍵影格後，依抵達速度<strong style="color:var(--text)">烘焙出衰減彈跳的真實關鍵影格</strong>（非表達式，曲線可再手調）。點＝標準彈跳、<kbd>⌥</kbd>＝Q 彈（彈更多下）、<kbd>⇧</kbd>＝輕彈（過衝一下就停）。</p>
+      <div class="tip">結尾要「帶著速度進來」才彈得起來——結尾那顆先按 ⇧EASE 設成線性，效果最明顯。Logo 進場、字卡落定必備。</div>
+    </div>
+    <div class="card">
+      <h3>錨點九宮格 <span style="color:var(--gold);font-size:13px">v0.3 新增</span></h3>
+      <p>點九宮格任一格，選取圖層的錨點就移到內容的角/邊/中心，<strong style="color:var(--text)">畫面位置完全不動</strong>（自動補償，支援縮放、旋轉、父子連結、XY 分離、位置有關鍵影格）。</p>
+      <div class="tip">做縮放/旋轉動畫前先定錨點，Motion 最經典的功能。錨點本身有關鍵影格的圖層會跳過。</div>
+    </div>
+    <div class="card">
+      <h3>曲線預設 <span style="color:var(--gold);font-size:13px">v0.3 新增</span></h3>
+      <p>四顆按鈕直接畫出曲線形狀：標準 33/33、柔順 75/75、急出緩收 15/85、緩出急收 85/15。點了立即套用到選取的關鍵影格，並回填進/出欄位方便微調。</p>
+      <div class="tip">急出緩收＝爆衝出發慢慢煞車，UI 進場最好用；緩出急收＝慢啟動瞬間到位。</div>
+    </div>
+    <div class="card">
+      <h3>Ease 緩動</h3>
+      <p>對選取的關鍵影格套用緩動。「進」「出」影響值（0.1–100%）分開自訂，四種模式：緩入緩出、只緩入、只緩出、線性。</p>
+      <div class="tip">預設 75% 比 AE 內建 Easy Ease（33%）更有味道，適合 UI 動畫。</div>
+    </div>
+    <div class="card">
+      <h3>Clone 複製 <span style="color:var(--gold);font-size:13px">一鈕三模式</span></h3>
+      <p>點＝接續複製（貼到結尾後一格，連點 N 下＝重複 N 次）。<strong style="color:var(--text)"><kbd>⌥</kbd>點＝鏡像接續</strong>：反轉接在後面，一鍵 ping-pong。<strong style="color:var(--text)"><kbd>⌘</kbd>點＝貼到時間指針</strong>：第一顆對齊指針，自由安排位置。</p>
+      <div class="tip">接續模式跟著關鍵影格走（做循環）；⌘ 模式跟著指針走（做編排）。鏡像接續是原生做不到一鍵的。</div>
+    </div>
+    <div class="card">
+      <h3>Mirror 鏡像</h3>
+      <p>選取範圍內時間反轉：值序顛倒、進出緩動對調、位置路徑切線一併反轉。動畫變成倒著播。</p>
+      <div class="tip">進場動畫直接鏡像成出場動畫，最省時的用法。需選取至少 2 顆。</div>
+    </div>
+    <div class="card">
+      <h3>Shift 平移 <kbd>←</kbd> <kbd>→</kbd></h3>
+      <p>選取的關鍵影格整批左右平移 1 格；按住 <kbd>Shift</kbd> 一次移 10 格。移動後保持選取，可連續按。</p>
+      <div class="tip">對節奏、對音樂點的微調神器。</div>
+    </div>
+  </div>
+
+  <h2>修飾鍵點擊（v0.2 核心操作，Motion 邏輯）</h2>
+  <div class="table-scroll">
+  <table>
+    <tr><th>操作</th><th>功能</th></tr>
+    <tr><td>點 <strong style="color:var(--text)">EASE</strong></td><td>緩入緩出（用面板上的進/出影響值）</td></tr>
+    <tr><td><kbd>⌥</kbd>＋點 EASE</td><td>只緩入</td></tr>
+    <tr><td><kbd>⌘</kbd>＋點 EASE</td><td>只緩出</td></tr>
+    <tr><td><kbd>⇧</kbd>＋點 EASE</td><td>線性（清除緩動）</td></tr>
+    <tr><td>點 <strong style="color:var(--text)">◀ / ▶</strong></td><td>平移 1 格</td></tr>
+    <tr><td><kbd>⇧</kbd>＋點 ◀ / ▶</td><td>平移 10 格</td></tr>
+    <tr><td><kbd>←</kbd>/<kbd>→</kbd>（面板聚焦時）</td><td>平移 1 格；加 <kbd>⇧</kbd> 移 10 格</td></tr>
+  </table>
+  </div>
+  <ul class="plain" style="margin-top:10px">
+    <li><strong style="color:var(--text)">滑鼠停在任何按鈕上</strong>會浮出該鈕的修飾鍵用法，不用背。</li>
+    <li><strong style="color:var(--text)">與 AE 快捷鍵零衝突</strong>：焦點在時間軸時，E／S／P／R／T／U 等屬性鍵一切照舊，KEYS 收不到也攔不到；字母快捷鍵已於 v0.1.1 移除。</li>
+    <li>所有操作都可 <kbd>⌘Z</kbd> 復原。</li>
+  </ul>
+
+  <h2>快速上手</h2>
+  <ol class="steps">
+    <li>面板已安裝在 <code class="path">/Applications/Adobe After Effects 2026/Scripts/ScriptUI Panels/KEYS.jsx</code></li>
+    <li>重啟 AE →「視窗」選單最下方點「KEYS.jsx」，拖到喜歡的位置停靠</li>
+    <li>時間軸選取關鍵影格 → 按面板按鈕或快捷鍵</li>
+  </ol>
+
+  <h2>已知限制（v0.1）</h2>
+  <ul class="plain">
+    <li>Clone / Shift 目標時間已有關鍵影格時，該顆跳過不覆蓋（保護既有動畫）。</li>
+    <li>Mirror 對 HOLD（凍結）關鍵影格的還原不完美。</li>
+    <li>單顆關鍵影格無法 Mirror。</li>
+  </ul>
+
+  <h2>更新紀錄</h2>
+  <div class="log">
+    <div class="log-entry">
+      <span class="log-ver">v0.7</span><span class="log-date">2026-07-12</span><span class="log-new">最新</span>
+      <ul>
+        <li>轉場區：閃（瞬閃亮起/瞬閃消失，HOLD 爆閃）、淡（入/出）、彈（入/出含 8% 過衝），格數控制長度</li>
+      </ul>
+    </div>
+    <div class="log-entry old">
+      <span class="log-ver">v0.6</span><span class="log-date">2026-07-12</span>
+      <ul>
+        <li>快速表達式區 ×6：抖動、閃爍（規律/隨機）、自轉、循環（cycle/pingpong/offset）、呼吸、清除</li>
+        <li>收編「動畫助手」面板全部功能，一個面板搞定</li>
+      </ul>
+    </div>
+    <div class="log-entry old">
+      <span class="log-ver">v0.5</span><span class="log-date">2026-07-12</span>
+      <ul>
+        <li>VALUE 批量改值：+N／×N／隨機 ±N 三模式（學自 GitHub kyletmartinez 的 Add_Value/Multiply_Selected_Keyframes，隨機為擴充）</li>
+      </ul>
+    </div>
+    <div class="log-entry old">
+      <span class="log-ver">v0.4</span><span class="log-date">2026-07-12</span>
+      <ul>
+        <li>BOUNCE 彈性：依結尾速度烘焙衰減彈跳關鍵影格，三種力道（點／⌥／⇧）</li>
+        <li>彈性公式思路參考開源 spring easing（GitHub: MysteryPancake/After-Effects-Fun），改為烘焙非表達式</li>
+      </ul>
+    </div>
+    <div class="log-entry old">
+      <span class="log-ver">v0.3.3</span><span class="log-date">2026-07-12</span>
+      <ul>
+        <li>Clone 新增 ⌘點＝貼到時間指針（第一顆對齊指針、保留相對時距）</li>
+      </ul>
+    </div>
+    <div class="log-entry old">
+      <span class="log-ver">v0.3.2</span><span class="log-date">2026-07-12</span>
+      <ul>
+        <li>Clone 新增 ⌥點＝鏡像接續（ping-pong 來回），轉折點緩動自動鏡像折返更順</li>
+      </ul>
+    </div>
+    <div class="log-entry old">
+      <span class="log-ver">v0.3.1</span><span class="log-date">2026-07-12</span>
+      <ul>
+        <li>修正：v0.2 起所有自繪按鈕點了沒反應（點擊事件改用 onClick＋keyboardState 讀修飾鍵）</li>
+      </ul>
+    </div>
+    <div class="log-entry old">
+      <span class="log-ver">v0.3</span><span class="log-date">2026-07-12</span>
+      <ul>
+        <li>錨點九宮格：一鍵移錨點到角/邊/中心，畫面不動（補償縮放/旋轉/父子/XY分離/位置關鍵影格）</li>
+        <li>曲線預設 ×4：按鈕上直接畫出曲線形狀，點了套用＋回填進/出數值</li>
+      </ul>
+    </div>
+    <div class="log-entry old">
+      <span class="log-ver">v0.2</span><span class="log-date">2026-07-12</span>
+      <ul>
+        <li>Motion 風格自繪介面：深色面板、彩色工具鈕（EASE 湖水綠／CLONE 橘／MIRROR 紫）、滑過變亮</li>
+        <li>修飾鍵點擊系統：EASE 一顆鈕四種模式（點／⌥／⌘／⇧），Shift 鈕 ⇧點=10 格</li>
+        <li>每顆按鈕滑鼠停留浮出修飾鍵說明（helpTip）</li>
+      </ul>
+    </div>
+    <div class="log-entry old">
+      <span class="log-ver">v0.1.1</span><span class="log-date">2026-07-12</span>
+      <ul>
+        <li>移除字母快捷鍵（E/L/C/M）——避免與 AE 屬性鍵（E/S/P/R/T/U）肌肉記憶衝突，功能改以按鈕為主</li>
+        <li>保留 ←→ 平移快捷鍵（面板聚焦時）</li>
+        <li>安裝位置修正到 AE 系統 Scripts 資料夾（先前路徑 AE 不載入，導致視窗選單看不到面板）</li>
+      </ul>
+    </div>
+    <div class="log-entry old">
+      <span class="log-ver">v0.1</span><span class="log-date">2026-07-12</span>
+      <ul>
+        <li>Ease 緩動：進/出影響值自訂，緩入緩出／只緩入／只緩出／線性</li>
+        <li>Clone 複製：整段複製貼到結尾後一格，保留緩動與路徑切線</li>
+        <li>Mirror 鏡像：時間反轉＋緩動對調＋空間切線互換</li>
+        <li>Shift 平移：±1 / ±10 格，移動後保持選取</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>下一版候選（v0.6）</h2>
+  <ul class="plain">
+    <li>清除冗餘關鍵影格（學自 Remove_Redundant_Keyframes）</li>
+    <li>移動圖層到目前時間指針</li>
+    <li>時間隨機化（關鍵影格時間點抖動，與 VALUE 的值隨機互補）</li>
+  </ul>
+
+  <footer>KEYS 關鍵影格助手｜錄人影像 內部工具｜由 Claude 開發維護｜專案位置：34 - AE插件/KEYS 關鍵影格助手/</footer>
+</div>
+<script>
+  function toggleTheme() {
+    var root = document.documentElement;
+    var isDark = root.dataset.theme === 'dark';
+    root.dataset.theme = isDark ? 'light' : 'dark';
+    document.querySelector('.theme-toggle').textContent = isDark ? '☀️' : '🌙';
+  }
+</script>
+</body>
+</html>

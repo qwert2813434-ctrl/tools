@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>錄人工具間 — 導演自用的影像工具</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* 🌑 暗房（預設・護眼） */
+  :root {
+    --bg: #0F0E12;
+    --surface: #201D24;
+    --surface2: #29252F;
+    --accent: #FF4D85;
+    --ink: #F3F1F4;
+    --ink2: #B8B4BE;
+    --faint: #7C7686;
+    --line: #312D38;
+    --shadow: none;
+    --font-ui: 'Inter', 'PingFang TC', 'Noto Sans TC', 'Helvetica Neue', sans-serif;
+    --side: clamp(28px, 8vw, 130px);
+  }
+  /* 📐 圖紙（米白・理性） */
+  :root[data-theme="light"] {
+    --bg: #F4F1E8;
+    --surface: #FFFFFF;
+    --surface2: #FBFAF5;
+    --accent: #3A5A8C;
+    --ink: #26251F;
+    --ink2: #6B6659;
+    --faint: #9a9384;
+    --line: #DAD5C6;
+    --shadow: 0 2px 14px rgba(60,55,40,.07);
+  }
+
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: var(--font-ui); font-weight: 400;
+    -webkit-font-smoothing: antialiased; line-height: 1.75;
+    transition: background .35s ease, color .35s ease;
+  }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: 940px; margin: 0 auto; padding: 0 var(--side) 120px; }
+
+  /* 主題切換鈕 */
+  .theme-toggle {
+    position: fixed; top: 22px; right: 22px; z-index: 100;
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--surface); border: 1px solid var(--line);
+    color: var(--ink); font-size: 18px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform .15s, border-color .2s;
+  }
+  .theme-toggle:hover { transform: scale(1.08); border-color: var(--accent); }
+
+  /* ─── HERO ─── */
+  header { padding: 118px 0 56px; border-bottom: 1px solid var(--line); }
+  .brand {
+    font-size: 12px; letter-spacing: .3em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 24px; font-weight: 500;
+  }
+  h1 {
+    font-weight: 800;
+    font-size: clamp(44px, 7.5vw, 74px); line-height: 1.08; letter-spacing: .01em;
+  }
+  .tagline { margin-top: 26px; font-size: 17px; color: var(--ink2); max-width: 540px; }
+  .tagline b { color: var(--ink); font-weight: 600; }
+
+  /* ─── SECTION ─── */
+  h2 {
+    font-weight: 700;
+    font-size: 30px; letter-spacing: .01em; margin: 78px 0 4px;
+  }
+  .h2sub {
+    font-size: 12px; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--faint); margin-bottom: 30px;
+  }
+
+  /* ─── TOOL CARD ─── */
+  .tool {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 32px 34px; margin-bottom: 20px;
+    display: flex; gap: 40px; flex-wrap: wrap; align-items: flex-start;
+    transition: border-color .2s, transform .15s;
+  }
+  .tool:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .tool-info { flex: 1 1 360px; }
+  .tool h3 {
+    font-weight: 700;
+    font-size: 22px; display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+  }
+  .ver {
+    font-family: var(--font-ui); font-weight: 500;
+    font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--ink2); border: 1px solid var(--line);
+    padding: 2px 11px; border-radius: 20px;
+  }
+  .ver.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+  p.desc { color: var(--ink2); margin: 12px 0 16px; font-size: 15px; }
+  ul.feat { list-style: none; margin-bottom: 22px; }
+  ul.feat li { padding: 4px 0 4px 20px; position: relative; font-size: 14.5px; color: var(--ink); }
+  ul.feat li::before {
+    content: ""; position: absolute; left: 0; top: 13px;
+    width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+  }
+
+  .btn {
+    display: inline-block; font-family: var(--font-ui);
+    font-size: 13px; font-weight: 600; letter-spacing: .08em;
+    padding: 11px 28px; border-radius: 8px;
+    background: var(--accent); color: #fff; border: 1px solid var(--accent);
+    transition: opacity .18s;
+  }
+  .btn:hover { opacity: .85; }
+  .btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); margin-left: 10px; }
+  .btn.ghost:hover { border-color: var(--accent); opacity: 1; }
+  .meta { color: var(--faint); font-size: 12px; letter-spacing: .03em; margin-top: 14px; }
+
+  .shot {
+    flex: 0 0 250px; aspect-ratio: 16/10;
+    background: var(--surface2); border: 1px solid var(--line); border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--faint); font-size: 12px; letter-spacing: .1em;
+  }
+
+  .tool.coming { opacity: .55; }
+  .tool.coming:hover { transform: none; border-color: var(--line); }
+
+  /* ─── CHANGELOG ─── */
+  h2.clog { margin-top: 80px; }
+  .log { border-left: 1px solid var(--line); margin-left: 4px; padding-left: 28px; }
+  .log-entry { position: relative; padding-bottom: 24px; }
+  .log-entry::before {
+    content: ""; position: absolute; left: -32px; top: 9px;
+    width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+  }
+  .log-entry.old::before { background: var(--surface); border: 1px solid var(--line); }
+  .log-date { font-size: 12px; letter-spacing: .13em; text-transform: uppercase; color: var(--faint); }
+  .log-entry .what { font-size: 15px; margin-top: 2px; color: var(--ink); }
+
+  footer {
+    margin-top: 90px; padding-top: 28px; border-top: 1px solid var(--line);
+    color: var(--faint); font-size: 13px; letter-spacing: .03em;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  }
+  footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+  <button class="theme-toggle" onclick="toggleTheme()" title="切換主題">🌙</button>
+<div class="wrap">
+
+  <header>
+    <div class="brand">Armin Kao · 小高</div>
+    <h1>小高工具間</h1>
+    <p class="tagline">廣告導演做給自己現場和後期真的在用的工具。<b>免費下載。</b>不好用直接跟我說，我每週都在改。</p>
+  </header>
+
+  <h2>工具</h2>
+  <div class="h2sub">全部免費 · 附安裝說明 · Mac / Windows</div>
+
+  <div class="tool">
+    <div class="tool-info">
+      <h3>AE 工具包 <span class="ver on">KEYS v0.7</span> <span class="ver">素材庫 v0.5.1</span></h3>
+      <p class="desc">After Effects 的關鍵影格工具箱＋動畫素材收藏庫，一天內從零迭代七個版本的實戰產物。</p>
+      <ul class="feat">
+        <li>KEYS：緩動曲線一鍵套用、複製／鏡像／彈性烘焙、爆閃轉場、快速表達式、錨點九宮格</li>
+        <li>素材庫：做好的動畫物件（對話框、字卡）存成素材＋縮圖，跨專案點擊重用</li>
+        <li>每顆按鈕滑鼠停留即浮出用法，不必讀說明書</li>
+      </ul>
+      <a class="btn" href="AE工具包_KEYS_素材庫_20260712.zip" download>下載 · 19KB</a>
+      <a class="btn ghost" href="KEYS使用說明.html">使用說明</a>
+      <div class="meta">AE 2020+ ／ 安裝說明含於 zip ／ 更新 2026.07.12</div>
+    </div>
+    <div class="shot">面板截圖</div>
+  </div>
+
+  <div class="tool">
+    <div class="tool-info">
+      <h3>ALIGNED <span class="ver">iOS · TestFlight</span></h3>
+      <p class="desc">IG 跨頁編輯 App——把多張照片對齊成一個橫向長畫布，做出無縫滑動的輪播貼文。</p>
+      <ul class="feat">
+        <li>跨頁參考線、文字外緣吸附、八點裁切</li>
+        <li>iPad + Apple Pencil 創作模式開發中</li>
+      </ul>
+      <a class="btn" href="#TESTFLIGHT_待補" title="等 Armin 提供 TestFlight 公開邀請連結">加入 TestFlight</a>
+      <a class="btn ghost" href="https://qwert2813434-ctrl.github.io/aligned-help">說明網站</a>
+      <div class="meta">iOS 17+ ／ 回饋 alignediosapp@gmail.com</div>
+    </div>
+    <div class="shot">App 畫面</div>
+  </div>
+
+  <div class="tool">
+    <div class="tool-info">
+      <h3>STB 腳本工具 <span class="ver on">Mac · 免費開源</span> <span class="ver">iPad · 審核中</span></h3>
+      <p class="desc">PPM 製作工具——十章式腳本、分鏡、通告、Rundown、簡報預覽，一路到 PDF／PPTX 匯出一條龍。Mac 版免費開源，iPad + Apple Pencil 版正在 App Store 審核。</p>
+      <ul class="feat">
+        <li>連鎖重算：刪一顆 cut，全線編號與群組自動重排</li>
+        <li>匯出中心：16:9 PDF ＋ 可編輯 PPTX</li>
+        <li>iPad 版塗鴉分鏡（Apple Pencil）審核通過後上架</li>
+      </ul>
+      <a class="btn" href="https://github.com/qwert2813434-ctrl/STB">GitHub 下載（Mac）</a>
+      <a class="btn ghost" href="#APPSTORE_過審後補" title="等 STB iPad 版過審後補 App Store 連結">App Store（審核中）</a>
+      <div class="meta">Mac 版 DMG／MIT 授權 ／ iPad 版 NT$350 買斷 · 審核中</div>
+    </div>
+    <div class="shot">App 畫面</div>
+  </div>
+
+  <h2 class="clog">更新紀錄</h2>
+  <div class="h2sub">每次發版都寫在這，回來看一眼就知道改了什麼</div>
+  <div class="log">
+    <div class="log-entry">
+      <div class="log-date">2026 · 07 · 12</div>
+      <div class="what">AE 工具包首發：KEYS v0.7（九區功能）＋素材庫 v0.5.1（含外部素材防斷鏈）</div>
+    </div>
+    <div class="log-entry">
+      <div class="log-date">2026 · 07 · 12</div>
+      <div class="what">STB iPad 版正式送審 App Store（買斷 NT$350，等待審核）</div>
+    </div>
+    <div class="log-entry old">
+      <div class="log-date">2026 · 07</div>
+      <div class="what">STB Mac 版 1.0 GitHub 公開發佈 ／ ALIGNED 多語說明網站上線</div>
+    </div>
+  </div>
+
+  <footer>
+    <div>高偉鳴 Armin Kao ／ 錄人影像 Passer Studio ／ 台灣南部</div>
+    <div>
+      <a href="https://arminkao.com">arminkao.com</a> ／
+      <a href="https://passerstudio.com">passerstudio.com</a> ／
+      <a href="https://www.instagram.com/17187kao/">Instagram</a>
+    </div>
+  </footer>
+
+</div>
+<script>
+  function toggleTheme() {
+    var root = document.documentElement;
+    var isDark = root.dataset.theme === 'dark';
+    root.dataset.theme = isDark ? 'light' : 'dark';
+    document.querySelector('.theme-toggle').textContent = isDark ? '☀️' : '🌙';
+  }
+</script>
+</body>
+</html>
