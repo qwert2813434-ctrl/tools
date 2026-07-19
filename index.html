@@ -88,6 +88,18 @@
   }
   .tool:hover { border-color: var(--accent); transform: translateY(-2px); }
   .tool-info { flex: 1 1 360px; }
+  .thead { display: flex; align-items: center; gap: 16px; margin-bottom: 2px; }
+  .ticon {
+    width: 48px; height: 48px; flex: none;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,.18)) drop-shadow(0 5px 12px rgba(0,0,0,.22));
+  }
+  .ticon .icm { display: block; width: 100%; height: 100%; clip-path: url(#squircle); position: relative; }
+  .ticon img { width: 100%; height: 100%; display: block; }
+  .ticon .icm::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,.06) 30%, rgba(255,255,255,0) 48%, rgba(0,0,0,.05) 100%);
+    box-shadow: inset 0 1px 1px rgba(255,255,255,.5), inset 0 -1px 1px rgba(0,0,0,.10);
+  }
   .tool h3 {
     font-weight: 700;
     font-size: 22px; display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
@@ -120,11 +132,10 @@
   .meta { color: var(--faint); font-size: 12px; letter-spacing: .03em; margin-top: 14px; }
 
   .shot {
-    flex: 0 0 250px; aspect-ratio: 16/10;
+    flex: 0 0 250px; aspect-ratio: 16/10; overflow: hidden;
     background: var(--surface2); border: 1px solid var(--line); border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--faint); font-size: 12px; letter-spacing: .1em;
   }
+  .shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
   .tool.coming { opacity: .55; }
   .tool.coming:hover { transform: none; border-color: var(--line); }
@@ -150,6 +161,11 @@
 </style>
 </head>
 <body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+    <clipPath id="squircle" clipPathUnits="objectBoundingBox">
+      <path d="M.5,0 C.115,0 0,.115 0,.5 0,.885 .115,1 .5,1 .885,1 1,.885 1,.5 1,.115 .885,0 .5,0Z"/>
+    </clipPath>
+  </defs></svg>
   <button class="theme-toggle" onclick="toggleTheme()" title="切換主題">🌙</button>
 <div class="wrap">
 
@@ -175,7 +191,6 @@
       <a class="btn ghost" href="KEYS使用說明.html">使用說明</a>
       <div class="meta">AE 2020+ ／ 安裝說明含於 zip ／ 更新 2026.07.12</div>
     </div>
-    <div class="shot">面板截圖</div>
   </div>
 
   <div class="tool">
@@ -190,12 +205,14 @@
       <a class="btn" href="video-downloader.zip" download="影片下載工具-安裝包.zip">下載 · 16KB</a>
       <div class="meta">macOS ／ 供個人找參考素材用 ／ 更新 2026.07.13</div>
     </div>
-    <div class="shot">工具畫面</div>
   </div>
 
   <div class="tool">
     <div class="tool-info">
-      <h3>ALIGNED <span class="ver">iOS · App Store 審核中</span></h3>
+      <div class="thead">
+        <span class="ticon"><span class="icm"><img src="assets/aligned-icon.png" alt="ALIGNED icon"></span></span>
+        <h3>ALIGNED <span class="ver">iOS · App Store 審核中</span></h3>
+      </div>
       <p class="desc">IG 跨頁編輯 App——把多張照片對齊成一個橫向長畫布，做出無縫滑動的輪播貼文。1.0 已送審 App Store，過審即上架。</p>
       <ul class="feat">
         <li>跨頁參考線、文字外緣吸附、八點裁切、影片輪播匯出</li>
@@ -204,12 +221,15 @@
       <a class="btn" href="https://qwert2813434-ctrl.github.io/aligned-help">說明網站</a>
       <div class="meta">iOS 17+ ／ 審核中，上架後在這裡補連結 ／ 回饋 alignediosapp@gmail.com</div>
     </div>
-    <div class="shot">App 畫面</div>
+    <div class="shot"><img src="assets/aligned-shot.jpg" alt="ALIGNED iPad 編輯畫面"></div>
   </div>
 
   <div class="tool">
     <div class="tool-info">
-      <h3>STB 腳本工具 <span class="ver on">Mac · 免費開源</span> <span class="ver">iPad · App Store</span></h3>
+      <div class="thead">
+        <span class="ticon"><span class="icm"><img src="assets/stb-icon.png" alt="STB icon"></span></span>
+        <h3>STB 腳本工具 <span class="ver on">Mac · 免費開源</span> <span class="ver">iPad · App Store</span></h3>
+      </div>
       <p class="desc">PPM 製作工具——十章式腳本、分鏡、通告、Rundown、簡報預覽，一路到 PDF／PPTX 匯出一條龍。Mac 版免費開源，iPad + Apple Pencil 版已上架 App Store。</p>
       <ul class="feat">
         <li>連鎖重算：刪一顆 cut，全線編號與群組自動重排</li>
@@ -220,12 +240,16 @@
       <a class="btn ghost" href="https://apps.apple.com/tw/app/stb-storyboard-to-shoot/id6790075928">App Store（iPad）</a>
       <div class="meta">Mac 版 DMG／MIT 授權 ／ iPad 版 NT$350 買斷 · 已上架 2026.07.16</div>
     </div>
-    <div class="shot">App 畫面</div>
+    <div class="shot"><img src="assets/stb-shot.jpg" alt="STB 分鏡頁畫面"></div>
   </div>
 
   <h2 class="clog">更新紀錄</h2>
   <div class="h2sub">每次發版都寫在這，回來看一眼就知道改了什麼</div>
   <div class="log">
+    <div class="log-entry">
+      <div class="log-date">2026 · 07 · 20</div>
+      <div class="what">網站改版：ALIGNED／STB 補上 App icon 與實機畫面</div>
+    </div>
     <div class="log-entry">
       <div class="log-date">2026 · 07 · 17</div>
       <div class="what">ALIGNED 1.0 正式送審 App Store，過審即上架</div>
