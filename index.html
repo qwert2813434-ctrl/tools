@@ -1,294 +1,425 @@
 <!DOCTYPE html>
-<html lang="zh-Hant" data-theme="dark">
+<html lang="zh-Hant" data-theme="soft">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>小高工具間 — 導演自用的影像工具</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* 🌑 暗房（預設・護眼） */
+  /* ══ 柔霧（預設）══ 無框，分層只靠明度差＋極散陰影 */
   :root {
-    --bg: #0F0E12;
-    --surface: #201D24;
-    --surface2: #29252F;
-    --accent: #FF4D85;
-    --ink: #F3F1F4;
-    --ink2: #B8B4BE;
-    --faint: #7C7686;
-    --line: #312D38;
-    --shadow: none;
-    --font-ui: 'Inter', 'PingFang TC', 'Noto Sans TC', 'Helvetica Neue', sans-serif;
-    --side: clamp(28px, 8vw, 130px);
+    --base:      #EDE7E1;
+    --wash-1:    #BFD9CD;   /* 薄荷 */
+    --wash-2:    #EFCEC6;   /* 腮紅 */
+    --wash-3:    #E9DCCA;   /* 暖米 */
+    --wash-4:    #CBDDD5;
+
+    --panel:     rgba(255,255,255,.42);   /* 外層霧面容器 */
+    --panel-top: rgba(255,255,255,.26);
+    --card:      #FCFAF9;                 /* 卡片（浮在霧底上，非整頁純白） */
+    --card-2:    #F6F2EF;                 /* 次階（軌道、圖磚） */
+
+    --ink:  #1B1917;
+    --ink2: #6B6560;
+    --faint:#A49C96;
+    --hair: rgba(27,25,23,.06);
+
+    --grad: linear-gradient(96deg, #8FB2A6 0%, #C9B0A8 52%, #D9A5A2 100%);
+
+    --e1: 0 1px 1px rgba(58,46,40,.035), 0 10px 26px -14px rgba(58,46,40,.22);
+    --e2: 0 2px 3px rgba(58,46,40,.05),  0 24px 50px -22px rgba(58,46,40,.30);
+    --e-panel: 0 1px 2px rgba(58,46,40,.04), 0 40px 90px -40px rgba(58,46,40,.34);
+
+    --r-xl: 34px; --r-lg: 26px; --r-md: 18px; --r-sm: 13px;
+    --sans: 'Figtree', 'PingFang TC', 'Noto Sans TC', -apple-system, sans-serif;
+    --side: clamp(18px, 4vw, 42px);
   }
-  /* 📐 圖紙（米白・理性） */
-  :root[data-theme="light"] {
-    --bg: #F4F1E8;
-    --surface: #FFFFFF;
-    --surface2: #FBFAF5;
-    --accent: #3A5A8C;
-    --ink: #26251F;
-    --ink2: #6B6659;
-    --faint: #9a9384;
-    --line: #DAD5C6;
-    --shadow: 0 2px 14px rgba(60,55,40,.07);
+
+  /* ══ 夜霧 ══ 同一套語言的深色對位 */
+  :root[data-theme="dusk"] {
+    --base:      #141317;
+    --wash-1:    #1D2A26;
+    --wash-2:    #2B2020;
+    --wash-3:    #201D1B;
+    --wash-4:    #17201E;
+
+    --panel:     rgba(255,255,255,.045);
+    --panel-top: rgba(255,255,255,.02);
+    --card:      #211F24;
+    --card-2:    #191820;
+
+    --ink:  #F1EDE9;
+    --ink2: #A8A19B;
+    --faint:#726B67;
+    --hair: rgba(255,255,255,.07);
+
+    --e1: 0 1px 1px rgba(0,0,0,.30), 0 12px 30px -16px rgba(0,0,0,.75);
+    --e2: 0 2px 4px rgba(0,0,0,.35),  0 26px 55px -24px rgba(0,0,0,.85);
+    --e-panel: 0 40px 100px -46px rgba(0,0,0,.9);
   }
 
   html { font-size: 16px; scroll-behavior: smooth; }
   body {
-    background: var(--bg); color: var(--ink);
-    font-family: var(--font-ui); font-weight: 400;
-    -webkit-font-smoothing: antialiased; line-height: 1.75;
-    transition: background .35s ease, color .35s ease;
+    font-family: var(--sans); font-weight: 400; line-height: 1.72;
+    color: var(--ink); background: var(--base);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh; overflow-x: hidden;
+    transition: background .5s ease, color .5s ease;
   }
   a { color: inherit; text-decoration: none; }
-  .wrap { max-width: 940px; margin: 0 auto; padding: 0 var(--side) 120px; }
 
-  /* 主題切換鈕 */
-  .theme-toggle {
-    position: fixed; top: 22px; right: 22px; z-index: 100;
-    width: 42px; height: 42px; border-radius: 50%;
-    background: var(--surface); border: 1px solid var(--line);
-    color: var(--ink); font-size: 18px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: transform .15s, border-color .2s;
+  /* ─── 柔霧背景：四團極散的光，沒有任何邊 ─── */
+  .sky {
+    position: fixed; inset: -20vh -10vw; z-index: -2; pointer-events: none;
+    background:
+      radial-gradient(58% 42% at 12%  4%, var(--wash-1) 0%, transparent 62%),
+      radial-gradient(52% 38% at 96% 20%, var(--wash-3) 0%, transparent 62%),
+      radial-gradient(72% 46% at 34% 74%, var(--wash-2) 0%, transparent 64%),
+      radial-gradient(50% 40% at 88% 96%, var(--wash-4) 0%, transparent 62%);
+    filter: blur(30px);
+    transition: background .5s ease;
   }
-  .theme-toggle:hover { transform: scale(1.08); border-color: var(--accent); }
-
-  /* ─── HERO ─── */
-  header { padding: 118px 0 56px; border-bottom: 1px solid var(--line); }
-  .brand {
-    font-size: 12px; letter-spacing: .3em; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 24px; font-weight: 500;
-  }
-  h1 {
-    font-weight: 800;
-    font-size: clamp(44px, 7.5vw, 74px); line-height: 1.08; letter-spacing: .01em;
-  }
-  .tagline { margin-top: 26px; font-size: 17px; color: var(--ink2); max-width: 540px; }
-  .tagline b { color: var(--ink); font-weight: 600; }
-
-  /* ─── SECTION ─── */
-  h2 {
-    font-weight: 700;
-    font-size: 30px; letter-spacing: .01em; margin: 78px 0 4px;
-  }
-  .h2sub {
-    font-size: 12px; letter-spacing: .16em; text-transform: uppercase;
-    color: var(--faint); margin-bottom: 30px;
+  /* 極淡顆粒，避免漸層太塑膠 */
+  .grain {
+    position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
-  /* ─── TOOL CARD ─── */
+  /* ─── 頂列 ─── */
+  .topbar {
+    max-width: 1020px; margin: 0 auto; padding: 26px var(--side) 0;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .mark { font-size: 13px; letter-spacing: .22em; text-transform: uppercase; color: var(--ink2); font-weight: 500; }
+  .orb {
+    width: 42px; height: 42px; border-radius: 50%; border: 0; cursor: pointer;
+    background: var(--card); color: var(--ink2); box-shadow: var(--e1);
+    display: flex; align-items: center; justify-content: center; font-size: 16px;
+    transition: transform .2s cubic-bezier(.2,.8,.3,1), box-shadow .2s;
+  }
+  .orb:hover { transform: scale(1.07); box-shadow: var(--e2); }
+
+  /* ─── 外層霧面容器（第一層浮起）─── */
+  .shell {
+    max-width: 1020px; margin: 22px auto 0; padding: clamp(38px, 6vw, 74px) clamp(20px, 4vw, 54px) clamp(44px, 6vw, 70px);
+    border-radius: var(--r-xl);
+    background: linear-gradient(170deg, var(--panel-top), var(--panel));
+    -webkit-backdrop-filter: blur(22px) saturate(1.15);
+    backdrop-filter: blur(22px) saturate(1.15);
+    box-shadow: var(--e-panel);
+  }
+
+  /* ─── HERO：左軸不對稱，力量來自字級落差＋字距＋留白，不靠字重 ─── */
+  .hero { margin-bottom: 0; }
+  .eyebrow {
+    font-size: 11px; letter-spacing: .26em; text-transform: uppercase;
+    color: var(--faint); font-weight: 500;
+    margin-bottom: clamp(20px, 3vw, 32px);
+  }
+  .hero h1 {
+    font-weight: 500;                                     /* 黑體＝預設；字重是最後手段，只到 500 */
+    font-size: clamp(38px, 8.2vw, 82px); line-height: 1.2;
+    letter-spacing: normal;                               /* 常規字距，力量交給字級落差與留白 */
+    color: var(--ink);
+  }
+  .rule {                                                 /* 短橫線當標點，比整條線安靜 */
+    width: 2.6em; height: 1px; background: var(--ink); opacity: .26;
+    margin: clamp(26px, 3.4vw, 38px) 0 22px;
+  }
+  .hero p { max-width: 23em; color: var(--ink2); font-size: 16.5px; }
+  .hero p b { color: var(--ink); font-weight: 600; white-space: nowrap; }
+
+  /* ─── 清單抬頭：小標左、篩選右，共用一條基線 ─── */
+  .listhead {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 18px; flex-wrap: wrap;
+    margin: clamp(44px, 6vw, 68px) 0 16px;
+  }
+  .listhead .label { margin: 0; }
+
+  /* ─── 分段控制（無框，選中＝白丸浮起）─── */
+  .seg {
+    display: flex; gap: 4px; padding: 5px; max-width: 100%;
+    background: var(--card-2); border-radius: 999px; box-shadow: inset 0 1px 2px rgba(58,46,40,.05);
+    flex-wrap: wrap;
+  }
+  .seg button {
+    border: 0; cursor: pointer; background: transparent; color: var(--ink2);
+    font-family: var(--sans); font-size: 14px; font-weight: 500;
+    padding: 9px 22px; border-radius: 999px; letter-spacing: .02em;
+    transition: color .2s, background .25s, box-shadow .25s;
+  }
+  .seg button[aria-selected="true"] {
+    background: var(--card); color: var(--ink); font-weight: 600; box-shadow: var(--e1);
+  }
+
+  /* ─── 區段小標（極小、大字距、無線）─── */
+  .label {
+    font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--faint); font-weight: 600;
+    margin: clamp(44px, 6vw, 68px) 0 14px 6px;
+  }
+
+  /* ─── 工具卡：完全無框 ─── */
   .tool {
-    background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
-    box-shadow: var(--shadow);
-    padding: 32px 34px; margin-bottom: 20px;
-    display: flex; gap: 40px; flex-wrap: wrap; align-items: flex-start;
-    transition: border-color .2s, transform .15s;
+    background: linear-gradient(180deg, var(--card) 0%, var(--card-2) 190%);
+    border-radius: var(--r-lg); box-shadow: var(--e1);
+    padding: clamp(24px, 3.2vw, 34px);
+    margin-bottom: 18px;
+    display: flex; gap: clamp(22px, 3.4vw, 42px); align-items: center; flex-wrap: wrap;
+    transition: transform .28s cubic-bezier(.2,.8,.3,1), box-shadow .28s;
   }
-  .tool:hover { border-color: var(--accent); transform: translateY(-2px); }
-  .tool-info { flex: 1 1 360px; }
-  .thead { display: flex; align-items: center; gap: 16px; margin-bottom: 2px; }
-  .ticon {
-    width: 48px; height: 48px; flex: none;
-    filter: drop-shadow(0 1px 2px rgba(0,0,0,.18)) drop-shadow(0 5px 12px rgba(0,0,0,.22));
-  }
-  .ticon .icm { display: block; width: 100%; height: 100%; clip-path: url(#squircle); position: relative; }
-  .ticon img { width: 100%; height: 100%; display: block; }
-  .ticon .icm::after {
-    content: ""; position: absolute; inset: 0; pointer-events: none;
-    background: linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,.06) 30%, rgba(255,255,255,0) 48%, rgba(0,0,0,.05) 100%);
-    box-shadow: inset 0 1px 1px rgba(255,255,255,.5), inset 0 -1px 1px rgba(0,0,0,.10);
-  }
+  .tool:hover { transform: translateY(-3px); box-shadow: var(--e2); }
+  .tool.flip { flex-direction: row-reverse; }
+  .tool.hide { display: none; }
+
+  .tool-body { flex: 1 1 340px; min-width: 0; }
   .tool h3 {
-    font-weight: 700;
-    font-size: 22px; display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+    font-size: 21px; font-weight: 700; letter-spacing: -.01em; line-height: 1.35;
+    display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
   }
-  .ver {
-    font-family: var(--font-ui); font-weight: 500;
-    font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
-    color: var(--ink2); border: 1px solid var(--line);
-    padding: 2px 11px; border-radius: 20px;
+  .tag {
+    font-size: 11px; font-weight: 600; letter-spacing: .06em;
+    padding: 4px 12px; border-radius: 999px;
+    background: var(--card-2); color: var(--ink2);
   }
-  .ver.on { background: var(--accent); color: #fff; border-color: var(--accent); }
-  p.desc { color: var(--ink2); margin: 12px 0 16px; font-size: 15px; }
-  ul.feat { list-style: none; margin-bottom: 22px; }
-  ul.feat li { padding: 4px 0 4px 20px; position: relative; font-size: 14.5px; color: var(--ink); }
-  ul.feat li::before {
-    content: ""; position: absolute; left: 0; top: 13px;
-    width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+  .tag.live { background: var(--grad); color: #fff; }
+  .tool .desc { color: var(--ink2); font-size: 15px; margin: 10px 0 14px; }
+  .tool ul { list-style: none; margin-bottom: 20px; }
+  .tool ul li { position: relative; padding: 3px 0 3px 18px; font-size: 14.5px; color: var(--ink); }
+  .tool ul li::before {
+    content: ""; position: absolute; left: 0; top: 14px;
+    width: 5px; height: 5px; border-radius: 50%; background: var(--faint); opacity: .75;
   }
+  .tool ul li b { font-weight: 600; }
+  .note { margin-top: 14px; font-size: 12.5px; color: var(--faint); letter-spacing: .01em; }
 
+  /* ─── 按鈕：無框，主鈕＝薄荷腮紅漸層 ─── */
   .btn {
-    display: inline-block; font-family: var(--font-ui);
-    font-size: 13px; font-weight: 600; letter-spacing: .08em;
-    padding: 11px 28px; border-radius: 8px;
-    background: var(--accent); color: #fff; border: 1px solid var(--accent);
-    transition: opacity .18s;
+    display: inline-block; font-size: 14px; font-weight: 600; letter-spacing: .01em;
+    padding: 11px 26px; border-radius: 999px; margin: 0 8px 8px 0;
+    background: var(--grad); color: #fff;
+    box-shadow: 0 6px 16px -8px rgba(150,110,105,.75);
+    transition: transform .2s cubic-bezier(.2,.8,.3,1), box-shadow .2s, opacity .2s;
   }
-  .btn:hover { opacity: .85; }
-  .btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); margin-left: 10px; }
-  .btn.ghost:hover { border-color: var(--accent); opacity: 1; }
-  .meta { color: var(--faint); font-size: 12px; letter-spacing: .03em; margin-top: 14px; }
+  .btn:hover { transform: translateY(-1.5px); box-shadow: 0 10px 22px -9px rgba(150,110,105,.8); }
+  .btn.quiet {
+    background: var(--card-2); color: var(--ink); box-shadow: none;
+  }
+  .btn.quiet:hover { box-shadow: var(--e1); }
 
+  /* ─── 圖磚：截圖＋icon 疊放（呼應參考的堆疊照片）─── */
+  .tool-media {
+    flex: 0 0 clamp(180px, 26vw, 252px); position: relative; align-self: stretch;
+    display: flex; align-items: center; min-height: 150px;
+  }
   .shot {
-    flex: 0 0 250px; aspect-ratio: 16/10; overflow: hidden;
-    background: var(--surface2); border: 1px solid var(--line); border-radius: 10px;
+    width: 100%; aspect-ratio: 4/3; border-radius: var(--r-md); overflow: hidden;
+    background: var(--card-2); box-shadow: var(--e1);
   }
   .shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-  .tool.coming { opacity: .55; }
-  .tool.coming:hover { transform: none; border-color: var(--line); }
-
-  /* ─── CHANGELOG ─── */
-  h2.clog { margin-top: 80px; }
-  .log { border-left: 1px solid var(--line); margin-left: 4px; padding-left: 28px; }
-  .log-entry { position: relative; padding-bottom: 24px; }
-  .log-entry::before {
-    content: ""; position: absolute; left: -32px; top: 9px;
-    width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+  .appicon {
+    position: absolute; left: -12px; bottom: 8px; width: 60px; height: 60px;
+    filter: drop-shadow(0 2px 3px rgba(50,40,36,.14)) drop-shadow(0 10px 20px rgba(50,40,36,.22));
   }
-  .log-entry.old::before { background: var(--surface); border: 1px solid var(--line); }
-  .log-date { font-size: 12px; letter-spacing: .13em; text-transform: uppercase; color: var(--faint); }
-  .log-entry .what { font-size: 15px; margin-top: 2px; color: var(--ink); }
+  .tool.flip .appicon { left: auto; right: -12px; }
+  .appicon .sq { display: block; width: 100%; height: 100%; clip-path: url(#squircle); }
+  .appicon img { width: 100%; height: 100%; display: block; }
+
+  .glyph {
+    width: 100%; aspect-ratio: 4/3; border-radius: var(--r-md);
+    background: var(--card-2); box-shadow: var(--e1);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .glyph svg { width: 46%; height: 46%; stroke: var(--ink2); fill: none; stroke-width: 1.1; opacity: .55; }
+
+  /* ─── 更新紀錄：iOS 群組列表，只有內縮髮絲 ─── */
+  .list { background: var(--card); border-radius: var(--r-lg); box-shadow: var(--e1); overflow: hidden; }
+  .row { display: flex; gap: 20px; padding: 17px clamp(20px, 3vw, 28px); align-items: baseline; }
+  .row + .row { box-shadow: inset 0 1px 0 var(--hair); }
+  .row time {
+    flex: 0 0 92px; font-size: 12px; letter-spacing: .1em; color: var(--faint);
+    font-variant-numeric: tabular-nums;
+  }
+  .row span { font-size: 14.5px; color: var(--ink); }
+  .row.past span { color: var(--ink2); }
 
   footer {
-    margin-top: 90px; padding-top: 28px; border-top: 1px solid var(--line);
-    color: var(--faint); font-size: 13px; letter-spacing: .03em;
-    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    max-width: 1020px; margin: 40px auto 60px; padding: 0 var(--side);
+    text-align: center; color: var(--faint); font-size: 13px; line-height: 2;
   }
-  footer a:hover { color: var(--accent); }
+  footer a { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--hair); }
+  footer a:hover { color: var(--ink2); }
+
+  @media (max-width: 620px) {
+    /* 面板留一點邊，圓角才看得到；內容軸與頂列對齊在 28px */
+    .shell { margin-left: 10px; margin-right: 10px; padding-left: 18px; padding-right: 18px; border-radius: 26px; }
+    .topbar { padding-left: 28px; padding-right: 28px; }
+
+    .tool, .tool.flip { flex-direction: column; align-items: stretch; }
+    .tool-media { flex: 1 1 auto; min-height: 0; }
+    .tool-body { margin-top: 20px; }
+
+    /* 無截圖的裝飾圖磚：手機不撐滿寬，縮成方形徽章，不然一格空白佔掉半個螢幕 */
+    .glyph { width: 74px; aspect-ratio: 1; border-radius: var(--r-sm); }
+    .glyph svg { width: 50%; height: 50%; }
+
+    .appicon { left: 10px; bottom: -12px; width: 52px; height: 52px; }
+    .tool.flip .appicon { left: 10px; right: auto; }
+
+    .row { flex-direction: column; gap: 2px; }
+    .row time { flex: none; }
+  }
 </style>
 </head>
 <body>
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
-    <clipPath id="squircle" clipPathUnits="objectBoundingBox">
-      <path d="M.5,0 C.115,0 0,.115 0,.5 0,.885 .115,1 .5,1 .885,1 1,.885 1,.5 1,.115 .885,0 .5,0Z"/>
-    </clipPath>
-  </defs></svg>
-  <button class="theme-toggle" onclick="toggleTheme()" title="切換主題">🌙</button>
-<div class="wrap">
+<div class="sky"></div><div class="grain"></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <clipPath id="squircle" clipPathUnits="objectBoundingBox">
+    <path d="M.5,0 C.115,0 0,.115 0,.5 0,.885 .115,1 .5,1 .885,1 1,.885 1,.5 1,.115 .885,0 .5,0Z"/>
+  </clipPath>
+</defs></svg>
 
-  <header>
-    <div class="brand">Armin Kao · 小高</div>
+<div class="topbar">
+  <div class="mark">Armin Kao</div>
+  <button class="orb" onclick="flip()" title="切換明暗">◐</button>
+</div>
+
+<main class="shell">
+
+  <header class="hero">
+    <div class="eyebrow">個人工具發佈站</div>
     <h1>小高工具間</h1>
-    <p class="tagline">廣告導演做給自己現場和後期真的在用的工具。<b>免費下載。</b>不好用直接跟我說，我每週都在改。</p>
+    <div class="rule"></div>
+    <p>廣告導演做給自己現場和後期真的在用的工具。<b>免費下載。</b>不好用直接跟我說，我每週都在改。</p>
   </header>
 
-  <h2>工具</h2>
-  <div class="h2sub">全部免費 · 附安裝說明 · Mac / Windows</div>
-
-  <div class="tool">
-    <div class="tool-info">
-      <h3>AE 工具包 <span class="ver on">KEYS v0.7</span> <span class="ver">素材庫 v0.5.1</span></h3>
-      <p class="desc">After Effects 的關鍵影格工具箱＋動畫素材收藏庫，一天內從零迭代七個版本的實戰產物。</p>
-      <ul class="feat">
-        <li>KEYS：緩動曲線一鍵套用、複製／鏡像／彈性烘焙、爆閃轉場、快速表達式、錨點九宮格</li>
-        <li>素材庫：做好的動畫物件（對話框、字卡）存成素材＋縮圖，跨專案點擊重用</li>
-        <li>每顆按鈕滑鼠停留即浮出用法，不必讀說明書</li>
-      </ul>
-      <a class="btn" href="AE工具包_KEYS_素材庫_20260712.zip" download>下載 · 19KB</a>
-      <a class="btn ghost" href="KEYS使用說明.html">使用說明</a>
-      <div class="meta">AE 2020+ ／ 安裝說明含於 zip ／ 更新 2026.07.12</div>
+  <div class="listhead">
+    <div class="label">工具 · 全部免費 · 附安裝說明</div>
+    <div class="seg" role="tablist">
+      <button role="tab" aria-selected="true"  data-cat="all">全部</button>
+      <button role="tab" aria-selected="false" data-cat="ae">AE 插件</button>
+      <button role="tab" aria-selected="false" data-cat="mac">桌面工具</button>
+      <button role="tab" aria-selected="false" data-cat="app">行動 App</button>
     </div>
   </div>
 
-  <div class="tool">
-    <div class="tool-info">
-      <h3>參考片下載工具 <span class="ver on">v1.2 · Mac · 免費</span></h3>
+  <article class="tool" data-cat="ae">
+    <div class="tool-media">
+      <div class="glyph"><svg viewBox="0 0 48 48" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8 36 C 17 36, 19 15, 26 15 S 35 26, 42 26"/>
+        <path d="M8 31 l5 5 -5 5 -5 -5 z"/>
+        <path d="M42 21 l5 5 -5 5 -5 -5 z"/>
+      </svg></div>
+    </div>
+    <div class="tool-body">
+      <h3>AE 工具包 <span class="tag live">KEYS v0.7</span> <span class="tag">素材庫 v0.5.1</span></h3>
+      <p class="desc">After Effects 的關鍵影格工具箱＋動畫素材收藏庫，一天內從零迭代七個版本的實戰產物。</p>
+      <ul>
+        <li>KEYS：緩動曲線一鍵套用、複製／鏡像／彈性烘焙、爆閃轉場、錨點九宮格</li>
+        <li>素材庫：做好的動畫物件存成素材＋縮圖，跨專案點擊重用</li>
+        <li>每顆按鈕滑鼠停留即浮出用法，不必讀說明書</li>
+      </ul>
+      <a class="btn" href="AE工具包_KEYS_素材庫_20260712.zip" download>下載 · 19KB</a>
+      <a class="btn quiet" href="KEYS使用說明.html">使用說明</a>
+      <div class="note">AE 2020+ ／ 安裝說明含於 zip ／ 更新 2026.07.12</div>
+    </div>
+  </article>
+
+  <article class="tool flip" data-cat="mac">
+    <div class="tool-media">
+      <div class="glyph"><svg viewBox="0 0 48 48" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M24 7 V 30"/><path d="M15 22 L 24 31 L 33 22"/>
+        <path d="M8 34 V 38 C 8 39.7 9.3 41 11 41 H 37 C 38.7 41 40 39.7 40 38 V 34"/>
+      </svg></div>
+    </div>
+    <div class="tool-body">
+      <h3>參考片下載工具 <span class="tag live">v1.2 · Mac</span></h3>
       <p class="desc">找腳本參考、對標片時，把參考影片抓下來看的小工具。貼網址、選畫質、下載，順手還能轉 GIF。</p>
-      <ul class="feat">
-        <li>支援 YouTube／Vimeo／<b>Instagram</b>／TVCF／新片场等常用參考片來源</li>
+      <ul>
+        <li>支援 YouTube／Vimeo／<b>Instagram</b>／TVCF／新片場等常用參考片來源</li>
         <li>可只抓音訊（mp3）、可把影片轉成大／中／小 GIF</li>
         <li>右鍵安裝一次，之後點 App 就用</li>
       </ul>
       <a class="btn" href="video-downloader.zip" download="影片下載工具-安裝包.zip">下載 · 16KB</a>
-      <div class="meta">macOS ／ 供個人找參考素材用 ／ 更新 2026.07.13</div>
+      <div class="note">macOS ／ 供個人找參考素材用 ／ 更新 2026.07.13</div>
     </div>
-  </div>
+  </article>
 
-  <div class="tool">
-    <div class="tool-info">
-      <div class="thead">
-        <span class="ticon"><span class="icm"><img src="assets/aligned-icon.png" alt="ALIGNED icon"></span></span>
-        <h3>ALIGNED <span class="ver">iOS · App Store 審核中</span></h3>
-      </div>
+  <article class="tool" data-cat="app">
+    <div class="tool-media">
+      <div class="shot"><img src="assets/aligned-shot.jpg" alt="ALIGNED 編輯畫面"></div>
+      <span class="appicon"><span class="sq"><img src="assets/aligned-icon.png" alt=""></span></span>
+    </div>
+    <div class="tool-body">
+      <h3>ALIGNED <span class="tag">iOS · 審核中</span></h3>
       <p class="desc">IG 跨頁編輯 App——把多張照片對齊成一個橫向長畫布，做出無縫滑動的輪播貼文。1.0 已送審 App Store，過審即上架。</p>
-      <ul class="feat">
+      <ul>
         <li>跨頁參考線、文字外緣吸附、八點裁切、影片輪播匯出</li>
         <li>iPad + Apple Pencil 創作模式開發中</li>
       </ul>
-      <a class="btn" href="https://qwert2813434-ctrl.github.io/aligned-help">說明網站</a>
-      <div class="meta">iOS 17+ ／ 審核中，上架後在這裡補連結 ／ 回饋 alignediosapp@gmail.com</div>
+      <a class="btn quiet" href="https://qwert2813434-ctrl.github.io/aligned-help">說明網站</a>
+      <div class="note">iOS 17+ ／ 上架後在這裡補連結 ／ 回饋 alignediosapp@gmail.com</div>
     </div>
-    <div class="shot"><img src="assets/aligned-shot.jpg" alt="ALIGNED iPad 編輯畫面"></div>
-  </div>
+  </article>
 
-  <div class="tool">
-    <div class="tool-info">
-      <div class="thead">
-        <span class="ticon"><span class="icm"><img src="assets/stb-icon.png" alt="STB icon"></span></span>
-        <h3>STB 腳本工具 <span class="ver on">Mac · 免費開源</span> <span class="ver">iPad · App Store</span></h3>
-      </div>
-      <p class="desc">PPM 製作工具——十章式腳本、分鏡、通告、Rundown、簡報預覽，一路到 PDF／PPTX 匯出一條龍。Mac 版免費開源，iPad + Apple Pencil 版已上架 App Store。</p>
-      <ul class="feat">
+  <article class="tool flip" data-cat="app">
+    <div class="tool-media">
+      <div class="shot"><img src="assets/stb-shot.jpg" alt="STB 分鏡頁畫面"></div>
+      <span class="appicon"><span class="sq"><img src="assets/stb-icon.png" alt=""></span></span>
+    </div>
+    <div class="tool-body">
+      <h3>STB 腳本工具 <span class="tag live">Mac · 開源</span> <span class="tag">iPad · App Store</span></h3>
+      <p class="desc">PPM 製作工具——十章式腳本、分鏡、通告、Rundown、簡報預覽，一路到 PDF／PPTX 匯出一條龍。</p>
+      <ul>
         <li>連鎖重算：刪一顆 cut，全線編號與群組自動重排</li>
         <li>匯出中心：16:9 PDF ＋ 可編輯 PPTX</li>
-        <li>iPad 版塗鴉分鏡（Apple Pencil 描圖墊底）、通告排表、.stb 打包交換</li>
+        <li>iPad 版塗鴉分鏡（Apple Pencil 描圖墊底）、.stb 打包交換</li>
       </ul>
       <a class="btn" href="https://github.com/qwert2813434-ctrl/STB">GitHub 下載（Mac）</a>
-      <a class="btn ghost" href="https://apps.apple.com/tw/app/stb-storyboard-to-shoot/id6790075928">App Store（iPad）</a>
-      <div class="meta">Mac 版 DMG／MIT 授權 ／ iPad 版 NT$350 買斷 · 已上架 2026.07.16</div>
+      <a class="btn quiet" href="https://apps.apple.com/tw/app/stb-storyboard-to-shoot/id6790075928">App Store（iPad）</a>
+      <div class="note">Mac 版 DMG／MIT 授權 ／ iPad 版 NT$350 買斷 · 已上架 2026.07.16</div>
     </div>
-    <div class="shot"><img src="assets/stb-shot.jpg" alt="STB 分鏡頁畫面"></div>
+  </article>
+
+  <div class="label">更新紀錄</div>
+  <div class="list">
+    <div class="row"><time>2026.07.20</time><span>網站改版：ALIGNED／STB 補上 App icon 與實機畫面</span></div>
+    <div class="row"><time>2026.07.17</time><span>ALIGNED 1.0 正式送審 App Store，過審即上架</span></div>
+    <div class="row"><time>2026.07.16</time><span>STB iPad 版過審、正式上架 App Store（NT$350 買斷）</span></div>
+    <div class="row past"><time>2026.07.13</time><span>參考片下載工具上架</span></div>
+    <div class="row past"><time>2026.07.12</time><span>AE 工具包首發：KEYS v0.7 ＋ 素材庫 v0.5.1（含外部素材防斷鏈）</span></div>
+    <div class="row past"><time>2026.07</time><span>STB Mac 版 1.0 GitHub 公開發佈 ／ ALIGNED 多語說明網站上線</span></div>
   </div>
 
-  <h2 class="clog">更新紀錄</h2>
-  <div class="h2sub">每次發版都寫在這，回來看一眼就知道改了什麼</div>
-  <div class="log">
-    <div class="log-entry">
-      <div class="log-date">2026 · 07 · 20</div>
-      <div class="what">網站改版：ALIGNED／STB 補上 App icon 與實機畫面</div>
-    </div>
-    <div class="log-entry">
-      <div class="log-date">2026 · 07 · 17</div>
-      <div class="what">ALIGNED 1.0 正式送審 App Store，過審即上架</div>
-    </div>
-    <div class="log-entry">
-      <div class="log-date">2026 · 07 · 16</div>
-      <div class="what">STB iPad 版過審、正式上架 App Store（NT$350 買斷），下載連結已補上</div>
-    </div>
-    <div class="log-entry old">
-      <div class="log-date">2026 · 07 · 12</div>
-      <div class="what">AE 工具包首發：KEYS v0.7（九區功能）＋素材庫 v0.5.1（含外部素材防斷鏈）；參考片下載工具上架</div>
-    </div>
-    <div class="log-entry old">
-      <div class="log-date">2026 · 07 · 12</div>
-      <div class="what">STB iPad 版正式送審 App Store（買斷 NT$350，等待審核）</div>
-    </div>
-    <div class="log-entry old">
-      <div class="log-date">2026 · 07</div>
-      <div class="what">STB Mac 版 1.0 GitHub 公開發佈 ／ ALIGNED 多語說明網站上線</div>
-    </div>
-  </div>
+</main>
 
-  <footer>
-    <div>高偉鳴 Armin Kao ／ 錄人影像 Passer Studio ／ 台灣南部</div>
-    <div>
-      <a href="https://arminkao.com">arminkao.com</a> ／
-      <a href="https://passerstudio.com">passerstudio.com</a> ／
-      <a href="https://www.instagram.com/17187kao/">Instagram</a>
-    </div>
-  </footer>
+<footer>
+  高偉鳴 Armin Kao ／ 錄人影像 Pezós ／ 台灣南部<br>
+  <a href="https://arminkao.com">arminkao.com</a> ·
+  <a href="https://passerstudio.com">passerstudio.com</a> ·
+  <a href="https://www.instagram.com/17187kao/">Instagram</a>
+</footer>
 
-</div>
 <script>
-  function toggleTheme() {
-    var root = document.documentElement;
-    var isDark = root.dataset.theme === 'dark';
-    root.dataset.theme = isDark ? 'light' : 'dark';
-    document.querySelector('.theme-toggle').textContent = isDark ? '☀️' : '🌙';
+  function flip() {
+    var r = document.documentElement;
+    r.dataset.theme = r.dataset.theme === 'soft' ? 'dusk' : 'soft';
   }
+  document.querySelectorAll('.seg button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('.seg button').forEach(function (x) { x.setAttribute('aria-selected', 'false'); });
+      b.setAttribute('aria-selected', 'true');
+      var c = b.dataset.cat;
+      document.querySelectorAll('.tool').forEach(function (t) {
+        t.classList.toggle('hide', c !== 'all' && t.dataset.cat !== c);
+      });
+    });
+  });
 </script>
 </body>
 </html>
