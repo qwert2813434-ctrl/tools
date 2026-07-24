@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Text Bead Curtain 串珠門簾 — 直排文字互動＋五聲音階環境音</title>
+<!--
+  ════════════════════════════════════════════════════
+  Text Bead Curtain 串珠門簾 v1.1
+  MIT License — Copyright (c) 2026 Armin Kao (arminkao.com)
+
+  直排文字被滑鼠撥動的軟繩物理＋五聲音階合音環境音效。
+  單一 HTML 檔、零依賴、零音檔。
+
+  怎麼玩：
+  1. 滑動滑鼠撥字，點一下頁面後會有聲音（瀏覽器規定）
+  2. 右側控制器即時調手感與音色
+  3. 調到喜歡按「複製設定」，把 JSON 貼回下方 CONFIG
+     （或直接丟給你的 AI：「把這段設定套進串珠門簾範本」）
+  4. 文字改 CONFIG.lines，一個字串＝一串垂簾
+
+  觸控裝置自動退回靜態排版（此效果需要滑鼠）。
+  ════════════════════════════════════════════════════
+-->
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #fff;
+    font-family: 'Inter', 'PingFang TC', 'Hiragino Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+    cursor: none;                    /* 簡約圓點鼠標 */
+  }
+  button { cursor: none; }
+  #cursor {
+    position: fixed; left: -20px; top: -20px;
+    width: 7px; height: 7px;
+    background: #000; border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s ease, height 0.2s ease;
+  }
+  .hint {
+    position: fixed;
+    left: 24px; bottom: 20px;
+    font-size: 10px; letter-spacing: 0.12em; color: #bbb;
+  }
+  #stage {
+    height: 100vh;                   /* 全置中：作品掛在畫面正中央 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #curtain { display: inline-flex; }
+  .strand { position: relative; }
+  .bead {
+    position: absolute; left: 0; right: 0;
+    text-align: center;
+    font-family: 'PingFang TC', 'Hiragino Sans', sans-serif;
+    font-weight: 300;
+    letter-spacing: 0.01em;
+    will-change: transform;
+  }
+
+  /* ─── 控制面板（預設收起，按 ‹ 展開）───── */
+  #toggle {
+    position: fixed;
+    top: 50%; right: 20px;
+    transform: translateY(-50%);
+    background: none; border: none;
+    font: inherit; font-size: 18px; font-weight: 300;
+    color: #ccc; padding: 12px;
+    z-index: 10;
+    transition: color 0.2s;
+  }
+  #toggle:hover { color: #000; }
+  body.panel-open #toggle { right: 300px; }
+
+  #panel {
+    position: fixed;
+    top: 60px; right: clamp(16px, 3vw, 48px);
+    width: 240px;
+    max-height: calc(100vh - 90px);
+    overflow-y: auto;
+    border-left: 1px solid #e2e2e2;
+    padding-left: 22px;
+    display: none;
+  }
+  body.panel-open #panel { display: block; }
+  #panel h3 {
+    font-size: 10px; font-weight: 400; letter-spacing: 0.2em;
+    color: #000; margin: 18px 0 12px;
+  }
+  #panel h3:first-child { margin-top: 0; }
+  .timbres { display: flex; flex-wrap: wrap; gap: 8px 14px; }
+  .timbres button, #panel .btns button {
+    background: none; border: 1px solid #ddd; cursor: pointer;
+    font: inherit; font-size: 10px; letter-spacing: 0.14em;
+    color: #999; padding: 6px 10px;
+  }
+  .timbres button.active { border-color: #000; color: #000; }
+  .timbres button:hover, #panel .btns button:hover { border-color: #000; color: #000; }
+  .ctl { margin-bottom: 13px; }
+  .ctl label {
+    display: flex; justify-content: space-between;
+    font-size: 10px; letter-spacing: 0.14em; color: #666;
+    margin-bottom: 4px;
+  }
+  .ctl label b { font-weight: 400; color: #000; font-variant-numeric: tabular-nums; }
+  .ctl input[type=range] {
+    width: 100%; height: 14px;
+    -webkit-appearance: none; appearance: none; background: transparent;
+  }
+  .ctl input[type=range]::-webkit-slider-runnable-track { height: 1px; background: #ccc; }
+  .ctl input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 11px; height: 11px; margin-top: -5px;
+    border-radius: 50%; background: #000;
+  }
+  #panel .btns { display: flex; gap: 12px; margin: 18px 0 8px; }
+  #copied { font-size: 10px; color: #aaa; letter-spacing: 0.1em; padding-bottom: 20px; word-break: break-all; }
+
+  @media (hover: none), (max-width: 768px) {
+    body { cursor: auto; }
+    #cursor, #toggle { display: none; }
+    body.panel-open #panel { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="stage"><div id="curtain"></div></div>
+<p class="hint">TEXT BEAD CURTAIN．滑動撥字．點一下頁面啟動聲音</p>
+<div id="cursor"></div>
+<button id="toggle" aria-label="設定">‹</button>
+<div id="panel"></div>
+
+<script>
+/* ════════════════ CONFIG：所有設定都在這裡 ════════════════ */
+const CONFIG = {
+
+  /* ── 文字 ──────────────────────────────────────
+     一個字串＝一串垂簾，由左到右排列。
+     各串長度可以不同；建議 8–14 字、串數 4–10。 */
+  lines: [
+    '一九九二年生高雄市台灣',
+    '誤打誤撞從影像產業十年',
+    '從一個人獨立公司到團隊',
+    '二Ｏ一五年創立錄人媒體',
+    '擔任後期動畫及平面設計',
+    '二Ｏ一七年專營錄人影像',
+    '活躍於攝影師及廣告導演',
+    '業餘擔任影像講師與顧問',
+  ],
+
+  /* ── 排版 ────────────────────────────────────── */
+  layout: {
+    fontSize: 16,        // 字級 px
+    color: '#474747',    // 文字顏色
+    step: 33,            // 字與字的垂直間距 px（建議＝字級×2）
+    gap: 36,             // 串與串的水平間距 px
+    strandWidth: 30,     // 每串的欄寬 px
+  },
+
+  /* ── 物理手感（巨物軟繩・定案參數）────────────── */
+  physics: {
+    R: 185,        // 滑鼠影響半徑 px
+    F: 7.5,        // 推力
+    vert: 0.15,    // 垂直帶動比例 0–1
+    g: 0.28,       // 重力（垂墜感）
+    damp: 0.77,    // 阻尼：低＝快停不彈，高＝盪很久
+    cap: 12,       // 單幀速度上限：低＝慢動作巨物感
+    settle: 0.004, // 歸位速度：低＝慢慢飄回
+    decay: 0.06,   // 滑鼠停下後力消失的速度
+  },
+
+  /* ── 音效 ──────────────────────────────────────
+     timbre     音色名（見下方 TIMBRES：木琴/拇指琴/風鈴/水滴）
+     baseNote   根音 MIDI 編號（60＝中央 Do，越大越高）
+     瀏覽器規定：使用者點過頁面後才會有聲音。 */
+  sound: {
+    enabled: true,
+    timbre: '木琴',
+    baseNote: 60,
+    volume: 0.44,     // 總音量 0–1
+    reverbWet: 0.32,  // 殘響比例 0–1
+    threshold: 18,    // 位移幾 px 算「撥了一下」
+    cooldown: 260,    // 同一串兩次發聲最短間隔 ms
+  },
+};
+
+/* 音色庫：partials＝泛音列表 [倍頻, 音量, 衰減秒]
+   base＝該音色的建議根音；bend＝起音後音高滑落比例（水滴用） */
+const TIMBRES = {
+  '木琴':   { base: 60, attack: 0.003,
+              partials: [[1, 1, 0.9], [4, 0.15, 0.2], [9.2, 0.04, 0.08]] },
+  '拇指琴': { base: 72, attack: 0.005,
+              partials: [[1, 1, 1.6], [3.01, 0.10, 0.3], [5.4, 0.03, 0.15]] },
+  '風鈴':   { base: 84, attack: 0.002,
+              partials: [[1, 0.7, 2.6], [2.76, 0.25, 1.8], [5.4, 0.08, 1.0]] },
+  '水滴':   { base: 76, attack: 0.004, bend: 0.94,
+              partials: [[1, 1, 0.55], [2, 0.12, 0.25]] },
+};
+/* ═══════════════ 以下是引擎，一般不需要動 ═══════════════ */
+
+(() => {
+  const L = CONFIG.layout, P = CONFIG.physics, S = CONFIG.sound;
+  const STEP = L.step;
+  const DEFAULTS = JSON.parse(JSON.stringify({ physics: P, sound: S }));
+
+  /* ── 建立 DOM ── */
+  const curtain = document.getElementById('curtain');
+  curtain.style.gap = L.gap + 'px';
+  const strands = [];
+
+  for (const chunk of CONFIG.lines) {
+    const el = document.createElement('div');
+    el.className = 'strand';
+    el.style.width = L.strandWidth + 'px';
+    el.style.height = chunk.length * STEP + 'px';
+    const beads = [...chunk].map((ch, j) => {
+      const b = document.createElement('span');
+      b.className = 'bead';
+      b.style.top = j * STEP + 'px';
+      b.style.fontSize = L.fontSize + 'px';
+      b.style.color = L.color;
+      b.textContent = ch;
+      el.appendChild(b);
+      return { el: b, rx: 0, ry: 0, x: 0, y: 0, px: 0, py: 0 };
+    });
+    curtain.appendChild(el);
+    strands.push({ beads, prevDisp: 0, lastNote: 0 });
+  }
+
+  // 觸控裝置／偏好減少動態：停在靜態排版
+  if (matchMedia('(hover: none)').matches ||
+      matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  function cache() {
+    strands.forEach(s => s.beads.forEach(b => {
+      b.el.style.transform = '';
+      const r = b.el.getBoundingClientRect();
+      b.rx = r.left + r.width / 2 + window.scrollX;
+      b.ry = r.top + r.height / 2 + window.scrollY;
+      b.x = b.px = b.rx; b.y = b.py = b.ry;
+    }));
+  }
+
+  let mx = -9999, my = -9999, lastMx = -9999, lastMy = -9999, gate = 0;
+  addEventListener('mousemove', e => { mx = e.pageX; my = e.pageY; });
+  document.addEventListener('mouseleave', () => { mx = my = -9999; });
+
+  /* ── 聲音引擎（純合成）── */
+  const midi = m => 440 * 2 ** ((m - 69) / 12);
+  const PENTA = [0, 2, 4, 7, 9];   // 五聲音階：任意組合都和諧
+  let NOTES = [];
+  const buildNotes = () => {
+    NOTES = Array.from({ length: 16 }, (_, i) =>
+      midi(S.baseNote + PENTA[i % 5] + 12 * Math.floor(i / 5)));
+  };
+  buildNotes();
+  const timbre = () => TIMBRES[S.timbre] || TIMBRES['木琴'];
+
+  let AC = null, dry = null, verb = null, wet = null;
+  addEventListener('pointerdown', () => {
+    if (!AC) {
+      AC = new (window.AudioContext || window.webkitAudioContext)();
+      const comp = AC.createDynamicsCompressor();
+      comp.connect(AC.destination);
+      dry = AC.createGain(); dry.gain.value = S.volume; dry.connect(comp);
+      // 殘響：噪音脈衝卷積
+      const rate = AC.sampleRate, len = rate * 2.4;
+      const ir = AC.createBuffer(2, len, rate);
+      for (let c = 0; c < 2; c++) {
+        const d = ir.getChannelData(c);
+        for (let i = 0; i < len; i++)
+          d[i] = (Math.random() * 2 - 1) * (1 - i / len) ** 2.8;
+      }
+      verb = AC.createConvolver(); verb.buffer = ir;
+      wet = AC.createGain(); wet.gain.value = S.reverbWet;
+      verb.connect(wet); wet.connect(comp);
+    }
+    AC.resume();
+  });
+
+  function tone(freq, vel, dt = 0) {
+    const t = AC.currentTime + dt, tb = timbre();
+    freq *= 2 ** ((Math.random() * 8 - 4) / 1200);  // 微失準：像真樂器
+    tb.partials.forEach(([mult, amp, dec]) => {
+      const o = AC.createOscillator();
+      o.type = 'sine'; o.frequency.value = freq * mult;
+      if (tb.bend) o.frequency.exponentialRampToValueAtTime(freq * mult * tb.bend, t + 0.09);
+      const g = AC.createGain();
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(vel * amp, t + tb.attack);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dec);
+      o.connect(g); g.connect(dry); g.connect(verb);
+      o.start(t); o.stop(t + dec + 0.1);
+    });
+  }
+
+  // 合音：主音＋錯落的隨機和聲夥伴（不規律但永遠和諧）
+  function chord(rootIdx, vel) {
+    const at = i => NOTES[Math.min(i, NOTES.length - 1)];
+    tone(at(rootIdx), vel);
+    let dt = 0.03 + Math.random() * 0.13;
+    tone(at(rootIdx + (Math.random() < 0.5 ? 2 : 3)),
+         vel * (0.4 + Math.random() * 0.3), dt);
+    if (Math.random() < 0.6) {
+      dt += 0.04 + Math.random() * 0.16;
+      tone(at(rootIdx + 4 + (Math.random() < 0.4 ? 1 : 0)),
+           vel * (0.25 + Math.random() * 0.25), dt);
+    }
+    if (Math.random() < 0.3)
+      tone(at(rootIdx + 7), vel * 0.18, 0.2 + Math.random() * 0.18);
+  }
+
+  // 撥弦偵測：串位移越過門檻＝撥了一下
+  function pluckCheck() {
+    if (!S.enabled || !AC || AC.state !== 'running') return;
+    const now = performance.now();
+    strands.forEach((s, i) => {
+      let disp = 0;
+      s.beads.forEach(b => { disp = Math.max(disp, Math.abs(b.x - b.rx)); });
+      if (disp > S.threshold && s.prevDisp <= S.threshold &&
+          now - s.lastNote > S.cooldown) {
+        s.lastNote = now;
+        chord(i, 0.1 + Math.min(1, gate) * 0.42);
+      }
+      s.prevDisp = disp;
+    });
+  }
+
+  /* ── 軟繩物理（Verlet）── */
+  function ropeUpdate(s) {
+    const bs = s.beads;
+    for (let i = 1; i < bs.length; i++) {
+      const b = bs[i];
+      let vx = (b.x - b.px) * P.damp, vy = (b.y - b.py) * P.damp;
+      const sp = Math.hypot(vx, vy);
+      if (sp > P.cap) { vx *= P.cap / sp; vy *= P.cap / sp; }
+      b.px = b.x; b.py = b.y;
+      b.x += vx; b.y += vy + P.g;
+      b.x += (b.rx - b.x) * P.settle;
+      b.y += (b.ry - b.y) * 0.012;   // 微弱 Y 歸位：翻摺的珠自己滑回
+      const dx = b.x - mx, dy = b.y - my, d = Math.hypot(dx, dy);
+      if (d < P.R && d > 0.01) {
+        const f = (1 - d / P.R) ** 1.5 * P.F * gate;
+        b.x += dx / d * f;
+        b.y += dy / d * f * P.vert;
+      }
+    }
+    for (let pass = 0; pass < 3; pass++) {
+      for (let i = 1; i < bs.length; i++) {
+        const a = bs[i - 1], b = bs[i];
+        const dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 1;
+        const diff = (d - STEP) / d;
+        b.x -= dx * diff; b.y -= dy * diff;
+      }
+    }
+    // 位移上限：離原位最多 110px，超過柔性拉回（零反彈）
+    for (let i = 1; i < bs.length; i++) {
+      const b = bs[i];
+      const over = Math.abs(b.x - b.rx) - 110;
+      if (over > 0) {
+        const sx = Math.min(over, 3) * Math.sign(b.x - b.rx);
+        b.x -= sx; b.px -= sx;
+      }
+    }
+  }
+
+  // 串間碰撞：相鄰串同高度的字不重疊（每幀最多推 3px、零反彈）
+  function separate() {
+    const SEP = L.strandWidth * 0.8, SOFT = 3;
+    const shift = (b, amt) => {
+      amt = Math.max(-SOFT, Math.min(SOFT, amt));
+      b.x += amt; b.px += amt;
+    };
+    for (let k = 0; k < strands.length - 1; k++) {
+      const A = strands[k].beads, B = strands[k + 1].beads;
+      for (let i = 0; i < A.length; i++) {
+        for (let j = 0; j < B.length; j++) {
+          if (i === 0 && j === 0) continue;
+          const a = A[i], b = B[j];
+          if (Math.abs(a.y - b.y) > STEP * 0.8) continue;
+          const dx = a.x - b.x;
+          if (Math.abs(dx) >= SEP) continue;
+          const dir = Math.sign(dx || (a.rx - b.rx) || 1);
+          const gap = SEP - Math.abs(dx);
+          if (i === 0)      shift(b, -gap * dir);
+          else if (j === 0) shift(a,  gap * dir);
+          else { shift(a, gap / 2 * dir); shift(b, -gap / 2 * dir); }
+        }
+      }
+    }
+  }
+
+  function render() {
+    strands.forEach(s => s.beads.forEach(b => {
+      b.el.style.transform = `translate(${b.x - b.rx}px, ${b.y - b.ry}px)`;
+    }));
+  }
+
+  /* ── 主迴圈：速度門控＝力只在滑鼠移動中存在 ── */
+  function frame() {
+    const sp = Math.hypot(mx - lastMx, my - lastMy);
+    lastMx = mx; lastMy = my;
+    const target = Math.min(1, sp / 6);
+    gate += (target - gate) * (target > gate ? 0.35 : P.decay);
+    strands.forEach(ropeUpdate);
+    separate();
+    pluckCheck();
+    render();
+    requestAnimationFrame(frame);
+  }
+
+  cache();
+  addEventListener('resize', cache);
+  if (document.fonts) document.fonts.ready.then(cache);
+  frame();
+
+  /* ═══════════ 圓點鼠標 ═══════════ */
+  const cursorEl = document.getElementById('cursor');
+  addEventListener('mousemove', e => {
+    cursorEl.style.left = e.clientX + 'px';
+    cursorEl.style.top  = e.clientY + 'px';
+  });
+
+  /* ═══════════ 控制面板（可整段刪除，不影響效果）═══════════ */
+  const toggle = document.getElementById('toggle');
+  toggle.onclick = () => {
+    const open = document.body.classList.toggle('panel-open');
+    toggle.textContent = open ? '›' : '‹';
+  };
+
+  const panel = document.getElementById('panel');
+  const h3 = txt => { const h = document.createElement('h3'); h.textContent = txt; panel.appendChild(h); };
+
+  // 音色切換
+  h3('音色 TIMBRE');
+  const timbreBox = document.createElement('div');
+  timbreBox.className = 'timbres';
+  panel.appendChild(timbreBox);
+  const timbreBtns = Object.keys(TIMBRES).map(name => {
+    const btn = document.createElement('button');
+    btn.textContent = name;
+    btn.onclick = () => {
+      S.timbre = name;
+      S.baseNote = TIMBRES[name].base;   // 帶入該音色建議根音
+      buildNotes();
+      syncSliders(); syncTimbres();
+    };
+    timbreBox.appendChild(btn);
+    return btn;
+  });
+  const muteBtn = document.createElement('button');
+  muteBtn.onclick = () => { S.enabled = !S.enabled; syncTimbres(); };
+  timbreBox.appendChild(muteBtn);
+  function syncTimbres() {
+    timbreBtns.forEach(b => b.classList.toggle('active', S.enabled && b.textContent === S.timbre));
+    muteBtn.textContent = S.enabled ? '靜音' : '開聲音';
+  }
+  syncTimbres();
+
+  // 複製設定／重設（放最上面，捲動也看得到）
+  const btns = document.createElement('div');
+  btns.className = 'btns';
+  panel.appendChild(btns);
+  const copied = document.createElement('div');
+  copied.id = 'copied';
+
+  const copyBtn = document.createElement('button');
+  copyBtn.textContent = '複製設定';
+  copyBtn.onclick = () => {
+    const out = JSON.stringify({ physics: P, sound: S }, null, 2);
+    navigator.clipboard.writeText(out);
+    copied.textContent = '已複製，貼回 CONFIG 或丟給你的 AI 即可';
+  };
+  const resetBtn = document.createElement('button');
+  resetBtn.textContent = '重設';
+  resetBtn.onclick = () => {
+    Object.assign(P, DEFAULTS.physics);
+    Object.assign(S, DEFAULTS.sound);
+    buildNotes(); syncSliders(); syncTimbres();
+    copied.textContent = '';
+  };
+  btns.appendChild(copyBtn);
+  btns.appendChild(resetBtn);
+  panel.appendChild(copied);
+
+  // 滑桿：綁到 CONFIG 的物件＋鍵，即時生效
+  const SLIDERS = [
+    ['物理 PHYSICS', [
+      [P, 'R',      80,   420,  5,     '影響範圍 px'],
+      [P, 'F',      0.5,  12,   0.25,  '力道'],
+      [P, 'vert',   0,    1,    0.05,  '垂直帶動'],
+      [P, 'g',      0,    1,    0.02,  '重量（重力）'],
+      [P, 'damp',   0.7,  0.995, 0.005, '餘擺（阻尼）'],
+      [P, 'cap',    1,    16,   0.5,   '速度上限'],
+      [P, 'settle', 0.001, 0.05, 0.001, '歸位速度'],
+      [P, 'decay',  0.005, 0.2,  0.005, '停止後力消失'],
+    ]],
+    ['音效 SOUND', [
+      [S, 'volume',    0,    1,   0.02, '音量'],
+      [S, 'reverbWet', 0,    1,   0.02, '殘響'],
+      [S, 'baseNote',  48,   90,  1,    '根音（MIDI）'],
+      [S, 'threshold', 6,    40,  1,    '觸發門檻 px'],
+      [S, 'cooldown',  100,  800, 10,   '冷卻 ms'],
+    ]],
+  ];
+  const slidersByKey = {};
+  SLIDERS.forEach(([section, items]) => {
+    h3(section);
+    items.forEach(([obj, key, min, max, step, name]) => {
+      const div = document.createElement('div');
+      div.className = 'ctl';
+      div.innerHTML = `<label>${name}<b></b></label>`;
+      const input = document.createElement('input');
+      input.type = 'range';
+      input.min = min; input.max = max; input.step = step; input.value = obj[key];
+      const val = div.querySelector('b');
+      const show = () => val.textContent = obj[key];
+      input.addEventListener('input', () => {
+        obj[key] = Number(input.value); show();
+        if (key === 'baseNote') buildNotes();
+        if (key === 'volume' && dry) dry.gain.value = obj[key];
+        if (key === 'reverbWet' && wet) wet.gain.value = obj[key];
+      });
+      show();
+      div.appendChild(input);
+      panel.appendChild(div);
+      slidersByKey[key] = { input, show };
+    });
+  });
+  function syncSliders() {
+    Object.entries(slidersByKey).forEach(([key, s]) => {
+      s.input.value = key in P ? P[key] : S[key];
+      s.show();
+    });
+    if (dry) dry.gain.value = S.volume;
+    if (wet) wet.gain.value = S.reverbWet;
+  }
+})();
+</script>
+</body>
+</html>
