@@ -1,10 +1,10 @@
 {
-  "version": "1.6.0",
+  "version": "1.6.1",
   "url": "https://github.com/qwert2813434-ctrl/STB/releases",
-  "notes": "場勘整合（STB Camera 照片按 cut 自動對位）、隱藏 cut、配對板、全幅 3:2／寬銀幕 21:9、深色主題、英文介面、iPad 觸控全面補課",
+  "notes": "VO 稿獨立預覽（整路旁白連著讀、複製全文給配音與演員）、日本語介面正式開放、景別／秒數欄顯示開關",
   "notesI18n": {
-    "zh": "場勘整合（STB Camera 照片按 cut 自動對位）、隱藏 cut、配對板、全幅 3:2／寬銀幕 21:9、深色主題、英文介面、iPad 觸控全面補課",
-    "en": "Scout integration (STB Camera photos auto-match by cut), hidden cuts, match board, FF 3:2 / 21:9, dark theme, English UI, full iPad touch pass",
-    "ja": "ロケハン統合（STB Camera の写真をカット単位で自動整合）、カット非表示、ペアリングボード、フル 3:2／21:9、ダークテーマ、英語UI、iPad タッチ全面対応"
+    "zh": "VO 稿獨立預覽（整路旁白連著讀、複製全文給配音與演員）、日本語介面正式開放、景別／秒數欄顯示開關",
+    "en": "VO script panel (read the whole narration in one flow, copy as plain text for voice talent), Japanese UI, shot-size / duration field toggles",
+    "ja": "NA原稿パネル（ナレーションを通しで確認、全文コピーでナレーター共有）、日本語UI正式対応、サイズ／秒数表示の切り替え"
   }
 }
