@@ -1,10 +1,10 @@
 {
-  "version": "1.6.1",
+  "version": "1.6.2",
   "url": "https://github.com/qwert2813434-ctrl/STB/releases",
-  "notes": "VO 稿獨立預覽（整路旁白連著讀、複製全文給配音與演員）、日本語介面正式開放、景別／秒數欄顯示開關",
+  "notes": "Rundown 自動分頁（排長了不再擠成一頁、比例不被壓小）、直式案的分鏡縮圖放大、通告單加「統編」欄",
   "notesI18n": {
-    "zh": "VO 稿獨立預覽（整路旁白連著讀、複製全文給配音與演員）、日本語介面正式開放、景別／秒數欄顯示開關",
-    "en": "VO script panel (read the whole narration in one flow, copy as plain text for voice talent), Japanese UI, shot-size / duration field toggles",
-    "ja": "NA原稿パネル（ナレーションを通しで確認、全文コピーでナレーター共有）、日本語UI正式対応、サイズ／秒数表示の切り替え"
+    "zh": "Rundown 自動分頁（排長了不再擠成一頁、比例不被壓小）、直式案的分鏡縮圖放大、通告單加「統編」欄",
+    "en": "Shooting schedule now paginates automatically (long days no longer squeeze into one shrinking page), larger storyboard thumbnails on vertical projects, new Tax ID field on the call sheet",
+    "ja": "進行表の自動ページ分け（長くなっても1ページに詰め込まれず縮小しない）、縦位置案件の絵コンテサムネイル拡大、香盤表に「法人番号」欄を追加"
   }
 }
