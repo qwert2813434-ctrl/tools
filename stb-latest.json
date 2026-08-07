@@ -1,10 +1,10 @@
 {
-  "version": "1.6.2",
-  "url": "https://github.com/qwert2813434-ctrl/STB/raw/main/release/STB_1.6.2_aarch64.dmg",
-  "notes": "Rundown 自動分頁（排長了不再擠成一頁、比例不被壓小）、直式案的分鏡縮圖放大、通告單加「統編」欄",
+  "version": "1.6.3",
+  "url": "https://github.com/qwert2813434-ctrl/STB/raw/main/release/STB_1.6.3_aarch64.dmg",
+  "notes": "通告單加「車輛」與「注意事項」：車名／車牌／司機／電話一列一台，乘客欄貼名單自動分隔；注意事項一句一條印給全組看",
   "notesI18n": {
-    "zh": "Rundown 自動分頁（排長了不再擠成一頁、比例不被壓小）、直式案的分鏡縮圖放大、通告單加「統編」欄",
-    "en": "Shooting schedule now paginates automatically (long days no longer squeeze into one shrinking page), larger storyboard thumbnails on vertical projects, new Tax ID field on the call sheet",
-    "ja": "進行表の自動ページ分け（長くなっても1ページに詰め込まれず縮小しない）、縦位置案件の絵コンテサムネイル拡大、香盤表に「法人番号」欄を追加"
+    "zh": "通告單加「車輛」與「注意事項」：車名／車牌／司機／電話一列一台，乘客欄貼名單自動分隔；注意事項一句一條印給全組看",
+    "en": "Call sheet now has Vehicles and Notes: one row per vehicle with name, plate, driver and phone — paste a passenger list and it splits itself; notes go one line each, printed for the whole crew",
+    "ja": "香盤表に「車両」と「注意事項」を追加：1台1行で車名・ナンバー・ドライバー・電話を記入、同乗者欄は名簿を貼るだけで自動整理。注意事項は1行1件、スタッフ全員向けに印刷されます"
   }
 }
