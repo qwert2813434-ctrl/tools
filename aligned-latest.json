@@ -1,5 +1,5 @@
 {
-  "version": "1.0.10",
-  "url": "https://raw.githubusercontent.com/qwert2813434-ctrl/ALIGNED/main/release/ALIGNED_1.0.10_aarch64.dmg",
-  "notes": "流暢度大修：縮放與播放 25→60fps、濾鏡開著不再卡頓（濾鏡運算移到背景執行緒）"
+  "version": "1.0.11",
+  "url": "https://raw.githubusercontent.com/qwert2813434-ctrl/ALIGNED/main/release/ALIGNED_1.0.11_aarch64.dmg",
+  "notes": "流暢度大修（縮放60fps・濾鏡背景運算）＋內建 8 頁說明輪播範本，開場即功能導覽"
 }
