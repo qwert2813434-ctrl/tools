@@ -1,5 +1,5 @@
 {
-  "version": "1.0.8",
-  "url": "https://raw.githubusercontent.com/qwert2813434-ctrl/ALIGNED/main/release/ALIGNED_1.0.8_aarch64.dmg",
-  "notes": "修正：套濾鏡後預覽不顯示（圖片與影片皆修）、匯出 PNG 在含圖專案上失敗"
+  "version": "1.0.9",
+  "url": "https://raw.githubusercontent.com/qwert2813434-ctrl/ALIGNED/main/release/ALIGNED_1.0.9_aarch64.dmg",
+  "notes": "修正：套濾鏡預覽不顯示（圖片與影片）、匯出 PNG 失敗、縮放與播放卡頓（25fps→60fps）"
 }
