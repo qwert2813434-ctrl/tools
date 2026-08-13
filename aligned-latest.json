@@ -1,5 +1,5 @@
 {
-  "version": "1.0.15",
+  "version": "1.0.16",
   "url": "https://github.com/qwert2813434-ctrl/ALIGNED/releases/latest/download/ALIGNED-macOS-arm64.dmg",
-  "notes": "文字手把：右下角拉字級、右緣拉欄寬（換行寬度）、長文框下緣拉框高——文字終於能在畫布上直接調大小"
+  "notes": "多選批次改文字（字型／字級／顏色等一次改，值不同顯示「混合」）＋對齊頁面六顆：單選快速對齊、多選整組平移"
 }
