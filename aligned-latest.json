@@ -1,5 +1,5 @@
 {
-  "version": "1.0.11",
+  "version": "1.0.12",
   "url": "https://github.com/qwert2813434-ctrl/ALIGNED/releases/latest/download/ALIGNED-macOS-arm64.dmg",
-  "notes": "流暢度大修（縮放60fps・濾鏡背景運算）＋內建 8 頁說明輪播範本，開場即功能導覽"
+  "notes": "自動保存＋未存草稿救援、互動操作導覽（藍框帶著做，含排開教學）、齒輪選單（說明・回報問題・檢查更新）；修正新專案首次放圖不顯示"
 }
