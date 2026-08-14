@@ -1,0 +1,4 @@
+RHEOMac.xcodeproj/
+release/
+*.dmg
+.DS_Store
