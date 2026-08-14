@@ -1,5 +1,5 @@
 {
-  "version": "1.0.17",
+  "version": "1.0.22",
   "url": "https://github.com/qwert2813434-ctrl/ALIGNED/releases/latest/download/ALIGNED-macOS-arm64.dmg",
-  "notes": "文字手把（拉字級／欄寬／長文框高）＋多選批次改文字＋對齊頁面快速對齊＋對齊按鈕 icon 化；修點選多選面板被蓋掉、檔案對話框分開記憶"
+  "notes": "參考線產生器（IG 安全區／欄格／模組網格含分鏡比例／基線網格／三分法／黃金分割，隨畫布比例生成）＋絕對對齊（貼字寬一鍵、框貼墨跡、吸附咬大寫線與基線）＋匯出透明 PNG／只留文字／2×＋跨專案 ⌘C⌘V＋存檔匯出 icon 修正"
 }
