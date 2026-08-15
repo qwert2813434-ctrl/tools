@@ -1,10 +1,10 @@
 {
-  "version": "1.6.3",
-  "url": "https://github.com/qwert2813434-ctrl/STB/raw/main/release/STB_1.6.3_aarch64.dmg",
-  "notes": "通告單加「車輛」與「注意事項」：車名／車牌／司機／電話一列一台，乘客欄貼名單自動分隔；注意事項一句一條印給全組看",
+  "version": "1.7.0",
+  "url": "https://github.com/qwert2813434-ctrl/STB/raw/main/release/STB_1.7.0_aarch64.dmg",
+  "notes": "塗鴉分鏡大升級：筆刷粗細拉桿＋自訂顏色（我的顏色可收藏）、自訂圖層拖曳排序、套索選取移動縮放，連畫多層不再發燙卡頓；參考章項目多時，預覽／PDF 照版型分頁",
   "notesI18n": {
-    "zh": "通告單加「車輛」與「注意事項」：車名／車牌／司機／電話一列一台，乘客欄貼名單自動分隔；注意事項一句一條印給全組看",
-    "en": "Call sheet now has Vehicles and Notes: one row per vehicle with name, plate, driver and phone — paste a passenger list and it splits itself; notes go one line each, printed for the whole crew",
-    "ja": "香盤表に「車両」と「注意事項」を追加：1台1行で車名・ナンバー・ドライバー・電話を記入、同乗者欄は名簿を貼るだけで自動整理。注意事項は1行1件、スタッフ全員向けに印刷されます"
+    "zh": "塗鴉分鏡大升級：筆刷粗細拉桿＋自訂顏色（我的顏色可收藏）、自訂圖層拖曳排序、套索選取移動縮放，連畫多層不再發燙卡頓；參考章項目多時，預覽／PDF 照版型分頁",
+    "en": "Sketch overhaul: brush-size slider and custom colors (with saved swatches), draggable custom layers, and lasso select to move or scale strokes — multi-layer drawing no longer overheats or lags; reference chapters now paginate in preview and PDF just like the PPTX export",
+    "ja": "スケッチ大幅強化：筆サイズスライダーとカスタムカラー（マイカラー保存）、カスタムレイヤーのドラッグ並べ替え、投げ縄選択で移動・拡大縮小。多レイヤー描画の発熱やカクつきも解消。参考章はプレビュー／PDFでもレイアウトどおりに改ページされます"
   }
 }
