@@ -1,5 +1,6 @@
 {
   "version": "1.1.1",
   "url": "https://github.com/qwert2813434-ctrl/ALIGNED/releases/latest/download/ALIGNED-macOS-arm64.dmg",
+  "urlWin": "https://github.com/qwert2813434-ctrl/ALIGNED/releases/latest/download/ALIGNED-windows-x64-setup.exe",
   "notes": "修正：影片套濾鏡時匯出會定格。新增：紙張可分別套用到物件／背景／文字（三個勾選）、頁面背景色一鍵套用全部頁。前版 1.1.0 的大功能一併帶著：出場動畫系統（文字打字／逐句／位移／閃現、物件位移／淡入／縮放／遮罩、兩段式縮放、一鍵陸續出現）＋多圖輪播＋3D 物件插入（GLB）＋會動的頁面直接匯出 MP4＋手抄紙兩款"
 }
