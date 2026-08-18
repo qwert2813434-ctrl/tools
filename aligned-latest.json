@@ -1,6 +1,6 @@
 {
-  "version": "1.1.2",
+  "version": "1.1.3",
   "url": "https://github.com/qwert2813434-ctrl/ALIGNED/releases/latest/download/ALIGNED-macOS-arm64.dmg",
   "urlWin": "https://github.com/qwert2813434-ctrl/ALIGNED/releases/latest/download/ALIGNED-windows-x64-setup.exe",
-  "notes": "修正：多圖輪播在重開專案後只剩第一張（匯出的影片也會缺圖）；跨專案複製 ⌘C⌘V 現在會帶走輪播圖與 3D 的 .glb。前版 1.1.1／1.1.0 的內容一併帶著：出場動畫系統（文字打字／逐句／位移／閃現、物件位移／淡入／縮放／遮罩、兩段式縮放、一鍵陸續出現）＋多圖輪播＋3D 物件插入（GLB）＋會動的頁面直接匯出 MP4＋紙張套用範圍三勾選。⚠️ Windows 版仍是 1.1.1。"
+  "notes": "3D 與參考線升級：3D 物件改逐顆載入＋失敗自動重試、真的載不動會報錯（大模型不再永遠是佔位方塊），置入超過 50MB 的模型當下提醒；參考線記憶欄 1–9——把整組參考線存起來跨專案隨叫隨用（面板點＝套用、⌥點＝存入、⇧點＝清空）；新快捷鍵：⌘; 開關參考線、⌥1–9 套用記憶欄、⇧⌥1–9 存入。上一版 1.1.2 的修正一併帶著：多圖輪播重開專案只剩第一張（含匯出缺圖）、跨專案 ⌘C⌘V 帶走輪播圖與 3D 檔。"
 }
