@@ -1,6 +1,6 @@
 {
-  "version": "1.1.4",
+  "version": "1.1.5",
   "url": "https://github.com/qwert2813434-ctrl/ALIGNED/releases/latest/download/ALIGNED-macOS-arm64.dmg",
   "urlWin": "https://github.com/qwert2813434-ctrl/ALIGNED/releases/latest/download/ALIGNED-windows-x64-setup.exe",
-  "notes": "側欄手感修正：右側欄改任何參數（模組網格的列數、欄數這類）不再整欄彈回頂端，可以停在原地連續點；參考線面板新增「刪除全部參考線」一鍵清空（有參考線時才出現）。"
+  "notes": "直排大修：直排標題可拖下緣調欄高（等同橫排壓段落）；長文框固定容器化——字不再溢出框外、整欄放不下就不排，吸附咬的框就是眼睛看到的範圍；直排標點終於像直排——括號、書名號、破折號、刪節號轉 90°，頓號句號移到字格右上。另外英文介面補齊出場動畫／輪播／3D 物件全部字串。"
 }
