@@ -1,6 +1,6 @@
 {
-  "version": "1.1.5",
+  "version": "1.2.0",
   "url": "https://github.com/qwert2813434-ctrl/ALIGNED/releases/latest/download/ALIGNED-macOS-arm64.dmg",
   "urlWin": "https://github.com/qwert2813434-ctrl/ALIGNED/releases/latest/download/ALIGNED-windows-x64-setup.exe",
-  "notes": "直排大修：直排標題可拖下緣調欄高（等同橫排壓段落）；長文框固定容器化——字不再溢出框外、整欄放不下就不排，吸附咬的框就是眼睛看到的範圍；直排標點終於像直排——括號、書名號、破折號、刪節號轉 90°，頓號句號移到字格右上。另外英文介面補齊出場動畫／輪播／3D 物件全部字串。"
+  "notes": "塗鴉來了（Beta）：畫筆直接在版面上畫，三種筆刷、生長與巡線動畫、橡皮擦整筆擦，快捷鍵 B 進出。字體商店：47 套開放授權可商用字型（繁中／日系／歐文／韓文）點一下就裝，缺字體的專案開檔一鍵補齊。介面更清爽：動作按鈕加上圖示、參考線面板調數值不再跳回頂端、視窗變窄工具列可以橫向捲動。另有齒輪選單語言切換（繁中／English）。"
 }
