@@ -1,10 +1,10 @@
 {
-  "version": "1.7.0",
-  "url": "https://github.com/qwert2813434-ctrl/STB/raw/main/release/STB_1.7.0_aarch64.dmg",
-  "notes": "塗鴉分鏡大升級：筆刷粗細拉桿＋自訂顏色（我的顏色可收藏）、自訂圖層拖曳排序、套索選取移動縮放，連畫多層不再發燙卡頓；參考章項目多時，預覽／PDF 照版型分頁",
+  "version": "1.7.1",
+  "url": "https://github.com/qwert2813434-ctrl/STB/raw/main/release/STB_1.7.1_aarch64.dmg",
+  "notes": "塗鴉筆刷補完：新增鉛筆（紙紋＋筆壓深淺）與墨筆，四支筆收成「筆刷」選單；筆刷／粗細／顏色跟著案子記住；Apple Pencil 筆壓自動貼手；匯出新增深色版面（黑底 PDF），並修正深色主題匯出半黑半白；大量筆畫的擦除／換層／復原全面加速",
   "notesI18n": {
-    "zh": "塗鴉分鏡大升級：筆刷粗細拉桿＋自訂顏色（我的顏色可收藏）、自訂圖層拖曳排序、套索選取移動縮放，連畫多層不再發燙卡頓；參考章項目多時，預覽／PDF 照版型分頁",
-    "en": "Sketch overhaul: brush-size slider and custom colors (with saved swatches), draggable custom layers, and lasso select to move or scale strokes — multi-layer drawing no longer overheats or lags; reference chapters now paginate in preview and PDF just like the PPTX export",
-    "ja": "スケッチ大幅強化：筆サイズスライダーとカスタムカラー（マイカラー保存）、カスタムレイヤーのドラッグ並べ替え、投げ縄選択で移動・拡大縮小。多レイヤー描画の発熱やカクつきも解消。参考章はプレビュー／PDFでもレイアウトどおりに改ページされます"
+    "zh": "塗鴉筆刷補完：新增鉛筆（紙紋＋筆壓深淺）與墨筆，四支筆收成「筆刷」選單；筆刷／粗細／顏色跟著案子記住；Apple Pencil 筆壓自動貼手；匯出新增深色版面（黑底 PDF），並修正深色主題匯出半黑半白；大量筆畫的擦除／換層／復原全面加速",
+    "en": "Brush set completed: new Pencil (paper grain, pressure shading) and Ink pen, all four brushes in one Brush menu; brush, size and color are remembered per project; Apple Pencil pressure auto-calibrates to your hand; new Dark layout PDF export (fixes half-dark pages in dark theme); erasing, layer switching and undo are much faster with many strokes",
+    "ja": "ブラシ機能を完成：紙目と筆圧の濃淡を持つ鉛筆とインクペンを追加し、4本をブラシメニューに集約。ブラシ・太さ・色は案件ごとに記憶。Apple Pencil の筆圧は自動で手に合わせて調整。書き出しにダークレイアウト（黒背景PDF）を追加し、ダークテーマでの白黒混在も修正。大量ストローク時の消しゴム・レイヤー切替・取り消しを高速化"
   }
 }
