@@ -1,6 +1,6 @@
 {
-  "version": "1.2.0",
+  "version": "1.3.0",
   "url": "https://github.com/qwert2813434-ctrl/ALIGNED/releases/latest/download/ALIGNED-macOS-arm64.dmg",
   "urlWin": "https://github.com/qwert2813434-ctrl/ALIGNED/releases/latest/download/ALIGNED-windows-x64-setup.exe",
-  "notes": "塗鴉來了（Beta）：畫筆直接在版面上畫，三種筆刷、生長與巡線動畫、橡皮擦整筆擦，快捷鍵 B 進出。字體商店：47 套開放授權可商用字型（繁中／日系／歐文／韓文）點一下就裝，缺字體的專案開檔一鍵補齊。介面更清爽：動作按鈕加上圖示、參考線面板調數值不再跳回頂端、視窗變窄工具列可以橫向捲動。另有齒輪選單語言切換（繁中／English）。"
+  "notes": "去背來了（New）：一鍵抽出照片主體，可反轉、手動修邊，還能把去背形狀填上材質。軟鉛筆（Beta）：全新質感筆刷＋筆刷偏好設定視窗——紙張、紋路、黏性、顆粒全可調，參數會烤進筆畫，之後改設定不影響畫過的東西。外觀：跟系統／淺色／深色手動切換（齒輪選單）。播放更聰明：頁上有影片或動畫時，停留自動跟著播放長度走。塗鴉物件可整張縮放。"
 }
