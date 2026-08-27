@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="soft">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>幾何 icon 工坊 — 小高工具間</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ══ 柔霧（預設）══ */
+  :root {
+    --base:#EDE7E1;
+    --wash-1:#BFD9CD; --wash-2:#EFCEC6; --wash-3:#E9DCCA; --wash-4:#CBDDD5;
+    --panel:rgba(255,255,255,.42); --panel-top:rgba(255,255,255,.26);
+    --card:#FCFAF9; --card-2:#F6F2EF;
+    --ink:#1B1917; --ink2:#6B6560; --faint:#A49C96; --hair:rgba(27,25,23,.06);
+    --sel:#6E9A8C; --warm:#C0857A;
+    --grad: linear-gradient(96deg,#8FB2A6 0%,#C9B0A8 52%,#D9A5A2 100%);
+    --e1: 0 1px 1px rgba(58,46,40,.035), 0 10px 26px -14px rgba(58,46,40,.22);
+    --e2: 0 2px 3px rgba(58,46,40,.05),  0 24px 50px -22px rgba(58,46,40,.30);
+    --e-panel: 0 1px 2px rgba(58,46,40,.04), 0 40px 90px -40px rgba(58,46,40,.34);
+    --inset: inset 0 1px 2px rgba(58,46,40,.05);
+    --r-xl:34px; --r-lg:26px; --r-md:18px;
+    --sans:'Figtree','PingFang TC','Noto Sans TC',-apple-system,sans-serif;
+    --mono:ui-monospace,'SF Mono',Menlo,monospace;
+    --side: clamp(18px,4vw,42px);
+  }
+  /* ══ 夜霧 ══ */
+  :root[data-theme="dusk"] {
+    --base:#141317;
+    --wash-1:#1D2A26; --wash-2:#2B2020; --wash-3:#201D1B; --wash-4:#17201E;
+    --panel:rgba(255,255,255,.045); --panel-top:rgba(255,255,255,.02);
+    --card:#211F24; --card-2:#191820;
+    --ink:#F1EDE9; --ink2:#A8A19B; --faint:#726B67; --hair:rgba(255,255,255,.07);
+    --sel:#8FB2A6; --warm:#D9A5A2;
+    --e1: 0 1px 1px rgba(0,0,0,.30), 0 12px 30px -16px rgba(0,0,0,.75);
+    --e2: 0 2px 4px rgba(0,0,0,.35),  0 26px 55px -24px rgba(0,0,0,.85);
+    --e-panel: 0 40px 100px -46px rgba(0,0,0,.9);
+    --inset: inset 0 1px 2px rgba(0,0,0,.35);
+  }
+
+  html { font-size:16px; }
+  body {
+    font-family:var(--sans); font-weight:400; line-height:1.72;
+    color:var(--ink); background:var(--base);
+    -webkit-font-smoothing:antialiased; min-height:100vh; overflow-x:hidden;
+    transition:background .5s ease, color .5s ease;
+  }
+  .sky {
+    position:fixed; inset:-20vh -10vw; z-index:-2; pointer-events:none;
+    background:
+      radial-gradient(58% 42% at 12%  4%, var(--wash-1) 0%, transparent 62%),
+      radial-gradient(52% 38% at 96% 20%, var(--wash-3) 0%, transparent 62%),
+      radial-gradient(72% 46% at 34% 74%, var(--wash-2) 0%, transparent 64%),
+      radial-gradient(50% 40% at 88% 96%, var(--wash-4) 0%, transparent 62%);
+    filter:blur(30px); transition:background .5s ease;
+  }
+  .grain {
+    position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.05;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .topbar {
+    max-width:1080px; margin:0 auto; padding:26px var(--side) 0;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .mark { font-size:13px; letter-spacing:.22em; text-transform:uppercase; color:var(--ink2); font-weight:500;
+          display:inline-flex; align-items:center; gap:9px; padding:8px 16px 8px 12px; border-radius:999px;
+          background:var(--card); box-shadow:var(--e1); text-decoration:none;
+          transition:transform .2s cubic-bezier(.2,.8,.3,1), box-shadow .2s, color .2s; }
+  .mark:hover { color:var(--ink); transform:translateX(-2px); box-shadow:var(--e2); }
+  .mark svg { width:14px; height:14px; stroke:currentColor; fill:none; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
+  .orb {
+    width:42px; height:42px; border-radius:50%; border:0; cursor:pointer;
+    background:var(--card); color:var(--ink2); box-shadow:var(--e1);
+    display:flex; align-items:center; justify-content:center;
+    transition:transform .2s cubic-bezier(.2,.8,.3,1), box-shadow .2s;
+  }
+  .orb:hover { transform:scale(1.07); box-shadow:var(--e2); }
+  .orb svg { width:17px; height:17px; stroke:currentColor; fill:none; stroke-width:1.6; }
+
+  .shell {
+    max-width:1080px; margin:22px auto 0;
+    padding:clamp(34px,5vw,58px) clamp(20px,3.4vw,44px) clamp(38px,5vw,56px);
+    border-radius:var(--r-xl);
+    background:linear-gradient(170deg, var(--panel-top), var(--panel));
+    -webkit-backdrop-filter:blur(22px) saturate(1.15);
+    backdrop-filter:blur(22px) saturate(1.15);
+    box-shadow:var(--e-panel);
+  }
+
+  .eyebrow { font-size:11px; letter-spacing:.26em; text-transform:uppercase; color:var(--faint); font-weight:500; margin-bottom:clamp(16px,2.4vw,24px); }
+  h1 { font-weight:500; font-size:clamp(34px,6.4vw,62px); line-height:1.18; letter-spacing:normal; }
+  .rule { width:2.6em; height:1px; background:var(--ink); opacity:.26; margin:clamp(22px,3vw,30px) 0 20px; }
+  .lede { max-width:26em; color:var(--ink2); font-size:16px; }
+  .lede b { color:var(--ink); font-weight:600; }
+
+  /* 四公理：純文字分欄，不做卡不加底（規則藏在版面裡） */
+  .axioms { display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(16px,2.4vw,30px); margin-top:clamp(34px,4.6vw,52px); }
+  .ax { font-size:12.5px; color:var(--ink2); line-height:1.7; }
+  .ax b { display:block; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--faint); font-weight:600; margin-bottom:7px; }
+  .ax code { font-family:var(--mono); font-size:11.5px; color:var(--ink2); }
+  .op { margin-top:clamp(20px,2.6vw,28px); padding-top:clamp(18px,2.4vw,24px); border-top:1px solid var(--hair);
+        display:grid; grid-template-columns:150px minmax(0,1fr); gap:clamp(16px,2.4vw,30px); font-size:12.5px; color:var(--ink2); line-height:1.7; }
+  .op > b { font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--sel); font-weight:600; }
+  .op span b { color:var(--ink); font-weight:600; }
+  .op code { font-family:var(--mono); font-size:11.5px; }
+  @media (max-width:620px){ .op { grid-template-columns:1fr; gap:8px; } }
+
+  .grid { display:grid; grid-template-columns:minmax(0,1fr) 336px; gap:18px; margin-top:clamp(32px,4.4vw,46px); align-items:start; }
+  .card {
+    background:linear-gradient(180deg,var(--card) 0%, var(--card-2) 220%);
+    border-radius:var(--r-lg); box-shadow:var(--e1); padding:clamp(18px,2.4vw,26px);
+    margin-bottom:18px;
+  }
+  .card:last-child { margin-bottom:0; }
+  .label { font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--faint); font-weight:600; margin-bottom:14px; }
+
+  #stage { display:block; width:100%; height:auto; touch-action:none; cursor:crosshair; border-radius:var(--r-md); }
+  .note { margin-top:14px; font-size:12.5px; color:var(--faint); line-height:1.85; }
+  .note b { color:var(--ink2); font-weight:600; }
+  kbd { font-family:var(--sans); font-weight:600; color:var(--ink2); }
+
+  .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+
+  /* 分段控制：灰軌內凹＋選中白丸浮起 */
+  .seg { display:flex; gap:3px; padding:4px; background:var(--card-2); border-radius:999px; box-shadow:var(--inset); }
+  .seg button {
+    border:0; cursor:pointer; background:transparent; color:var(--ink2);
+    font-family:var(--sans); font-size:13.5px; font-weight:500;
+    padding:7px 15px; border-radius:999px; transition:color .2s, background .25s, box-shadow .25s;
+  }
+  .seg button[aria-selected="true"] { background:var(--card); color:var(--ink); font-weight:600; box-shadow:var(--e1); }
+
+  .pill {
+    border:0; cursor:pointer; font-family:var(--sans); font-size:13.5px; font-weight:600;
+    padding:8px 17px; border-radius:999px; background:var(--card-2); color:var(--ink);
+    transition:transform .2s cubic-bezier(.2,.8,.3,1), box-shadow .2s, color .2s;
+  }
+  .pill:hover { box-shadow:var(--e1); transform:translateY(-1px); }
+  .pill.on { background:var(--grad); color:#fff; box-shadow:0 6px 16px -8px rgba(150,110,105,.75); }
+  .pill.mini { padding:6px 13px; font-size:12.5px; }
+  .pill.round { width:32px; height:32px; padding:0; display:inline-flex; align-items:center; justify-content:center; font-size:16px; line-height:1; }
+
+  .dens { font-size:12.5px; color:var(--ink2); margin-right:2px; }
+  .dens b { color:var(--ink); font-weight:600; font-variant-numeric:tabular-nums; }
+
+  /* 圖層：iOS 群組列表，只有內縮髮絲 */
+  #layers { list-style:none; margin:-6px -6px 0; max-height:262px; overflow-y:auto; }
+  #layers li { display:flex; align-items:center; gap:8px; padding:9px 10px; cursor:pointer; border-radius:14px; transition:background .18s; }
+  #layers li + li { box-shadow:inset 0 1px 0 var(--hair); }
+  #layers li:hover { background:var(--card-2); }
+  #layers li.sel { background:var(--card-2); box-shadow:none; }
+  #layers li.sel + li { box-shadow:none; }
+  #layers .tag { font-family:var(--mono); font-size:11px; color:var(--ink2); letter-spacing:.04em; flex:1; }
+  #layers li.sel .tag { color:var(--ink); }
+  #layers .empty { color:var(--faint); font-size:13px; cursor:default; }
+  #layers .empty:hover { background:transparent; }
+
+  /* 變體牆：用選的取代用畫的 */
+  #wall { display:grid; grid-template-columns:repeat(6, minmax(0,1fr)); gap:12px; }   /* 12 顆＝乾淨兩排 */
+  @media (max-width:880px){ #wall { grid-template-columns:repeat(4, minmax(0,1fr)); } }
+  @media (max-width:520px){ #wall { grid-template-columns:repeat(3, minmax(0,1fr)); } }
+  .vt { background:var(--card-2); border-radius:var(--r-md); padding:14px 8px 11px; cursor:pointer; text-align:center;
+        transition:transform .22s cubic-bezier(.2,.8,.3,1), box-shadow .22s; }
+  .vt:hover { transform:translateY(-3px); box-shadow:var(--e1); }
+  .vt.now { box-shadow:inset 0 0 0 1.5px var(--sel); }
+  .vt svg { display:block; margin:0 auto; color:var(--ink); }
+  .vt em { display:block; font-style:normal; font-size:11px; color:var(--faint); margin-top:9px; letter-spacing:.02em; }
+  .vt.now em { color:var(--sel); font-weight:600; }
+
+  #previews { display:flex; gap:16px; align-items:flex-end; flex-wrap:wrap; }
+  .pv { display:flex; flex-direction:column; align-items:center; gap:8px; font-size:11px; letter-spacing:.06em; color:var(--faint); }
+  .pv .box { background:var(--card-2); border-radius:var(--r-md); box-shadow:var(--e1); display:flex; align-items:center; justify-content:center; color:var(--ink); }
+  .pv .box.paper { background:#EDE7E1; color:#1B1917; }
+  .pv .box.dark  { background:#1B1917; color:#F1EDE9; }
+  .pv .box svg { display:block; }
+
+  textarea {
+    width:100%; height:104px; resize:vertical; font-family:var(--mono);
+    font-size:11px; line-height:1.75; color:var(--ink2);
+    background:var(--card-2); border:0; border-radius:var(--r-md);
+    padding:14px 16px; margin-top:12px; box-shadow:var(--inset);
+  }
+  textarea:focus { outline:none; }
+
+  footer { max-width:1080px; margin:34px auto 60px; padding:0 var(--side); text-align:center; color:var(--faint); font-size:12.5px; }
+
+  @media (max-width:880px){
+    .grid { grid-template-columns:1fr; }
+    .axioms { grid-template-columns:1fr 1fr; }
+  }
+  @media (max-width:620px){
+    .shell { margin-left:10px; margin-right:10px; padding-left:18px; padding-right:18px; border-radius:26px; }
+    .axioms { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="sky"></div><div class="grain"></div>
+
+<div class="topbar">
+  <a class="mark" href="index.html" title="回小高工具間首頁">
+    <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>小高工具間
+  </a>
+  <button class="orb" id="themeBtn" title="切換柔霧／夜霧">
+    <svg viewBox="0 0 24 24" id="themeIcon"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+  </button>
+</div>
+
+<div class="shell">
+  <div class="eyebrow">Geometric Icon System</div>
+  <h1>幾何 icon 工坊</h1>
+  <div class="rule"></div>
+  <p class="lede">四條公理造形，一個運算子把形變成圖案。每顆 icon 就是<b>一段可序列化的公式</b>——可以手畫、可以程式生成、可以無限出變體。</p>
+
+  <div class="axioms">
+    <div class="ax"><b>一・格點</b>n 分格，<code>P(i,j)=(i·u, j·u)</code>，u＝格距。座標全是相對值，任何輸出尺寸都對齊。</div>
+    <div class="ax"><b>二・面與線</b>有序點列連線：閉合填色＝面，開放描邊＝線（圓頭）。</div>
+    <div class="ax"><b>三・圓族</b>以格點為圓心，半徑＝k·u。實心＝圓、描邊＝環。</div>
+    <div class="ax"><b>四・正負</b>每個形標正（畫）或負（挖）。依序疊層，負形讓鏤空成為可能。</div>
+  </div>
+  <div class="op">
+    <b>運算子・重複</b>
+    <span>形帶一個參數 <code>rep:{k, mir}</code>：繞畫布中心複製 k 份、可加鏡射軸。
+    <b>複本是算出來的、不是存起來的</b>——所以畫八分之一就有一整顆，而且把 k 從 8 改成 6，整顆立刻重新長出來。
+    這是「生產器」和「畫圖工具」的分界線。</span>
+  </div>
+
+  <div class="grid">
+    <div>
+      <div class="card">
+        <div class="label">畫布</div>
+        <svg id="stage" viewBox="0 0 560 560"></svg>
+        <p class="note">
+          <b>兩種模式，先選對再動手。</b><br>
+          <b>畫（面／線／圓／環）</b>　點哪裡都算，自動吸到最近格點。<u>面</u>：連點，點回起點＝封閉。<u>線</u>：連點，再點一次最後那點＝完成。兩者都可雙擊或 <kbd>Enter</kbd> 收工。<u>圓／環</u>：按住直接拖＝邊畫邊定大小。<br>
+          <b>選（<kbd>V</kbd> 或 <kbd>Esc</kbd>）</b>　點圖形＝選取，<kbd>⇧</kbd>點＝加選，<b>空白處拖＝框選</b>，<kbd>⌘A</kbd>＝全選。<br>
+          　　直接拖＝移動；<kbd>⌘</kbd>拖＝大小（多選時整組繞外框中心縮）；<kbd>⌥</kbd>拖＝複本；<b><kbd>⌥⇧</kbd>拖＝旋轉重複</b>（繞中心拖到「下一份該在的位置」，它就知道要幾份）。<br>
+          <b>鍵</b>　<kbd>←↑↓→</kbd> 位置（<kbd>⇧</kbd>一格／<kbd>⌥</kbd>四分之一格）・<kbd>+</kbd><kbd>-</kbd> 大小・<kbd>[</kbd><kbd>]</kbd> 份數・<kbd>,</kbd><kbd>.</kbd> 線寬・<kbd>X</kbd><kbd>Y</kbd> 鏡射・<kbd>N</kbd> 正負・<kbd>D</kbd> 複製・<kbd>Delete</kbd> 刪除・<kbd>⌘Z</kbd> 上一步。
+        </p>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="label">工具</div>
+        <div class="row" style="margin-bottom:12px">
+          <div class="seg" id="tools">
+            <button data-tool="sel"  aria-selected="true">選</button>
+            <button data-tool="poly" aria-selected="false">面</button>
+            <button data-tool="line" aria-selected="false">線</button>
+            <button data-tool="dot"  aria-selected="false">圓</button>
+            <button data-tool="ring" aria-selected="false">環</button>
+          </div>
+          <button class="pill mini" id="negBtn">負形</button>
+        </div>
+        <div class="row">
+          <span class="dens">格點 <b id="nV">5</b>×<b id="nV2">5</b></span>
+          <button class="pill round" id="nMinus">−</button>
+          <button class="pill round" id="nPlus">+</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="label">業界格線</div>
+        <div class="row" id="grids"></div>
+        <div class="row" style="margin-top:10px">
+          <button class="pill mini on" id="keyBtn">Keyline 疊圖</button>
+        </div>
+        <p class="note" id="gridNote">選一套格線，畫布換成業界規格：安全區與 keyline 基準形會疊在底下。</p>
+      </div>
+
+      <div class="card">
+        <div class="label">圖層</div>
+        <ul id="layers"></ul>
+        <div class="row" id="repBar" style="display:none;margin-top:14px"></div>
+        <div class="row" style="margin-top:14px">
+          <button class="pill mini" id="undoBtn">上一步</button>
+          <button class="pill mini" id="clearBtn">清空</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="label">基本形</div>
+        <div class="row" id="presets"></div>
+        <div class="label" style="margin:18px 0 12px">構成法　一鍵拆解</div>
+        <div class="row" id="constructs"></div>
+        <div class="row" style="margin-top:12px">
+          <button class="pill mini" id="randBtn">隨機生成（左右對稱）</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:18px">
+    <div class="label">變體牆　每顆只改一件事</div>
+    <div class="row" style="margin:-4px 0 16px">
+      <button class="pill mini" id="rollBtn">再變一批</button>
+      <span class="dens">點一顆就採用，然後從它再變一輪　<b id="wallGen">第 1 輪</b></span>
+    </div>
+    <div id="wall"></div>
+  </div>
+
+  <div class="grid" style="margin-top:18px">
+    <div class="card" style="margin-bottom:0">
+      <div class="label">尺寸驗證　60px 讀不出來＝重做</div>
+      <div id="previews"></div>
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <div class="label">輸出</div>
+      <div class="row">
+        <button class="pill mini" id="copySvg">複製 SVG</button>
+        <button class="pill mini" id="copyJson">複製公式 JSON</button>
+      </div>
+      <textarea id="jsonOut" readonly></textarea>
+    </div>
+  </div>
+</div>
+
+<footer><a href="index.html" style="text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--hair)">← 回小高工具間</a>　·　單一 HTML 檔，你畫的東西不會離開自己的電腦</footer>
+
+<script>
+'use strict';
+// ---------- 主題 ----------
+const ICON_MOON = '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>';
+const ICON_SUN  = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/>';
+document.getElementById('themeBtn').addEventListener('click', ()=>{
+  const dusk = document.documentElement.dataset.theme === 'dusk';
+  document.documentElement.dataset.theme = dusk ? 'soft' : 'dusk';
+  document.getElementById('themeIcon').innerHTML = dusk ? ICON_MOON : ICON_SUN;
+});
+
+// ---------- 狀態 ----------
+let n = 5;                 // 每邊格點數
+let shapes = [];           // 已完成的形
+let cur = null;            // 進行中 {t:'poly'|'line', pts:[]}
+let tool = 'sel';          // sel＝選取／移動；其餘＝畫圖
+const DRAW = () => tool !== 'sel';
+let neg = false;
+let hover = null;          // 最近格點 [i,j]
+let sel = [];              // 選取中的圖層 index（可多選）
+let drag = null;           // 進行中的拖曳手勢
+let marquee = null;        // 框選矩形 [起點, 現在]
+let hist = [];             // undo 快照
+let activeGrid = null;     // 目前套用的業界格線規格
+let showKey = true;        // keyline 疊圖
+
+const DOT_R = 1, W_DEF = 0.5;
+const stage = document.getElementById('stage');
+const S = 560, PAD = 46;
+const scale = () => (S - PAD*2) / (n - 1);
+const px = p => [PAD + p[0]*scale(), PAD + p[1]*scale()];
+const clone = o => JSON.parse(JSON.stringify(o));
+const snap = (v, st) => Math.round(v/st)*st;
+const rnd3 = (k,v) => typeof v==='number' ? Math.round(v*1000)/1000 : v;
+
+function pushHist(){ hist.push(JSON.stringify({n,shapes})); if(hist.length>60) hist.shift(); }
+function undo(){
+  if(cur && cur.pts.length){ cur.pts.pop(); if(!cur.pts.length) cur=null; draw(); return; }
+  if(!hist.length) return;
+  const s = JSON.parse(hist.pop());
+  n = s.n; shapes = s.shapes; sel = []; drag = null; syncN(); draw();
+}
+function syncN(){ document.getElementById('nV').textContent = n; document.getElementById('nV2').textContent = n; }
+
+// ---------- 重複運算子：形帶著 rep 參數，複本是「算出來的」不是「存起來的」 ----------
+// rep = { k: 旋轉份數, mir: 'x'|'y' 鏡射軸 }。旋轉中心永遠是畫布中心 (n-1)/2。
+function rotShape(s, c, deg){
+  const a = deg*Math.PI/180, co = Math.cos(a), si = Math.sin(a);
+  const f = p => [c + (p[0]-c)*co - (p[1]-c)*si, c + (p[0]-c)*si + (p[1]-c)*co];
+  const o = clone(s);
+  if(o.c) o.c = f(o.c); if(o.pts) o.pts = o.pts.map(f);
+  return o;
+}
+function mirShape(s, c, ax){
+  const f = p => ax==='x' ? [2*c-p[0], p[1]] : [p[0], 2*c-p[1]];
+  const o = clone(s);
+  if(o.c) o.c = f(o.c); if(o.pts) o.pts = o.pts.map(f);
+  return o;
+}
+// 展開成實體＋各自的變換，變換要留著才能把「拖複本」換算回原形
+function expandOne(s, N){
+  const c = ((N||n)-1)/2, r = s.rep;
+  let L = [{s, deg:0, mx:false, my:false}];
+  if(r){
+    if(r.mir==='x') L = L.flatMap(o=>[o, {s:mirShape(o.s,c,'x'), deg:o.deg, mx:!o.mx, my:o.my}]);
+    if(r.mir==='y') L = L.flatMap(o=>[o, {s:mirShape(o.s,c,'y'), deg:o.deg, mx:o.mx, my:!o.my}]);
+    if(r.k>1) L = L.flatMap(o=>Array.from({length:r.k},(_,i)=>{
+      const d = 360*i/r.k;
+      return {s: d ? rotShape(o.s,c,d) : o.s, deg:o.deg+d, mx:o.mx, my:o.my};
+    }));
+  }
+  return L;
+}
+// 一次 draw 內會展開很多次（畫布＋六顆預覽），快取一份；每次 draw 開頭作廢
+let _expCache = null;
+const allShapes = () => (_expCache ||= shapes.flatMap(s=>expandOne(s).map(o=>o.s)));
+// 抓著複本拖曳時，把游標逆變換回原形空間，手感才會對（複本＝rot(mir(原形))，所以先反旋轉再反鏡射）
+function invPoint(p, tr){
+  const c = (n-1)/2;
+  const a = -tr.deg*Math.PI/180, co=Math.cos(a), si=Math.sin(a);
+  let x = c + (p[0]-c)*co - (p[1]-c)*si;
+  let y = c + (p[0]-c)*si + (p[1]-c)*co;
+  if(tr.mx) x = 2*c - x;
+  if(tr.my) y = 2*c - y;
+  return [x, y];
+}
+const repCount = s => (s.rep ? (s.rep.k||1) * (s.rep.mir?2:1) : 1);
+
+// ---------- 選取集合與整組變換（快捷鍵與多選共用同一套） ----------
+const selShapes = () => sel.map(i=>shapes[i]).filter(Boolean);
+function bboxOf(s){
+  if(s.c) return [s.c[0]-s.r, s.c[1]-s.r, s.c[0]+s.r, s.c[1]+s.r];
+  const xs = s.pts.map(p=>p[0]), ys = s.pts.map(p=>p[1]);
+  return [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)];
+}
+function groupCenter(list){
+  if(!list.length) return [(n-1)/2, (n-1)/2];
+  const b = list.map(bboxOf);
+  return [(Math.min(...b.map(v=>v[0])) + Math.max(...b.map(v=>v[2])))/2,
+          (Math.min(...b.map(v=>v[1])) + Math.max(...b.map(v=>v[3])))/2];
+}
+const moveShape = (s,dx,dy) => { const o=clone(s);
+  if(o.c) o.c=[o.c[0]+dx, o.c[1]+dy]; if(o.pts) o.pts=o.pts.map(p=>[p[0]+dx,p[1]+dy]); return o; };
+const scaleShape = (s,c,f) => { const o=clone(s), g=p=>[c[0]+(p[0]-c[0])*f, c[1]+(p[1]-c[1])*f];
+  if(o.c) o.c=g(o.c); if(o.pts) o.pts=o.pts.map(g);
+  if(o.r!=null){                       // 吸到 0.25 格會讓小圓卡住（0.5×0.8→0.4→又回 0.5），保底走一格
+    let r = Math.round(o.r*f*4)/4;
+    if(r === o.r && f !== 1) r = o.r + (f<1 ? -0.25 : 0.25);
+    o.r = Math.max(0.25, r);
+  }
+  return o; };
+// 整組縮放繞的是「選取集合的外框中心」，單選時就等於它自己的中心，行為一致
+function applySel(f){ if(!sel.length) return; pushHist(); sel.forEach(i=>shapes[i]=f(shapes[i])); draw(); }
+const nudgeSel  = (dx,dy) => applySel(s=>moveShape(s,dx,dy));
+const scaleSel  = f => { const c = groupCenter(selShapes()); applySel(s=>scaleShape(s,c,f)); };
+const widthSel  = d => applySel(s => s.w!=null ? {...s, w:Math.min(2,Math.max(0.25, Math.round((s.w+d)*4)/4))} : s);
+const negSel    = () => applySel(s=>({...s, neg:!s.neg}));
+
+// ---------- 公式 → SVG（mask 實作正負疊層） ----------
+function shapeMarkup(s, u){
+  const c = s.neg ? '#000' : '#fff';
+  if(s.t === 'dot')  return `<circle cx="${s.c[0]*u}" cy="${s.c[1]*u}" r="${s.r*u}" fill="${c}"/>`;
+  if(s.t === 'ring') return `<circle cx="${s.c[0]*u}" cy="${s.c[1]*u}" r="${s.r*u}" fill="none" stroke="${c}" stroke-width="${s.w*u}"/>`;
+  const d = s.pts.map((p,i)=>`${i?'L':'M'}${p[0]*u} ${p[1]*u}`).join(' ') + (s.t==='poly'||s.closed?' Z':'');
+  if(s.t === 'poly') return `<path d="${d}" fill="${c}"/>`;
+  return `<path d="${d}" fill="none" stroke="${c}" stroke-width="${s.w*u}" stroke-linecap="round" stroke-linejoin="round"/>`;
+}
+let maskSeq = 0;   // mask id 必須唯一：同頁多顆 icon 共用同名 id 會全部吃到第一個
+// 吃任意狀態 {n, shapes}，變體牆才畫得出十二顆各自不同的 icon
+function svgOf(st, size){
+  const W = (st.n-1)*24;
+  const inner = st.shapes.flatMap(s=>expandOne(s, st.n)).map(o=>shapeMarkup(o.s,24)).join('');
+  const sz = size ? ` width="${size}" height="${size}"` : '';
+  const id = 'gm'+(++maskSeq);
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${W}"${sz}>`+
+    `<mask id="${id}" maskUnits="userSpaceOnUse">${inner}</mask>`+
+    `<rect width="${W}" height="${W}" fill="currentColor" mask="url(#${id})"/></svg>`;
+}
+const iconSvg = size => svgOf({n, shapes}, size);
+
+// ---------- 畫布繪製 ----------
+function draw(){
+  _expCache = null;
+  const u = scale(), W = (n-1)*u;
+  let g = '';
+  g += `<rect x="${PAD}" y="${PAD}" width="${W}" height="${W}" rx="2" fill="none" stroke="var(--hair)"/>`;
+  const inner = allShapes().map(s=>shapeMarkup(s,u)).join('');
+  g += `<mask id="em" maskUnits="userSpaceOnUse">`+
+       `<g transform="translate(${PAD} ${PAD})">${inner}</g></mask>`+
+       `<g clip-path="inset(0)"><rect x="${PAD}" y="${PAD}" width="${W}" height="${W}" fill="var(--ink)" mask="url(#em)"/></g>`;
+  // 選取：所有複本都描邊，才看得出這一個 rep 參數生出了什麼
+  if(sel.length){
+    const outline = s =>
+      s.t==='dot'  ? `<circle cx="${s.c[0]*u}" cy="${s.c[1]*u}" r="${s.r*u}" fill="none"/>` :
+      s.t==='ring' ? `<circle cx="${s.c[0]*u}" cy="${s.c[1]*u}" r="${(s.r+s.w/2)*u}" fill="none"/>` :
+      `<path d="${s.pts.map((p,i)=>`${i?'L':'M'}${p[0]*u} ${p[1]*u}`).join(' ')+(s.t==='poly'||s.closed?' Z':'')}" fill="none"/>`;
+    let body = '', hasRep = false;
+    sel.forEach(i=>{
+      const L = expandOne(shapes[i]); if(L.length>1) hasRep = true;
+      body += L.map((o,j)=>`<g opacity="${j?.45:1}">${outline(o.s)}</g>`).join('');
+    });
+    g += `<g transform="translate(${PAD} ${PAD})" stroke="var(--sel)" stroke-width="1.75" stroke-dasharray="5 4">${body}</g>`;
+    if(hasRep) g += `<circle cx="${PAD+(n-1)/2*u}" cy="${PAD+(n-1)/2*u}" r="2.5" fill="var(--sel)"/>`;
+    // 多選：外框中心＝整組縮放的支點，畫出來才知道會往哪縮
+    if(sel.length>1){
+      const c = groupCenter(selShapes()), b = selShapes().map(bboxOf);
+      const x0=Math.min(...b.map(v=>v[0])), y0=Math.min(...b.map(v=>v[1]));
+      const x1=Math.max(...b.map(v=>v[2])), y1=Math.max(...b.map(v=>v[3]));
+      g += `<g transform="translate(${PAD} ${PAD})">`+
+           `<rect x="${x0*u}" y="${y0*u}" width="${(x1-x0)*u}" height="${(y1-y0)*u}" fill="none" `+
+           `stroke="var(--sel)" stroke-width="1" opacity=".4"/>`+
+           `<circle cx="${c[0]*u}" cy="${c[1]*u}" r="2.5" fill="var(--sel)"/></g>`;
+    }
+  }
+  // 框選中的矩形
+  if(marquee){
+    const [a,b] = marquee;
+    const x0=Math.min(a[0],b[0])*u+PAD, y0=Math.min(a[1],b[1])*u+PAD;
+    g += `<rect x="${x0}" y="${y0}" width="${Math.abs(a[0]-b[0])*u}" height="${Math.abs(a[1]-b[1])*u}" `+
+         `fill="var(--sel)" fill-opacity=".07" stroke="var(--sel)" stroke-width="1" stroke-dasharray="4 3"/>`;
+  }
+  // 旋轉重複拖曳中：把份數直接寫在畫布上
+  if(drag && drag.mode==='repeat' && shapes[sel[0]]){
+    g += `<text x="${PAD+(n-1)/2*u}" y="${PAD+(n-1)/2*u+7}" text-anchor="middle" `+
+         `font-family="Figtree,sans-serif" font-size="20" font-weight="600" fill="var(--sel)">×${repCount(shapes[sel[0]])}</text>`;
+  }
+  // 業界格線疊圖：安全區＋keyline 基準形
+  if(activeGrid && showKey){
+    const G = activeGrid, div = n-1, c = div/2;
+    const T = v => v*u;   // 格單位 → 畫布單位
+    let k = `<g transform="translate(${PAD} ${PAD})" fill="none" stroke="var(--sel)" stroke-width="1" opacity=".45">`;
+    if(G.live){          // 安全區：虛線框
+      const m = (div-G.live)/2;
+      k += `<rect x="${T(m)}" y="${T(m)}" width="${T(G.live)}" height="${T(G.live)}" stroke-dasharray="4 4"/>`;
+    }
+    if(G.key){           // keyline 基準形：圓要比方大才看起來一樣大
+      const K = G.key;
+      if(K.circ) k += `<circle cx="${T(c)}" cy="${T(c)}" r="${T(K.circ/2)}"/>`;
+      if(K.sq)   k += `<rect x="${T(c-K.sq/2)}" y="${T(c-K.sq/2)}" width="${T(K.sq)}" height="${T(K.sq)}" rx="${T(G.radius||0)}"/>`;
+      if(K.rw)   k += `<rect x="${T(c-K.rw/2)}" y="${T(c-K.rh/2)}" width="${T(K.rw)}" height="${T(K.rh)}" rx="${T(G.radius||0)}"/>`;
+      if(K.rw)   k += `<rect x="${T(c-K.rh/2)}" y="${T(c-K.rw/2)}" width="${T(K.rh)}" height="${T(K.rw)}" rx="${T(G.radius||0)}"/>`;
+    }
+    g += k + `</g>`;
+  }
+  // 格點：安靜的小點，密度越高越小；每 1/4 格一顆主點，高密度才讀得出位置
+  const dr = n > 25 ? 1.0 : n > 17 ? 1.2 : n > 11 ? 1.4 : 1.6;
+  const step = [8,6,4].map(q=>(n-1)/q).find(v=>Number.isInteger(v) && v>1) || 0;
+  for(let i=0;i<n;i++)for(let j=0;j<n;j++){
+    const [x,y]=px([i,j]);
+    const isH = hover && hover[0]===i && hover[1]===j;
+    const isStart = cur && cur.pts.length>1 && cur.pts[0][0]===i && cur.pts[0][1]===j;
+    if(isH)          g += `<circle cx="${x}" cy="${y}" r="4" fill="var(--sel)"/>`;
+    else if(isStart) g += `<circle cx="${x}" cy="${y}" r="4" fill="var(--warm)"/>`;
+    else {
+      const major = step && i%step===0 && j%step===0;
+      g += `<circle cx="${x}" cy="${y}" r="${major?dr+0.5:dr}" fill="var(--faint)" opacity="${major?.8:.42}"/>`;
+    }
+  }
+  // 進行中的形：用真線寬／真填色預覽，一眼看得出「已經是個物件了」
+  if(cur && cur.pts.length){
+    const d = cur.pts.map((p,i)=>{const[x,y]=px(p);return `${i?'L':'M'}${x} ${y}`}).join(' ');
+    const closing = cur.t==='poly' && cur.pts.length>2;
+    g += `<path d="${d}${closing?' Z':''}" fill="${closing?'var(--sel)':'none'}" fill-opacity=".2" `+
+         `stroke="var(--sel)" stroke-width="${cur.t==='line'?W_DEF*u:2.25}" stroke-linecap="round" stroke-linejoin="round"/>`;
+    cur.pts.forEach(p=>{const[x,y]=px(p); g += `<circle cx="${x}" cy="${y}" r="3.5" fill="var(--sel)"/>`;});
+    if(hover){const[hx,hy]=px(hover);const[lx,ly]=px(cur.pts[cur.pts.length-1]);
+      g += `<line x1="${lx}" y1="${ly}" x2="${hx}" y2="${hy}" stroke="var(--sel)" stroke-width="1.25" stroke-dasharray="4 4"/>`;}
+    const need = cur.t==='poly' ? 3 : 2;
+    const tip = cur.pts.length < need ? `再點 ${need-cur.pts.length} 個格點`
+      : cur.t==='line' ? '雙擊、Enter，或再點一次最後那點＝完成'
+      : '點回起點＝封閉成面；雙擊或再點一次最後那點也完成';
+    g += `<text x="${S/2}" y="${S-14}" text-anchor="middle" font-family="Figtree,sans-serif" `+
+         `font-size="13" fill="var(--sel)">${tip}</text>`;
+  }
+  if(!cur && !drag && hover && (tool==='dot'||tool==='ring')){
+    const [x,y]=px(hover);
+    g += `<circle cx="${x}" cy="${y}" r="${DOT_R*u}" fill="${tool==='dot'?'var(--sel)':'none'}" fill-opacity=".2" stroke="var(--sel)" stroke-width="${tool==='ring'?W_DEF*u:1.25}" opacity=".6"/>`;
+  }
+  stage.innerHTML = g;
+  drawSide();
+  scheduleWall();
+}
+
+// ---------- 右側同步 ----------
+function drawSide(){
+  const names = {poly:'面', line:'線', dot:'圓', ring:'環'};
+  const fmt = v => Math.round(v*4)/4;
+  document.getElementById('layers').innerHTML = shapes.length ? shapes.map((s,i)=>{
+    const info = s.t==='dot'||s.t==='ring' ? `(${fmt(s.c[0])},${fmt(s.c[1])}) r${fmt(s.r)}` : `${s.pts.length}點`;
+    const rep = (s.rep?.k>1 ? ` ×${s.rep.k}` : '') + (s.rep?.mir==='x' ? ' ⇄' : s.rep?.mir==='y' ? ' ⇅' : '');
+    return `<li class="${sel.includes(i)?'sel':''}" onclick="pick(${i})"><span class="tag">${i+1}　${names[s.t]}　${info}<b style="color:var(--sel)">${rep}</b></span>`+
+      `<button class="pill mini ${s.neg?'on':''}" onclick="event.stopPropagation();flip(${i})">${s.neg?'負':'正'}</button>`+
+      `<button class="pill mini" onclick="event.stopPropagation();del(${i})">刪</button></li>`;
+  }).join('') : '<li class="empty">尚無圖層</li>';
+  // 重複參數列：只在選到東西時出現，不佔常駐版面
+  const rb = document.getElementById('repBar');
+  if(sel.length && shapes[sel[0]]){
+    const r = shapes[sel[0]].rep || {};
+    rb.style.display = 'flex';
+    rb.innerHTML =
+      `<span class="dens">${sel.length>1?`選 ${sel.length} 個　`:''}重複 <b>×${repCount(shapes[sel[0]])}</b></span>`+
+      `<button class="pill round" onclick="bumpRep(-1)">−</button>`+
+      `<button class="pill round" onclick="bumpRep(1)">+</button>`+
+      `<button class="pill mini ${r.mir==='x'?'on':''}" onclick="setMir('x')" title="左右鏡射（X）">⇄</button>`+
+      `<button class="pill mini ${r.mir==='y'?'on':''}" onclick="setMir('y')" title="上下鏡射（Y）">⇅</button>`;
+  } else rb.style.display = 'none';
+  const sizes=[96,60,32,16];
+  document.getElementById('previews').innerHTML =
+    sizes.map(s=>`<div class="pv"><div class="box" style="width:${s+22}px;height:${s+22}px">${iconSvg(s)}</div>${s}px</div>`).join('')+
+    `<div class="pv"><div class="box paper" style="width:82px;height:82px">${iconSvg(60)}</div>米白底</div>`+
+    `<div class="pv"><div class="box dark"  style="width:82px;height:82px">${iconSvg(60)}</div>深底</div>`;
+  document.getElementById('jsonOut').value = JSON.stringify({n, shapes}, rnd3);
+}
+window.flip = i => { pushHist(); shapes[i].neg = !shapes[i].neg; draw(); };
+window.del  = i => { pushHist(); shapes.splice(i,1); sel = []; draw(); };
+window.pick = i => { sel = sel.includes(i) ? sel.filter(v=>v!==i) : (event?.shiftKey ? [...sel,i] : [i]); draw(); };
+const K_LIST = [1,2,3,4,5,6,8,9,10,12,15,18,24];
+window.bumpRep = d => applySel(s=>{
+  const k = s.rep?.k || 1;
+  const nk = K_LIST[Math.max(0, Math.min(K_LIST.length-1, K_LIST.indexOf(k) + d))];
+  const o = {...s}, r = {...(s.rep||{}), k:nk};
+  if(nk > 1 || r.mir) o.rep = nk>1 ? r : {mir:r.mir}; else delete o.rep;
+  return o;
+});
+window.setMir = ax => applySel(s=>{
+  const o = {...s}, r = {...(s.rep||{})};
+  if(r.mir === ax) delete r.mir; else r.mir = ax;
+  if(r.k>1 || r.mir) o.rep = r; else delete o.rep;
+  return o;
+});
+
+// ---------- 幾何工具 ----------
+function evtGrid(e){
+  const r = stage.getBoundingClientRect();
+  const x = (e.clientX-r.left)*(S/r.width), y = (e.clientY-r.top)*(S/r.height);
+  return [(x-PAD)/scale(), (y-PAD)/scale()];
+}
+// 畫圖時一律吸到最近的格點——格點是輔助線不是靶心，不該要求瞄準
+// （舊版要求 0.3 格內才算命中，等於七成的點擊落在空隙裡靜靜失效）
+function nearLattice(g){
+  const i = Math.max(0, Math.min(n-1, Math.round(g[0])));
+  const j = Math.max(0, Math.min(n-1, Math.round(g[1])));
+  return [i, j];
+}
+function d2seg(p,a,b){
+  const vx=b[0]-a[0], vy=b[1]-a[1];
+  const t=Math.max(0,Math.min(1,((p[0]-a[0])*vx+(p[1]-a[1])*vy)/(vx*vx+vy*vy||1)));
+  return Math.hypot(p[0]-a[0]-t*vx, p[1]-a[1]-t*vy);
+}
+function inPoly(p,pts){
+  let c=false;
+  for(let i=0,j=pts.length-1;i<pts.length;j=i++){
+    const a=pts[i], b=pts[j];
+    if((a[1]>p[1])!==(b[1]>p[1]) && p[0] < (b[0]-a[0])*(p[1]-a[1])/(b[1]-a[1])+a[0]) c=!c;
+  }
+  return c;
+}
+function centroid(pts){ return pts.reduce((a,p)=>[a[0]+p[0]/pts.length, a[1]+p[1]/pts.length],[0,0]); }
+function hitOne(g, s){
+  if(s.t==='dot')  return Math.hypot(g[0]-s.c[0],g[1]-s.c[1]) <= s.r+0.1;
+  if(s.t==='ring') return Math.abs(Math.hypot(g[0]-s.c[0],g[1]-s.c[1]) - s.r) <= s.w/2+0.15;
+  if(s.t==='poly') return inPoly(g,s.pts);
+  for(let k=0;k<s.pts.length-1;k++) if(d2seg(g,s.pts[k],s.pts[k+1]) <= (s.w||W_DEF)/2+0.15) return true;
+  return false;
+}
+// 點到複本也算命中，回傳「原形的 index」＋該複本的變換
+function hitShape(g){
+  for(let i=shapes.length-1;i>=0;i--){
+    const L = expandOne(shapes[i]);
+    for(const o of L) if(hitOne(g, o.s)) return {i, tr:{deg:o.deg, mx:o.mx, my:o.my}};
+  }
+  return null;
+}
+
+// ---------- 互動 ----------
+stage.addEventListener('pointerdown', e=>{
+  e.preventDefault();
+  const g = evtGrid(e);
+
+  // ── 畫圖模式：每一下點擊都算數，吸到最近格點，不必瞄準 ──
+  if(DRAW()){
+    const lat = nearLattice(g);
+    if(cur){
+      const last = cur.pts[cur.pts.length-1];
+      if(cur.t==='poly' && cur.pts.length>2 && cur.pts[0][0]===lat[0] && cur.pts[0][1]===lat[1]) commit();
+      else if(last[0]===lat[0] && last[1]===lat[1]) commit();   // 再點一次最後那點＝完成
+      else cur.pts.push(lat);
+      draw(); return;
+    }
+    if(tool==='poly' || tool==='line'){ cur = {t:tool, pts:[lat]}; draw(); return; }
+    pushHist();
+    const s = tool==='dot' ? {t:'dot', c:lat, r:DOT_R} : {t:'ring', c:lat, r:DOT_R, w:W_DEF};
+    if(neg) s.neg = true;
+    shapes.push(s); sel = [shapes.length-1];
+    drag = {mode:'resize', g0:g, moved:false, born:true, targets:[{i:sel[0], orig:clone(s)}]};
+    try{ stage.setPointerCapture(e.pointerId); }catch(_){}
+    draw(); return;
+  }
+
+  // ── 選取模式 ──
+  const h = hitShape(g);
+  // 沒點到東西＝開始框選（⇧＝加選）
+  if(h === null){
+    drag = {mode:'marquee', g0:g, moved:false, add:e.shiftKey};
+    if(!e.shiftKey) sel = [];
+    try{ stage.setPointerCapture(e.pointerId); }catch(_){}
+    draw(); return;
+  }
+  pushHist();
+  if(e.shiftKey && !e.altKey && !e.metaKey)  sel = sel.includes(h.i) ? sel.filter(v=>v!==h.i) : [...sel, h.i];
+  else if(!sel.includes(h.i))                sel = [h.i];
+  let mode = 'move', fromAlt = false;
+  if(e.altKey && e.shiftKey) mode = 'repeat';                                  // ⌥⇧＝旋轉重複份數
+  else if(e.altKey){ shapes.push(clone(shapes[h.i])); sel = [shapes.length-1]; fromAlt = true; }
+  else if(e.metaKey) mode = 'resize';
+  drag = {mode, g0:g, moved:false, fromAlt, src:h.i, tr:h.tr,
+          targets: sel.map(i=>({i, orig:clone(shapes[i])}))};
+  if(mode==='resize') drag.gc = groupCenter(selShapes());
+  if(mode==='repeat'){
+    const c = (n-1)/2;
+    drag.a0 = Math.atan2(g[1]-c, g[0]-c)*180/Math.PI;
+  }
+  try{ stage.setPointerCapture(e.pointerId); }catch(_){}
+  draw();
+});
+stage.addEventListener('dblclick', e=>{ e.preventDefault(); if(cur){ commit(); draw(); } });
+
+// 份數只能是整除 360 的那幾個，拖到哪就吸到最近的一份
+const REP_STEPS = [360,180,120,90,72,60,45,40,36,30,24,20,15];   // → k = 1,2,3,4,5,6,8,9,10,12,15,18,24
+
+stage.addEventListener('pointermove', e=>{
+  const g = evtGrid(e);
+  hover = DRAW() ? nearLattice(g) : null;    // 選取模式不需要格點提示
+  if(drag && drag.mode === 'marquee'){
+    marquee = [drag.g0, g];
+    if(Math.hypot(g[0]-drag.g0[0], g[1]-drag.g0[1]) > 0.3) drag.moved = true;
+  } else if(drag && drag.targets && drag.targets.length){
+    // 抓的可能是複本：先把游標換算回原形空間，move／resize 才會準
+    const gs = drag.tr ? invPoint(g, drag.tr) : g;
+    const g0 = drag.tr ? invPoint(drag.g0, drag.tr) : drag.g0;
+    if(drag.mode === 'repeat'){
+      const c = (n-1)/2;
+      const a = Math.atan2(g[1]-c, g[0]-c)*180/Math.PI;
+      const d = Math.max(1, Math.abs(((a - drag.a0 + 540) % 360) - 180));      // 0..180 的角距
+      const step = REP_STEPS.reduce((b,v)=>Math.abs(v-d)<Math.abs(b-d)?v:b);
+      const k = Math.round(360/step);
+      drag.targets.forEach(({i,orig})=>{
+        if(k !== (orig.rep?.k||1)) drag.moved = true;
+        const s = shapes[i];
+        if(k>1) s.rep = {...(orig.rep||{}), k};
+        else if(orig.rep?.mir) s.rep = {mir:orig.rep.mir};
+        else delete s.rep;
+      });
+    } else if(drag.mode === 'move'){
+      const dx = snap(gs[0]-g0[0], 0.5), dy = snap(gs[1]-g0[1], 0.5);
+      if(dx || dy) drag.moved = true;
+      drag.targets.forEach(({i,orig})=> shapes[i] = moveShape(orig, dx, dy));
+    } else if(drag.mode === 'resize'){
+      const one = drag.targets.length===1 ? drag.targets[0] : null;
+      if(one && one.orig.c){                       // 單選的圓／環＝直接畫半徑，最直覺
+        const r = Math.max(0.25, snap(Math.hypot(gs[0]-one.orig.c[0], gs[1]-one.orig.c[1]), 0.25));
+        if(r !== one.orig.r) drag.moved = true;
+        shapes[one.i] = {...one.orig, r};
+      } else {                                     // 其餘＝整組繞外框中心縮放
+        const c = drag.gc;
+        const d0 = Math.max(0.2, Math.hypot(g0[0]-c[0], g0[1]-c[1]));
+        const f = Math.max(0.25, snap(Math.hypot(gs[0]-c[0], gs[1]-c[1]) / d0, 0.25));
+        if(f !== 1) drag.moved = true;
+        drag.targets.forEach(({i,orig})=> shapes[i] = scaleShape(orig, c, f));
+      }
+    }
+  }
+  draw();
+});
+stage.addEventListener('pointerup', ()=>{
+  if(!drag) return;
+  if(drag.mode === 'marquee'){
+    if(drag.moved && marquee){
+      const [a,b] = marquee;
+      const R = [Math.min(a[0],b[0]), Math.min(a[1],b[1]), Math.max(a[0],b[0]), Math.max(a[1],b[1])];
+      const hit = shapes.map((s,i)=>i).filter(i =>
+        expandOne(shapes[i]).some(o=>{ const q = bboxOf(o.s);
+          return q[0]<=R[2] && q[2]>=R[0] && q[1]<=R[3] && q[3]>=R[1]; }));
+      sel = drag.add ? [...new Set([...sel, ...hit])] : hit;
+    }
+    marquee = null; drag = null; draw(); return;
+  }
+  if(!drag.moved && !drag.born){
+    if(drag.fromAlt){ shapes.pop(); sel = [drag.src]; }
+    hist.pop();
+  }
+  drag = null; draw();
+});
+stage.addEventListener('pointerleave', ()=>{ hover=null; if(!drag) draw(); });
+
+function commit(){
+  if(!cur) return;
+  if(cur.pts.length < (cur.t==='poly' ? 3 : 2)) return;   // 還不成形就繼續畫，別默默丟掉
+  pushHist();
+  const s = {t:cur.t, pts:cur.pts};
+  if(cur.t==='line') s.w = W_DEF;
+  if(neg) s.neg = true;
+  shapes.push(s); sel = shapes.length-1; cur = null;
+}
+// ---------- 鍵盤：選好之後，按鍵直接改參數 ----------
+const ARROWS = {ArrowLeft:[-1,0], ArrowRight:[1,0], ArrowUp:[0,-1], ArrowDown:[0,1]};
+document.addEventListener('keydown', e=>{
+  if(/TEXTAREA|INPUT/.test(e.target.tagName)) return;
+  if((e.metaKey||e.ctrlKey) && e.key==='z'){ e.preventDefault(); undo(); return; }
+  if((e.metaKey||e.ctrlKey) && (e.key==='a'||e.key==='A')){ e.preventDefault(); sel = shapes.map((_,i)=>i); draw(); return; }
+  if(e.key==='Enter'){ commit(); draw(); return; }
+  if(e.key==='Escape'){ if(cur) cur=null; else { sel=[]; setTool('sel'); } marquee=null; draw(); return; }
+  if(e.key==='v'||e.key==='V'){ setTool('sel'); return; }
+  if(!sel.length || e.metaKey || e.ctrlKey) return;
+  if(e.key==='Delete'||e.key==='Backspace'){
+    e.preventDefault(); pushHist();
+    shapes = shapes.filter((_,i)=>!sel.includes(i)); sel=[]; draw(); return;
+  }
+  if(ARROWS[e.key]){                                   // 方向鍵＝位置，⇧一整格、⌥四分之一格
+    e.preventDefault();
+    const step = e.shiftKey ? 1 : e.altKey ? 0.25 : 0.5;
+    nudgeSel(ARROWS[e.key][0]*step, ARROWS[e.key][1]*step); return;
+  }
+  const K = {                                          // 一鍵一參數
+    '=':()=>scaleSel(1.25), '+':()=>scaleSel(1.25),    // 大小
+    '-':()=>scaleSel(0.8),  '_':()=>scaleSel(0.8),
+    ']':()=>bumpRep(1),     '[':()=>bumpRep(-1),       // 份數
+    '.':()=>widthSel(0.25), ',':()=>widthSel(-0.25),   // 線寬
+    'x':()=>setMir('x'),    'y':()=>setMir('y'),       // 鏡射
+    'n':negSel,                                        // 正負
+    'd':()=>{ pushHist(); const add = selShapes().map(clone);
+              shapes.push(...add); sel = add.map((_,k)=>shapes.length-add.length+k); draw(); },
+  }[e.key.toLowerCase()];
+  if(K){ e.preventDefault(); K(); }
+});
+
+// ---------- 控制列 ----------
+function setTool(t){
+  tool = t; cur = null;
+  document.querySelectorAll('#tools button').forEach(x=>x.setAttribute('aria-selected', x.dataset.tool===t));
+  stage.style.cursor = DRAW() ? 'crosshair' : 'default';
+  draw();
+}
+document.getElementById('tools').addEventListener('click', e=>{
+  const b = e.target.closest('button[data-tool]'); if(b) setTool(b.dataset.tool);
+});
+document.getElementById('negBtn').addEventListener('click', function(){
+  neg = !neg; this.classList.toggle('on', neg);
+  this.textContent = neg ? '負形 挖空中' : '負形';
+});
+function setN(v){
+  v = Math.max(2, Math.min(33, v));
+  if(v === n) return;
+  pushHist();
+  activeGrid = null; renderGridBar();
+  const d = (v - n) / 2;   // 改密度時整體平移，維持置中
+  shapes.forEach(s=>{
+    if(s.c)   s.c = [s.c[0]+d, s.c[1]+d];
+    if(s.pts) s.pts = s.pts.map(p=>[p[0]+d, p[1]+d]);
+  });
+  n = v; cur = null; syncN(); draw();
+}
+document.getElementById('nMinus').addEventListener('click', ()=>setN(n-1));
+document.getElementById('nPlus').addEventListener('click', ()=>setN(n+1));
+document.getElementById('undoBtn').addEventListener('click', undo);
+document.getElementById('clearBtn').addEventListener('click', ()=>{pushHist();shapes=[];cur=null;sel=null;draw();});
+
+// ---------- 輸出 ----------
+document.getElementById('copySvg').addEventListener('click', function(){
+  navigator.clipboard.writeText(iconSvg());
+  this.textContent='已複製'; setTimeout(()=>this.textContent='複製 SVG',1200);
+});
+document.getElementById('copyJson').addEventListener('click', function(){
+  navigator.clipboard.writeText(JSON.stringify({n,shapes}, rnd3));
+  this.textContent='已複製'; setTimeout(()=>this.textContent='複製公式 JSON',1200);
+});
+
+// ---------- 公式範例 ----------
+const PRESETS = {
+  '播放':{n:5,shapes:[{t:'poly',pts:[[1,0],[1,4],[4,2]]}]},
+  '靶心':{n:5,shapes:[{t:'ring',c:[2,2],r:1.5,w:0.5},{t:'dot',c:[2,2],r:0.5}]},
+  '閃電':{n:7,shapes:[{t:'poly',pts:[[4,0],[1,4],[3,4],[2,6],[5,2],[3,2]]}]},
+  '山日':{n:7,shapes:[{t:'poly',pts:[[0,6],[2,2],[4,6]]},{t:'poly',pts:[[3,6],[5,4],[6,6]]},{t:'dot',c:[5,1],r:0.75}]},
+  '打勾':{n:7,shapes:[{t:'line',pts:[[1,3],[3,5],[6,1]],w:0.75}]},
+  '鏡頭':{n:7,shapes:[{t:'ring',c:[3,3],r:2.5,w:0.5},{t:'dot',c:[3,3],r:1.25},{t:'dot',c:[3,3],r:0.5,neg:true}]},
+};
+function loadPreset(k){
+  const p = PRESETS[k]; if(!p) return;
+  pushHist();
+  n = p.n; shapes = clone(p.shapes); cur = null; sel = []; setTool("sel");
+  if(activeGrid && activeGrid.div !== n-1){ activeGrid = null; renderGridBar(); }
+  syncN(); draw();
+}
+const pr = document.getElementById('presets');
+Object.keys(PRESETS).forEach(k=>{
+  const b = document.createElement('button');
+  b.className = 'pill mini'; b.textContent = k;
+  b.addEventListener('click', ()=>loadPreset(k));
+  pr.appendChild(b);
+});
+
+// ---------- 業界格線標準 ----------
+// div＝格數（viewBox 邊長），n＝格點數＝div+1。live＝安全區邊長。
+const GRIDS = {
+  'Material 24': { div:24, live:20, stroke:2, radius:2, key:{sq:18, circ:20, rw:20, rh:16},
+    note:'Google Material：24dp 畫布、20dp 安全區（四邊各留 2dp）。Keyline 基準形＝方 18／圓 ⌀20／矩 20×16 與 16×20——<b>圓要畫得比方大，看起來才一樣大</b>，這是整套系統最值錢的一條。線寬 2dp、圓角 2dp。' },
+  'Lucide 24':   { div:24, live:22, stroke:2,
+    note:'Feather／Lucide：24 格、線寬 2、端點圓頭、<b>純描邊不填色</b>。所以重量只剩線寬一個控制項，形要靠骨架撐。安全區是慣例，非硬規格。' },
+  'Carbon 32':   { div:32, live:28, stroke:2,
+    note:'IBM Carbon：32 格（另有 16／20／24 階）。畫布變大不代表線變粗——<b>線寬照樣鎖 2</b>，多出來的空間拿去放細節，不是放肉。' },
+  'Fluent 20':   { div:20, live:18, stroke:1.5,
+    note:'微軟 Fluent：12／16／20／24／28／32／48 一整階，20 是介面主力。<b>每一階是重畫不是縮放</b>，小尺寸要主動刪細節。' },
+  'Bootstrap 16':{ div:16, live:14, stroke:1,
+    note:'Bootstrap Icons：16 格，最小可用尺寸。這個密度幾乎放不下細節，是最好的<b>減法練習</b>——16 格畫得出來的形，放到哪都活。' },
+};
+function applyGrid(name){
+  const G = GRIDS[name]; if(!G) return;
+  pushHist();
+  const v = G.div + 1, d = (v - n) / 2;    // 換格線也維持置中
+  shapes.forEach(s=>{
+    if(s.c)   s.c = [s.c[0]+d, s.c[1]+d];
+    if(s.pts) s.pts = s.pts.map(p=>[p[0]+d, p[1]+d]);
+  });
+  n = v; activeGrid = {...G, name}; cur = null;
+  syncN(); renderGridBar(); draw();
+}
+function renderGridBar(){
+  document.querySelectorAll('#grids button').forEach(b=>
+    b.classList.toggle('on', !!activeGrid && b.textContent === activeGrid.name));
+  document.getElementById('gridNote').innerHTML = activeGrid
+    ? activeGrid.note
+    : '選一套格線，畫布換成業界規格：安全區與 keyline 基準形會疊在底下。';
+}
+const gb = document.getElementById('grids');
+Object.keys(GRIDS).forEach(k=>{
+  const b = document.createElement('button');
+  b.className = 'pill mini'; b.textContent = k;
+  b.addEventListener('click', ()=>applyGrid(k));
+  gb.appendChild(b);
+});
+document.getElementById('keyBtn').addEventListener('click', function(){
+  showKey = !showKey; this.classList.toggle('on', showKey); draw();
+});
+
+// ---------- 變體牆：停止設計，開始挑選 ----------
+// 規則只有一條：每個變體只改一件事。改兩件就看不出是哪一件讓它變好。
+const rand = a => a[Math.floor(Math.random()*a.length)];
+const pickIdx = (st, ok) => { const c = st.shapes.map((s,i)=>i).filter(i=>ok(st.shapes[i])); return c.length ? rand(c) : -1; };
+const withShape = (st, i, f) => ({ n:st.n, shapes: st.shapes.map((s,j)=> j===i ? f(clone(s)) : s) });
+const setRepOn = (s, r) => { const o = {...s}; if(r.k>1 || r.mir) o.rep = r; else delete o.rep; return o; };
+
+const MUTS = [
+  // 份數：最有感的一軸，對稱先把品味那關守住，所以怎麼變都不會醜
+  st => { const i = pickIdx(st, ()=>true); if(i<0) return null;
+    const k = rand([3,4,5,6,8,12].filter(v => v !== (st.shapes[i].rep?.k || 1)));
+    return [withShape(st,i,s=>setRepOn(s,{...(s.rep||{}), k})), `份數 ×${k}`]; },
+  // 鏡射
+  st => { const i = pickIdx(st, ()=>true); if(i<0) return null;
+    const has = st.shapes[i].rep?.mir, ax = has ? null : rand(['x','y']);
+    return [withShape(st,i,s=>{ const r={...(s.rep||{})}; if(ax) r.mir=ax; else delete r.mir; return setRepOn(s,r); }),
+      ax ? `加鏡射 ${ax.toUpperCase()}` : '去鏡射']; },
+  // 半徑
+  st => { const i = pickIdx(st, s=>s.r!=null); if(i<0) return null;
+    const r = Math.max(0.25, Math.round(st.shapes[i].r * rand([0.55,0.7,0.85,1.25,1.5]) * 4)/4);
+    if(r === st.shapes[i].r) return null;
+    return [withShape(st,i,s=>({...s, r})), `半徑 ${r}`]; },
+  // 線寬
+  st => { const i = pickIdx(st, s=>s.w!=null); if(i<0) return null;
+    const w = rand([0.25,0.5,0.75,1,1.5].filter(v=>v!==st.shapes[i].w));
+    return [withShape(st,i,s=>({...s, w})), `線寬 ${w}`]; },
+  // 推一個頂點：形本身的微調
+  st => { const i = pickIdx(st, s=>s.pts); if(i<0) return null;
+    const v = Math.floor(Math.random()*st.shapes[i].pts.length), d = rand([[1,0],[-1,0],[0,1],[0,-1],[1,1],[-1,-1]]);
+    return [withShape(st,i,s=>({...s, pts:s.pts.map((p,j)=> j===v ? [p[0]+d[0], p[1]+d[1]] : p)})), `推第 ${v+1} 點`]; },
+  // 離心：整形對中心縮放＝花瓣的長短與離心距離
+  st => { const i = pickIdx(st, ()=>true); if(i<0) return null;
+    const c = (st.n-1)/2, f = rand([0.7,0.82,1.15,1.3]);
+    return [withShape(st,i,s=>{ const g = p=>[c+(p[0]-c)*f, c+(p[1]-c)*f];
+      const o={...s}; if(o.c) o.c=g(o.c); if(o.pts) o.pts=o.pts.map(g);
+      if(o.r) o.r = Math.max(0.25, Math.round(o.r*f*4)/4); return o; }), `離心 ×${f}`]; },
+  // 相位：轉半格，讓複本錯開＝風車感
+  st => { const i = pickIdx(st, s=>s.rep?.k>1); if(i<0) return null;
+    const d = 180/st.shapes[i].rep.k;
+    return [withShape(st,i,s=>rotShape(s,(st.n-1)/2,d)), `相位 ${Math.round(d)}°`]; },
+  // 正負對調
+  st => { if(st.shapes.length < 2) return null;
+    const i = pickIdx(st, ()=>true);
+    return [withShape(st,i,s=>({...s, neg:!s.neg})), st.shapes[i].neg ? '轉正形' : '轉負形']; },
+];
+
+let wallItems = [], wallGen = 0, wallTimer = null, lastSig = '';
+function rollWall(){
+  wallGen++;
+  const base = { n, shapes: clone(shapes) };
+  const out = [{ st:base, label:'現在', now:true }];
+  const pool = [...MUTS].sort(()=>Math.random()-0.5);
+  const seen = new Set([JSON.stringify(base)]);
+  for(let mi=0, guard=0; out.length<12 && guard<300; mi++, guard++){
+    const r = pool[mi % pool.length](base);
+    if(!r) continue;
+    const key = JSON.stringify(r[0]);
+    if(seen.has(key)) continue;          // 完全一樣的不佔位子
+    seen.add(key);
+    out.push({ st:r[0], label:r[1] });
+  }
+  wallItems = out;
+  document.getElementById('wall').innerHTML = out.map((o,i)=>
+    `<div class="vt ${o.now?'now':''}" onclick="adoptVariant(${i})">${svgOf(o.st, 76)}<em>${o.label}</em></div>`).join('');
+  document.getElementById('wallGen').textContent = `第 ${wallGen} 輪`;
+}
+// 只有「形真的變了」才重排；純滑鼠移動不重排，牆才不會在你眼前亂跳
+function scheduleWall(){
+  const sig = JSON.stringify({n, shapes});
+  if(sig === lastSig) return;
+  lastSig = sig;
+  clearTimeout(wallTimer);
+  wallTimer = setTimeout(rollWall, 240);
+}
+window.adoptVariant = i => {
+  const o = wallItems[i]; if(!o || o.now) return;
+  pushHist();
+  n = o.st.n; shapes = clone(o.st.shapes); sel = []; cur = null; setTool("sel");
+  activeGrid = null; syncN(); renderGridBar(); draw();   // draw 會排下一輪＝迭代迴圈
+};
+document.getElementById('rollBtn').addEventListener('click', rollWall);
+
+// ---------- 骨架庫：每個都是「一層原形＋rep 參數」，不是一堆複本 ----------
+// 選起來改 ×份數，整顆立刻重新長出來——這就是骨架跟死圖的差別。
+const CONSTRUCTS = {
+  // 角寬 35°＜45°，八份之間才留得下縫；瓣尖偏一邊＝光圈的旋轉感
+  '光圈八瓣': {n:25, shapes:[{t:'poly', pts:[[12,9.4],[14.6,6.2],[13.2,2.6],[10.9,6.4]], rep:{k:8}}]},
+  '風車四葉': {n:25, shapes:[{t:'poly', pts:[[12,12],[12,2],[19,5]], rep:{k:4}}]},
+  // 主幹 + 一支分枝鏡射，再整組轉 6 份＝18 個實體，但只有 2 層
+  '六角雪花': {n:25, shapes:[
+      {t:'line', pts:[[12,12],[12,2]], w:0.9, rep:{k:6}},
+      {t:'line', pts:[[12,6],[9,3.6]], w:0.9, rep:{k:6, mir:'x'}},
+  ]},
+  '放射十二': {n:25, shapes:[{t:'line', pts:[[12,5],[12,1.5]], w:1.2, rep:{k:12}}]},
+  // 減法：負形就是設計裡的「咬一口」
+  '月牙':     {n:25, shapes:[{t:'dot',c:[12,12],r:9},{t:'dot',c:[16.5,7.5],r:8.6,neg:true}]},
+  '咬一口':   {n:25, shapes:[{t:'dot',c:[12,12],r:9},{t:'dot',c:[20.5,4.5],r:5.6,neg:true}]},
+  // 疊圓：正圓聯集、負圓相減，經典標誌構成法的兩個運算
+  '同心三環': {n:25, shapes:[{t:'ring',c:[12,12],r:10,w:2},{t:'ring',c:[12,12],r:6.5,w:2},{t:'dot',c:[12,12],r:2.5}]},
+  '疊圓花':   {n:25, shapes:[{t:'dot',c:[12,5],r:4,rep:{k:6}},{t:'dot',c:[12,12],r:3.4,neg:true}]},
+};
+function loadConstruct(k){
+  const p = CONSTRUCTS[k]; if(!p) return;
+  pushHist();
+  n = p.n; shapes = clone(p.shapes); cur = null; sel = [0]; setTool("sel"); // 直接選好第一層，拖了就有反應
+  activeGrid = null; syncN(); renderGridBar(); draw();
+}
+const cb = document.getElementById('constructs');
+Object.keys(CONSTRUCTS).forEach(k=>{
+  const b = document.createElement('button');
+  b.className = 'pill mini'; b.textContent = k;
+  b.addEventListener('click', ()=>loadConstruct(k));
+  cb.appendChild(b);
+});
+
+if(location.hash){
+  const k = decodeURIComponent(location.hash.slice(1));
+  if(PRESETS[k]) loadPreset(k); else if(CONSTRUCTS[k]) loadConstruct(k);
+}
+
+// ---------- 隨機生成 ----------
+document.getElementById('randBtn').addEventListener('click', ()=>{
+  pushHist();
+  n = [5,7][Math.floor(Math.random()*2)];
+  activeGrid = null; renderGridBar(); syncN();
+  const m = n-1, mid = m/2;
+  const mirror = p => [m-p[0], p[1]];
+  shapes = []; cur = null; sel = [];
+  const count = 1+Math.floor(Math.random()*2);
+  for(let c=0;c<count;c++){
+    const kind = ['poly','dot','ring','line'][Math.floor(Math.random()*4)];
+    const rp = ()=>[Math.floor(Math.random()*(mid+1)), Math.floor(Math.random()*n)];
+    if(kind==='dot'||kind==='ring'){
+      const ct = rp(), r = [0.75,1,1.5][Math.floor(Math.random()*3)];
+      const s = kind==='dot'?{t:'dot',c:ct,r}:{t:'ring',c:ct,r,w:0.5};
+      shapes.push(s);
+      if(ct[0]!==mid) shapes.push({...s, c:mirror(ct)});
+    } else {
+      const len = 3+Math.floor(Math.random()*2);
+      const pts=[]; while(pts.length<len){const p=rp(); if(!pts.some(q=>q[0]===p[0]&&q[1]===p[1])) pts.push(p);}
+      const s = kind==='poly'?{t:'poly',pts}:{t:'line',pts,w:0.5};
+      shapes.push(s);
+      shapes.push({...s, pts:pts.map(mirror)});
+    }
+  }
+  draw();
+});
+
+draw();
+clearTimeout(wallTimer); rollWall();   // 首屏不要空著等 debounce
+
+</script>
+</body>
+</html>
