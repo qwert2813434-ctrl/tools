@@ -4,6 +4,38 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>排版分享 — ALIGNED</title>
+<script>
+/* ── 主題：平常跟著日夜自動切；手動切了就聽你的，到下一次日夜交替為止 ──
+   放在 <head> 先跑，避免先閃一下亮色再變暗。全站共用同一把 key。 */
+(function(){
+  var MAP = {day:'light', night:'dark'};
+  var KEY = 'tools.theme';
+  function isDay(d){ var h = d.getHours(); return h >= 7 && h < 19; }
+  /* 覆寫的有效範圍＝「這一個白天」或「這一個夜晚」，所以要帶日期。
+     凌晨算前一天的夜，半夜才不會自己跳回去。 */
+  function phaseKey(d){
+    var t = new Date(d.getTime());
+    if(t.getHours() < 7) t.setDate(t.getDate() - 1);
+    return t.toDateString() + (isDay(d) ? '|day' : '|night');
+  }
+  function auto(d){
+    try{ if(matchMedia('(prefers-color-scheme: dark)').matches) return 'night'; }catch(e){}
+    return isDay(d) ? 'day' : 'night';
+  }
+  function override(d){
+    try{ var o = JSON.parse(localStorage.getItem(KEY) || 'null');
+         return (o && o.k === phaseKey(d)) ? o.v : null; }catch(e){ return null; }
+  }
+  window.themeNow = function(){ var d = new Date(); return override(d) || auto(d); };
+  window.applyTheme = function(v){ document.documentElement.dataset.theme = MAP[v]; };
+  window.toggleTheme = function(){
+    var d = new Date(), v = themeNow() === 'night' ? 'day' : 'night';
+    try{ localStorage.setItem(KEY, JSON.stringify({v:v, k:phaseKey(d)})); }catch(e){}
+    applyTheme(v); return v;
+  };
+  applyTheme(themeNow());
+})();
+</script>
 <style>
   :root{
     --base:#141317; --card:#211F24; --card2:#191820;
@@ -313,12 +345,7 @@ new ResizeObserver(() => {
 }).observe(WALL);
 addEventListener("load", () => layoutWall());
 
-const tbtn = document.getElementById("theme"), rootEl = document.documentElement;
-if (localStorage.getItem("theme")) rootEl.dataset.theme = localStorage.getItem("theme");
-tbtn.addEventListener("click", () => {
-  const t = rootEl.dataset.theme === "light" ? "dark" : "light";
-  rootEl.dataset.theme = t; localStorage.setItem("theme", t);
-});
+document.getElementById("theme").addEventListener("click", () => toggleTheme());
 </script>
 </body>
 </html>

@@ -7,6 +7,38 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+/* ── 主題：平常跟著日夜自動切；手動切了就聽你的，到下一次日夜交替為止 ──
+   放在 <head> 先跑，避免先閃一下亮色再變暗。全站共用同一把 key。 */
+(function(){
+  var MAP = {day:'soft', night:'dusk'};
+  var KEY = 'tools.theme';
+  function isDay(d){ var h = d.getHours(); return h >= 7 && h < 19; }
+  /* 覆寫的有效範圍＝「這一個白天」或「這一個夜晚」，所以要帶日期。
+     凌晨算前一天的夜，半夜才不會自己跳回去。 */
+  function phaseKey(d){
+    var t = new Date(d.getTime());
+    if(t.getHours() < 7) t.setDate(t.getDate() - 1);
+    return t.toDateString() + (isDay(d) ? '|day' : '|night');
+  }
+  function auto(d){
+    try{ if(matchMedia('(prefers-color-scheme: dark)').matches) return 'night'; }catch(e){}
+    return isDay(d) ? 'day' : 'night';
+  }
+  function override(d){
+    try{ var o = JSON.parse(localStorage.getItem(KEY) || 'null');
+         return (o && o.k === phaseKey(d)) ? o.v : null; }catch(e){ return null; }
+  }
+  window.themeNow = function(){ var d = new Date(); return override(d) || auto(d); };
+  window.applyTheme = function(v){ document.documentElement.dataset.theme = MAP[v]; };
+  window.toggleTheme = function(){
+    var d = new Date(), v = themeNow() === 'night' ? 'day' : 'night';
+    try{ localStorage.setItem(KEY, JSON.stringify({v:v, k:phaseKey(d)})); }catch(e){}
+    applyTheme(v); return v;
+  };
+  applyTheme(themeNow());
+})();
+</script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -286,7 +318,7 @@
 
 <div class="topbar">
   <div class="mark">Armin Kao</div>
-  <button class="orb" onclick="flip()" title="切換明暗">◐</button>
+  <button class="orb" onclick="flip()" title="明暗切換（平常跟著日夜自動切，手動切了就聽你的）">◐</button>
 </div>
 
 <main class="shell">
@@ -556,10 +588,7 @@
 </footer>
 
 <script>
-  function flip() {
-    var r = document.documentElement;
-    r.dataset.theme = r.dataset.theme === 'soft' ? 'dusk' : 'soft';
-  }
+  function flip() { toggleTheme(); }
   document.querySelectorAll('.seg button').forEach(function (b) {
     b.addEventListener('click', function () {
       document.querySelectorAll('.seg button').forEach(function (x) { x.setAttribute('aria-selected', 'false'); });
