@@ -1,0 +1,19 @@
+# 小高工具間
+# credits.html 是兩萬多位真人的姓名與作品紀錄，資料取自各家公開發佈的名單。
+# 先不開放搜尋引擎收錄，頁面本身也帶 noindex。
+User-agent: *
+Disallow: /credits.html
+
+# AI 訓練爬蟲一律不收
+User-agent: GPTBot
+Disallow: /
+User-agent: ClaudeBot
+Disallow: /
+User-agent: CCBot
+Disallow: /
+User-agent: Google-Extended
+Disallow: /
+User-agent: Applebot-Extended
+Disallow: /
+User-agent: PerplexityBot
+Disallow: /
