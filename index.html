@@ -341,7 +341,32 @@
     </div>
   </div>
 
-  <article class="tool" data-cat="web">
+  <article class="tool" data-cat="mac">
+    <div class="tool-media">
+      <div class="glyph"><svg viewBox="0 0 48 48" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="4" y="8" width="16" height="32" rx="2"/>
+        <path d="M8 15h8M8 21h8M8 27h5"/>
+        <path d="M23 24h6M26 21l3 3-3 3"/>
+        <path d="M34 18 40 15 46 18 46 26 40 29 34 26 Z"/>
+        <path d="M34 18 40 21 46 18M40 21 40 29"/>
+      </svg></div>
+    </div>
+    <div class="tool-body">
+      <h3>兩支工具的規格書 <span class="tag live">開源 · 給 AI 讀</span> <span class="tag">Mac</span></h3>
+      <p class="desc">我自己天天在用的兩支工具，開源了，但沒有放程式碼——放的是讓你的 AI 照著蓋的施工圖。分階段的施工順序、每個介面的規格、二十幾個不會噴錯的地雷，還有每一步該怎麼驗收。整包丟給你的 AI，說「照著蓋」，它會蓋出屬於你的那一版：你的快捷鍵、你的聲音、你的辭典。</p>
+      <ul>
+        <li><b>Aloud</b>　選單列朗讀窗：任何 App 選字右鍵就唸給你聽，逐句串流所以首字延遲不到半秒、跟文章多長無關，唸到哪句亮哪句</li>
+        <li><b>WhisperBar</b>　本機語音輸入：按一下 Fn 開始講、再按一下就貼進游標；轉譯全程在自己機器上跑，錄音不上傳</li>
+        <li>為什麼不給程式碼：這兩支跟我的機器、我的辭典、我的快捷鍵綁太緊，原封不動給你也裝不起來。而真正花時間的是那些<b>不會報錯</b>的坑，寫成文件比程式碼耐久</li>
+        <li>每個 repo 五份文件：施工順序／介面契約／地雷清單／驗收條件／給 agent 的入口指示</li>
+      </ul>
+      <a class="btn" href="https://github.com/qwert2813434-ctrl/aloud">Aloud · 朗讀窗</a>
+      <a class="btn quiet" href="https://github.com/qwert2813434-ctrl/whisperbar">WhisperBar · 語音輸入</a>
+      <div class="note">macOS ／ WhisperBar 的本機轉譯需要 Apple Silicon ／ MIT 授權 ／ 不含任何錄音或個人資料 ／ 上架 2026.08.29</div>
+    </div>
+  </article>
+
+  <article class="tool flip" data-cat="web">
     <div class="tool-media">
       <div class="glyph"><svg viewBox="0 0 48 48" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="24" cy="24" r="5"/>
@@ -366,7 +391,7 @@
     </div>
   </article>
 
-  <article class="tool flip" data-cat="web">
+  <article class="tool" data-cat="web">
     <div class="tool-media">
       <div class="glyph"><svg viewBox="0 0 48 48" stroke-linecap="round" stroke-linejoin="round">
         <path d="M24 21.5 L24 5 L33 12 Z"/><path d="M26.5 24 L43 24 L36 33 Z"/>
@@ -389,7 +414,7 @@
     </div>
   </article>
 
-  <article class="tool" data-cat="mac">
+  <article class="tool flip" data-cat="mac">
     <div class="tool-media">
       <div class="shot"><img src="assets/rheo-shot.jpg" alt="RHEO 編輯畫面：人像被抹成流動的絲綢"></div>
       <span class="appicon"><span class="sq"><img src="assets/rheo-icon.png" alt=""></span></span>
@@ -408,7 +433,7 @@
     </div>
   </article>
 
-  <article class="tool flip" data-cat="mac">
+  <article class="tool" data-cat="mac">
     <div class="tool-media">
       <div class="shot"><img src="assets/shuji-shot.jpg" alt="唸書機跟讀器 英中對照畫面"></div>
       <span class="appicon"><span class="sq"><img src="assets/shuji-icon.png" alt=""></span></span>
@@ -426,7 +451,7 @@
     </div>
   </article>
 
-  <article class="tool" data-cat="app">
+  <article class="tool flip" data-cat="app">
     <div class="tool-media">
       <div class="glyph"><svg viewBox="0 0 48 48" stroke-linecap="round" stroke-linejoin="round">
         <rect x="4" y="10" width="17" height="28" rx="2"/>
@@ -451,7 +476,7 @@
     </div>
   </article>
 
-  <article class="tool flip" data-cat="web">
+  <article class="tool" data-cat="web">
     <div class="tool-media">
       <div class="glyph"><svg viewBox="0 0 48 48" stroke-linecap="round" stroke-linejoin="round">
         <rect x="5" y="5" width="13" height="13"/><rect x="9.5" y="9.5" width="4" height="4"/>
@@ -475,7 +500,7 @@
     </div>
   </article>
 
-  <article class="tool" data-cat="web">
+  <article class="tool flip" data-cat="web">
     <div class="tool-media">
       <div class="glyph"><svg viewBox="0 0 48 48" stroke-linecap="round" stroke-linejoin="round">
         <path d="M14 8 C 14 16, 12 22, 14 30 S 17 38, 15 42"/>
@@ -498,7 +523,7 @@
     </div>
   </article>
 
-  <article class="tool flip" data-cat="app">
+  <article class="tool" data-cat="app">
     <div class="tool-media">
       <div class="shot"><img src="assets/aligned-shot.jpg" alt="ALIGNED 編輯畫面"></div>
       <span class="appicon"><span class="sq"><img src="assets/aligned-icon.png" alt=""></span></span>
@@ -518,7 +543,7 @@
     </div>
   </article>
 
-  <article class="tool" data-cat="app">
+  <article class="tool flip" data-cat="app">
     <div class="tool-media">
       <div class="shot"><img src="assets/stb-shot.jpg" alt="STB 分鏡頁畫面"></div>
       <span class="appicon"><span class="sq"><img src="assets/stb-icon.png" alt=""></span></span>
@@ -539,7 +564,7 @@
     </div>
   </article>
 
-  <article class="tool flip" data-cat="mac">
+  <article class="tool" data-cat="mac">
     <div class="tool-media">
       <div class="glyph"><svg viewBox="0 0 48 48" stroke-linecap="round" stroke-linejoin="round">
         <path d="M24 7 V 30"/><path d="M15 22 L 24 31 L 33 22"/>
@@ -559,7 +584,7 @@
     </div>
   </article>
 
-  <article class="tool" data-cat="ae">
+  <article class="tool flip" data-cat="ae">
     <div class="tool-media">
       <div class="glyph"><svg viewBox="0 0 48 48" stroke-linecap="round" stroke-linejoin="round">
         <path d="M8 36 C 17 36, 19 15, 26 15 S 35 26, 42 26"/>
