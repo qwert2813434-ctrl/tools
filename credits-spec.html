@@ -1,0 +1,862 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>怎麼讓名單被讀到｜片尾名單 — 台灣影像工作者名冊</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+/* ── 主題：平常跟著日夜自動切；手動切了就聽你的，到下一次日夜交替為止 ──
+   放在 <head> 先跑，避免先閃一下亮色再變暗。與工具間全站共用同一把 key。 */
+(function(){
+  var MAP = {day:'soft', night:'dusk'};
+  var KEY = 'tools.theme';
+  function isDay(d){ var h = d.getHours(); return h >= 7 && h < 19; }
+  function phaseKey(d){
+    var t = new Date(d.getTime());
+    if(t.getHours() < 7) t.setDate(t.getDate() - 1);   /* 凌晨算前一夜 */
+    return t.toDateString() + (isDay(d) ? '|day' : '|night');
+  }
+  function auto(d){
+    try{ if(matchMedia('(prefers-color-scheme: dark)').matches) return 'night'; }catch(e){}
+    return isDay(d) ? 'day' : 'night';
+  }
+  function override(d){
+    try{ var o = JSON.parse(localStorage.getItem(KEY) || 'null');
+         return (o && o.k === phaseKey(d)) ? o.v : null; }catch(e){ return null; }
+  }
+  window.themeNow = function(){ var d = new Date(); return override(d) || auto(d); };
+  window.applyTheme = function(v){ document.documentElement.dataset.theme = MAP[v]; };
+  window.toggleTheme = function(){
+    var d = new Date(), v = themeNow() === 'night' ? 'day' : 'night';
+    try{ localStorage.setItem(KEY, JSON.stringify({v:v, k:phaseKey(d)})); }catch(e){}
+    applyTheme(v); return v;
+  };
+  applyTheme(themeNow());
+})();
+</script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ══ 柔霧（日）══ */
+  :root {
+    --base:#EDE7E1;
+    --wash-1:#BFD9CD; --wash-2:#EFCEC6; --wash-3:#E9DCCA; --wash-4:#CBDDD5;
+    --panel:rgba(255,255,255,.42); --card:#FCFAF9; --card-2:#F6F2EF;
+    --ink:#1B1917; --ink2:#6B6560; --faint:#A49C96; --hair:rgba(27,25,23,.06);
+    --grad:linear-gradient(96deg,#8FB2A6 0%,#C9B0A8 52%,#D9A5A2 100%);
+    --e1:0 1px 1px rgba(58,46,40,.035), 0 10px 26px -14px rgba(58,46,40,.22);
+    --e2:0 2px 3px rgba(58,46,40,.05),  0 24px 50px -22px rgba(58,46,40,.30);
+    --e-panel:0 1px 2px rgba(58,46,40,.04), 0 40px 90px -40px rgba(58,46,40,.34);
+    --r-xl:34px; --r-lg:26px; --r-md:18px; --r-sm:13px;
+    --sans:'Figtree','PingFang TC','Noto Sans TC',-apple-system,sans-serif;
+    --mono:ui-monospace,'SF Mono',Menlo,monospace;
+    --side:clamp(18px,4vw,42px);
+  }
+  /* ══ 夜霧 ══ */
+  :root[data-theme="dusk"] {
+    --base:#141317;
+    --wash-1:#1D2A26; --wash-2:#2B2020; --wash-3:#201D1B; --wash-4:#17201E;
+    --panel:rgba(255,255,255,.045); --card:#211F24; --card-2:#191820;
+    --ink:#F1EDE9; --ink2:#A8A19B; --faint:#726B67; --hair:rgba(255,255,255,.07);
+    --e1:0 1px 1px rgba(0,0,0,.30), 0 12px 30px -16px rgba(0,0,0,.75);
+    --e2:0 2px 4px rgba(0,0,0,.35),  0 26px 55px -24px rgba(0,0,0,.85);
+    --e-panel:0 40px 100px -46px rgba(0,0,0,.9);
+  }
+
+  html { font-size:16px; }
+  body {
+    font-family:var(--sans); font-weight:400; line-height:1.72;
+    color:var(--ink); background:var(--base);
+    -webkit-font-smoothing:antialiased; min-height:100vh; overflow-x:hidden;
+    transition:background .5s ease, color .5s ease;
+  }
+  button, input, textarea, select { font:inherit; color:inherit; }
+
+  .sky {
+    position:fixed; inset:-20vh -10vw; z-index:-2; pointer-events:none;
+    background:
+      radial-gradient(58% 42% at 12%  4%, var(--wash-1) 0%, transparent 62%),
+      radial-gradient(52% 38% at 96% 20%, var(--wash-3) 0%, transparent 62%),
+      radial-gradient(72% 46% at 34% 74%, var(--wash-2) 0%, transparent 64%),
+      radial-gradient(50% 40% at 88% 96%, var(--wash-4) 0%, transparent 62%);
+    filter:blur(30px); transition:background .5s ease;
+  }
+  .grain {
+    position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.05;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ─── 頂列 ─── */
+  .topbar {
+    max-width:1020px; margin:0 auto; padding:26px var(--side) 0;
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+  }
+  .mark { font-size:13px; letter-spacing:.22em; text-transform:uppercase; color:var(--ink2); font-weight:500; }
+  .demo-tag {
+    font-size:11px; letter-spacing:.18em; color:var(--faint);
+    padding:4px 10px; border-radius:99px; background:var(--card-2);
+  }
+  .orb {
+    width:42px; height:42px; border-radius:50%; border:0; cursor:pointer; flex:none;
+    background:var(--card); color:var(--ink2); box-shadow:var(--e1);
+    display:flex; align-items:center; justify-content:center; font-size:16px;
+    transition:transform .2s cubic-bezier(.2,.8,.3,1), box-shadow .2s;
+  }
+  .orb:hover { transform:scale(1.07); box-shadow:var(--e2); }
+
+  /* ─── 外層霧面容器 ─── */
+  .shell {
+    max-width:1020px; margin:22px auto 0;
+    padding:clamp(38px,6vw,74px) clamp(20px,4vw,54px) clamp(40px,5vw,60px);
+    background:var(--panel); border-radius:var(--r-xl); box-shadow:var(--e-panel);
+    backdrop-filter:blur(26px); -webkit-backdrop-filter:blur(26px);
+  }
+
+  /* ─── 標頭三層 ─── */
+  .eyebrow { font-size:12px; letter-spacing:.28em; margin-right:-.28em; text-transform:uppercase; color:var(--faint); font-weight:500; }
+  h1 { font-size:clamp(40px,7.4vw,60px); font-weight:700; letter-spacing:-.012em; line-height:1.04; margin:14px 0 0; }
+  .rule { width:2.6em; height:1px; background:var(--ink); opacity:.22; margin:22px 0; }
+  .lede { max-width:26em; color:var(--ink2); font-size:16.5px; }
+  .lede b { color:var(--ink); font-weight:600; }
+
+  /* ─── 搜尋 ─── */
+  .searchbox {
+    margin:34px 0 0; background:var(--card); border-radius:var(--r-lg);
+    box-shadow:var(--e1); padding:6px 8px 6px 22px; display:flex; align-items:center; gap:12px;
+    transition:box-shadow .25s, transform .25s;
+  }
+  .searchbox:focus-within { box-shadow:var(--e2); transform:translateY(-1px); }
+  .searchbox svg { flex:none; opacity:.42; }
+  #q { flex:1; border:0; outline:0; background:transparent; font-size:18px; padding:16px 0; min-width:0; }
+  #q::placeholder { color:var(--faint); }
+  .clr { border:0; background:transparent; cursor:pointer; color:var(--faint); font-size:20px; padding:8px 14px; border-radius:99px; }
+  .clr:hover { color:var(--ink); }
+
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin:16px 0 0; }
+  .chip {
+    border:0; cursor:pointer; font-size:13px; font-weight:500; padding:8px 15px;
+    border-radius:99px; background:var(--card-2); color:var(--ink2); transition:all .18s;
+  }
+  .chip:hover { color:var(--ink); }
+  .chip[aria-pressed="true"] { background:var(--card); color:var(--ink); box-shadow:var(--e1); }
+
+  .meta { font-size:12.5px; color:var(--faint); margin:24px 0 12px; letter-spacing:.02em; }
+  .meta b { color:var(--ink2); font-weight:500; }
+
+  /* ─── 結果 ─── */
+  .grouplabel { font-size:13px; font-weight:600; letter-spacing:.24em; margin:26px 0 12px; margin-right:-.24em; color:var(--ink2); }
+  .grouplabel span { font-weight:400; letter-spacing:0; color:var(--faint); margin-left:.7em; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(232px,1fr)); gap:12px; }
+  .card {
+    background:var(--card); border-radius:var(--r-lg); box-shadow:var(--e1);
+    padding:18px 20px 17px; cursor:pointer; text-align:left; border:0; width:100%;
+    transition:transform .2s cubic-bezier(.2,.8,.3,1), box-shadow .2s;
+  }
+  .card:hover { transform:translateY(-3px); box-shadow:var(--e2); }
+  .c-name { font-size:15.5px; font-weight:600; line-height:1.4; }
+  .c-id { font-family:var(--mono); font-size:11px; letter-spacing:.06em; color:var(--faint); margin-top:3px; }
+  .c-sub { font-size:13px; color:var(--ink2); line-height:1.62; margin-top:9px; }
+  .c-foot { font-size:12px; color:var(--faint); margin-top:8px; }
+  .pending { color:var(--ink2); }
+  .pending::before { content:''; display:inline-block; width:5px; height:5px; border-radius:50%; background:var(--faint); margin-right:7px; vertical-align:middle; }
+
+  .empty { font-size:14.5px; color:var(--ink2); background:var(--card); border-radius:var(--r-lg); box-shadow:var(--e1); padding:26px 24px; }
+  .empty b { color:var(--ink); font-weight:600; }
+
+  /* ─── 明細 ─── */
+  .back { border:0; background:transparent; cursor:pointer; color:var(--ink2); font-size:13px; padding:0; margin-bottom:20px; letter-spacing:.04em; }
+  .back:hover { color:var(--ink); }
+  .detail { background:var(--card); border-radius:var(--r-lg); box-shadow:var(--e1); padding:clamp(24px,3.6vw,38px); }
+  .d-head { display:flex; align-items:flex-start; justify-content:space-between; gap:20px; flex-wrap:wrap; }
+  .d-name { font-size:clamp(26px,4vw,34px); font-weight:700; line-height:1.14; letter-spacing:-.01em; }
+  .d-id { font-family:var(--mono); font-size:11.5px; letter-spacing:.06em; color:var(--faint); margin-top:6px; }
+  .d-sub { font-size:14.5px; color:var(--ink2); margin-top:12px; max-width:34em; }
+  .claim {
+    border:0; cursor:pointer; flex:none; font-size:13px; font-weight:500; color:#fff;
+    padding:11px 20px; border-radius:99px; background:var(--grad); box-shadow:var(--e1);
+    transition:transform .2s, box-shadow .2s;
+  }
+  .claim:hover { transform:translateY(-2px); box-shadow:var(--e2); }
+  .claim[disabled] { background:var(--card-2); color:var(--faint); cursor:default; transform:none; box-shadow:none; }
+
+  .src { font-size:12.5px; color:var(--faint); margin-top:10px; }
+  .src a { color:var(--ink2); text-decoration:underline; text-underline-offset:3px; text-decoration-color:var(--hair); }
+  .src a:hover { color:var(--ink); }
+  .src { font-size:12.5px; color:var(--faint); margin-top:10px; }
+  .src a { color:var(--ink2); text-decoration:underline; text-underline-offset:3px; text-decoration-color:var(--hair); }
+  .src a:hover { color:var(--ink); }
+  .src { font-size:12.5px; color:var(--faint); margin-top:10px; }
+  .src a { color:var(--ink2); text-decoration:underline; text-underline-offset:3px; text-decoration-color:var(--hair); }
+  .src a:hover { color:var(--ink); }
+  .src { font-size:12.5px; color:var(--faint); margin-top:10px; }
+  .src a { color:var(--ink2); text-decoration:underline; text-underline-offset:3px; text-decoration-color:var(--hair); }
+  .src a:hover { color:var(--ink); }
+  /* ==UI-BLOCK== 這一段由 inject.py 從 ui.css 覆蓋，改樣式請改 ui.css */
+  /* ==UI-BLOCK== 這一段由 inject.py 從 ui.css 覆蓋，改樣式請改 ui.css */
+  /* ==UI-BLOCK== 這一段由 inject.py 從 ui.css 覆蓋，改樣式請改 ui.css */
+  /* ==UI-BLOCK== 這一段由 inject.py 從 ui.css 覆蓋，改樣式請改 ui.css */
+  /* ==UI-BLOCK== 這一段由 inject.py 從 ui.css 覆蓋，改樣式請改 ui.css */
+  /* ==UI-BLOCK== 這一段由 inject.py 從 ui.css 覆蓋，改樣式請改 ui.css */
+  /* ==UI-BLOCK== 這一段由 inject.py 從 ui.css 覆蓋，改樣式請改 ui.css */
+  /* ==UI-BLOCK== 這一段由 inject.py 從 ui.css 覆蓋，改樣式請改 ui.css */
+  /* ==UI-BLOCK== 這一段由 inject.py 從 ui.css 覆蓋，改樣式請改 ui.css */
+  .card.w { padding:0; overflow:hidden; position:relative; }
+  .shot { aspect-ratio:16/9; background:var(--card-2); display:block; width:100%; object-fit:cover; }
+  .card.w .body { padding:15px 18px 16px; }
+  .card.w .c-name { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; min-height:2.8em; }
+  .thumb { width:56px; height:33px; object-fit:cover; border-radius:5px; background:var(--card-2); display:block; }
+  .banner { width:100%; max-width:400px; aspect-ratio:16/9; object-fit:cover; border-radius:var(--r-md); background:var(--card-2); margin-top:18px; }
+  .frow { display:flex; flex-wrap:wrap; gap:8px; align-items:baseline; margin-top:10px; }
+  .flabel { font-size:11.5px; letter-spacing:.2em; margin-right:-.2em; color:var(--faint); width:2.8em; flex:none; }
+  .f textarea { border:0; outline:0; background:var(--card-2); border-radius:var(--r-sm);
+    padding:12px 14px; font-size:14.5px; width:100%; resize:vertical; line-height:1.7; font-family:var(--sans); }
+  .ig { font-size:13px; color:var(--ink2); margin-top:10px; }
+  .ig a { color:var(--ink2); text-decoration:underline; text-underline-offset:3px; text-decoration-color:var(--hair); }
+  .ig a:hover { color:var(--ink); }
+  .kinds { font-size:11.5px; letter-spacing:.16em; margin-right:-.16em; color:var(--faint); margin-top:6px; }
+  .tier { font-size:12px; letter-spacing:.2em; margin-right:-.2em; color:var(--faint); margin:30px 0 -4px; }
+  .toggle { margin-left:6px; }
+  .toggle[aria-pressed="true"] { background:var(--grad); color:#fff; box-shadow:var(--e1); }
+  .src { font-size:12.5px; color:var(--faint); margin-top:10px; }
+  .src a { color:var(--ink2); text-decoration:underline; text-underline-offset:3px; text-decoration-color:var(--hair); }
+  .src a:hover { color:var(--ink); }
+  .rows { margin-top:26px; }
+  .rows.two .row { grid-template-columns:1fr auto; }
+
+  /* ── 年月分段：捲到哪一段，那一段的年月就黏在頂上 ── */
+  .mhead { position:sticky; top:0; z-index:4; margin:24px 0 11px; padding:9px 13px 8px;
+    font-size:12px; font-weight:600; letter-spacing:.2em; margin-right:-.2em; color:var(--ink2);
+    background:var(--panel); border-radius:var(--r-sm);
+    backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px); }
+  .mhead span { font-weight:400; letter-spacing:0; color:var(--faint); margin-left:.9em; }
+
+  /* ── 圖牆：CSS 分欄，卡片高度隨標題長短自然錯落＝真的瀑布流，零 JS ── */
+  .wall { column-width:194px; column-gap:10px; }
+  .wc { display:block; width:100%; break-inside:avoid; margin:0 0 10px; padding:0; border:0;
+    text-align:left; cursor:pointer; background:var(--card); border-radius:var(--r-sm);
+    box-shadow:var(--e1); overflow:hidden;
+    transition:transform .18s cubic-bezier(.2,.8,.3,1), box-shadow .18s; }
+  .wc:hover { transform:translateY(-3px); box-shadow:var(--e2); }
+  .wc img { width:100%; aspect-ratio:16/9; object-fit:cover; display:block; background:var(--card-2); }
+  .wc .wt { display:block; padding:9px 11px 0; font-size:13px; font-weight:600; line-height:1.45; color:var(--ink); }
+  .wc .wy { display:block; padding:3px 11px 10px; font-size:11px; color:var(--faint); }
+  .wc .wy i, .why i { font-style:normal; }
+  .why { position:absolute; top:9px; left:9px; z-index:2; font-size:10px; letter-spacing:.14em;
+    margin-right:-.14em; color:var(--ink); background:var(--card); border-radius:99px;
+    padding:3px 9px; box-shadow:var(--e1); }
+  .wc .wy i { color:var(--ink2); }
+
+  /* ── 關聯星圖 ── */
+  .star { position:relative; margin:16px 0 0; background:var(--card);
+    border-radius:var(--r-lg); box-shadow:var(--e1); overflow:hidden; }
+  .star canvas { display:block; width:100%; height:472px; }
+  .starlab { position:absolute; inset:auto 0 12px; display:flex; justify-content:space-between;
+    padding:0 22px; font-size:10.5px; letter-spacing:.18em; margin-right:-.18em;
+    color:var(--faint); pointer-events:none; }
+  @media (max-width:640px){ .star canvas { height:400px; } .starlab span:nth-child(2) { display:none; } }
+
+  /* ── 標頭：只留標題與一行小字，其餘搬到頁尾 ── */
+  .sub { font-size:13.5px; color:var(--ink2); margin-top:12px; letter-spacing:.02em; }
+  .searchbox { margin-top:26px; }
+
+  /* ── 頁尾的來源長串 ── */
+  .sources { margin-top:34px; }
+  .sources h3 { font-size:12px; font-weight:600; letter-spacing:.2em; margin-right:-.2em;
+    color:var(--ink2); margin-bottom:10px; }
+  .sources p { font-size:12.5px; line-height:2.05; color:var(--faint); }
+  .sources i { font-style:normal; font-family:var(--mono); font-size:11px; opacity:.7; }
+
+  /* ── 年月分段：捲到哪一段，那一段的年月就黏在頂上 ── */
+  .mhead { position:sticky; top:0; z-index:4; margin:24px 0 11px; padding:9px 13px 8px;
+    font-size:12px; font-weight:600; letter-spacing:.2em; margin-right:-.2em; color:var(--ink2);
+    background:var(--panel); border-radius:var(--r-sm);
+    backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px); }
+  .mhead span { font-weight:400; letter-spacing:0; color:var(--faint); margin-left:.9em; }
+
+  /* ── 圖牆：CSS 分欄，卡片高度隨標題長短自然錯落＝真的瀑布流，零 JS ── */
+  .wall { column-width:194px; column-gap:10px; }
+  .wc { display:block; width:100%; break-inside:avoid; margin:0 0 10px; padding:0; border:0;
+    text-align:left; cursor:pointer; background:var(--card); border-radius:var(--r-sm);
+    box-shadow:var(--e1); overflow:hidden;
+    transition:transform .18s cubic-bezier(.2,.8,.3,1), box-shadow .18s; }
+  .wc:hover { transform:translateY(-3px); box-shadow:var(--e2); }
+  .wc img { width:100%; aspect-ratio:16/9; object-fit:cover; display:block; background:var(--card-2); }
+  .wc .wt { display:block; padding:9px 11px 0; font-size:13px; font-weight:600; line-height:1.45; color:var(--ink); }
+  .wc .wy { display:block; padding:3px 11px 10px; font-size:11px; color:var(--faint); }
+  .wc .wy i, .why i { font-style:normal; }
+  .why { position:absolute; top:9px; left:9px; z-index:2; font-size:10px; letter-spacing:.14em;
+    margin-right:-.14em; color:var(--ink); background:var(--card); border-radius:99px;
+    padding:3px 9px; box-shadow:var(--e1); }
+  .wc .wy i { color:var(--ink2); }
+
+  /* ── 關聯星圖 ── */
+  .star { position:relative; margin:16px 0 0; background:var(--card);
+    border-radius:var(--r-lg); box-shadow:var(--e1); overflow:hidden; }
+  .star canvas { display:block; width:100%; height:472px; }
+  .starlab { position:absolute; inset:auto 0 12px; display:flex; justify-content:space-between;
+    padding:0 22px; font-size:10.5px; letter-spacing:.18em; margin-right:-.18em;
+    color:var(--faint); pointer-events:none; }
+  @media (max-width:640px){ .star canvas { height:400px; } .starlab span:nth-child(2) { display:none; } }
+
+  /* ── 標頭：只留標題與一行小字，其餘搬到頁尾 ── */
+  .sub { font-size:13.5px; color:var(--ink2); margin-top:12px; letter-spacing:.02em; }
+  .searchbox { margin-top:26px; }
+
+  /* ── 頁尾的來源長串 ── */
+  .sources { margin-top:34px; }
+  .sources h3 { font-size:12px; font-weight:600; letter-spacing:.2em; margin-right:-.2em;
+    color:var(--ink2); margin-bottom:10px; }
+  .sources p { font-size:12.5px; line-height:2.05; color:var(--faint); }
+  .sources i { font-style:normal; font-family:var(--mono); font-size:11px; opacity:.7; }
+
+  /* ── 年月分段：捲到哪一段，那一段的年月就黏在頂上 ── */
+  .mhead { position:sticky; top:0; z-index:4; margin:24px 0 11px; padding:9px 13px 8px;
+    font-size:12px; font-weight:600; letter-spacing:.2em; margin-right:-.2em; color:var(--ink2);
+    background:var(--panel); border-radius:var(--r-sm);
+    backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px); }
+  .mhead span { font-weight:400; letter-spacing:0; color:var(--faint); margin-left:.9em; }
+
+  /* ── 圖牆：CSS 分欄，卡片高度隨標題長短自然錯落＝真的瀑布流，零 JS ── */
+  .wall { column-width:194px; column-gap:10px; }
+  .wc { display:block; width:100%; break-inside:avoid; margin:0 0 10px; padding:0; border:0;
+    text-align:left; cursor:pointer; background:var(--card); border-radius:var(--r-sm);
+    box-shadow:var(--e1); overflow:hidden;
+    transition:transform .18s cubic-bezier(.2,.8,.3,1), box-shadow .18s; }
+  .wc:hover { transform:translateY(-3px); box-shadow:var(--e2); }
+  .wc img { width:100%; aspect-ratio:16/9; object-fit:cover; display:block; background:var(--card-2); }
+  .wc .wt { display:block; padding:9px 11px 0; font-size:13px; font-weight:600; line-height:1.45; color:var(--ink); }
+  .wc .wy { display:block; padding:3px 11px 10px; font-size:11px; color:var(--faint); }
+  .wc .wy i, .why i { font-style:normal; }
+  .why { position:absolute; top:9px; left:9px; z-index:2; font-size:10px; letter-spacing:.14em;
+    margin-right:-.14em; color:var(--ink); background:var(--card); border-radius:99px;
+    padding:3px 9px; box-shadow:var(--e1); }
+  .wc .wy i { color:var(--ink2); }
+
+  /* ── 關聯星圖 ── */
+  .star { position:relative; margin:16px 0 0; background:var(--card);
+    border-radius:var(--r-lg); box-shadow:var(--e1); overflow:hidden; }
+  .star canvas { display:block; width:100%; height:472px; }
+  .starlab { position:absolute; inset:auto 0 12px; display:flex; justify-content:space-between;
+    padding:0 22px; font-size:10.5px; letter-spacing:.18em; margin-right:-.18em;
+    color:var(--faint); pointer-events:none; }
+  @media (max-width:640px){ .star canvas { height:400px; } .starlab span:nth-child(2) { display:none; } }
+
+  /* ── 年月分段：捲到哪一段，那一段的年月就黏在頂上 ── */
+  .mhead { position:sticky; top:0; z-index:4; margin:24px 0 11px; padding:9px 13px 8px;
+    font-size:12px; font-weight:600; letter-spacing:.2em; margin-right:-.2em; color:var(--ink2);
+    background:var(--panel); border-radius:var(--r-sm);
+    backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px); }
+  .mhead span { font-weight:400; letter-spacing:0; color:var(--faint); margin-left:.9em; }
+
+  /* ── 圖牆：CSS 分欄，卡片高度隨標題長短自然錯落＝真的瀑布流，零 JS ── */
+  .wall { column-width:194px; column-gap:10px; }
+  .wc { display:block; width:100%; break-inside:avoid; margin:0 0 10px; padding:0; border:0;
+    text-align:left; cursor:pointer; background:var(--card); border-radius:var(--r-sm);
+    box-shadow:var(--e1); overflow:hidden;
+    transition:transform .18s cubic-bezier(.2,.8,.3,1), box-shadow .18s; }
+  .wc:hover { transform:translateY(-3px); box-shadow:var(--e2); }
+  .wc img { width:100%; aspect-ratio:16/9; object-fit:cover; display:block; background:var(--card-2); }
+  .wc .wt { display:block; padding:9px 11px 0; font-size:13px; font-weight:600; line-height:1.45; color:var(--ink); }
+  .wc .wy { display:block; padding:3px 11px 10px; font-size:11px; color:var(--faint); }
+  .wc .wy i, .why i { font-style:normal; }
+  .why { position:absolute; top:9px; left:9px; z-index:2; font-size:10px; letter-spacing:.14em;
+    margin-right:-.14em; color:var(--ink); background:var(--card); border-radius:99px;
+    padding:3px 9px; box-shadow:var(--e1); }
+  .wc .wy i { color:var(--ink2); }
+
+  /* ── 關聯星圖 ── */
+  .star { position:relative; margin:16px 0 0; background:var(--card);
+    border-radius:var(--r-lg); box-shadow:var(--e1); overflow:hidden; }
+  .star canvas { display:block; width:100%; height:472px; }
+  .starlab { position:absolute; inset:auto 0 12px; display:flex; justify-content:space-between;
+    padding:0 22px; font-size:10.5px; letter-spacing:.18em; margin-right:-.18em;
+    color:var(--faint); pointer-events:none; }
+  @media (max-width:640px){ .star canvas { height:400px; } .starlab span:nth-child(2) { display:none; } }
+
+  /* ── 年月分段：捲到哪一段，那一段的年月就黏在頂上 ── */
+  .mhead { position:sticky; top:0; z-index:4; margin:24px 0 11px; padding:9px 13px 8px;
+    font-size:12px; font-weight:600; letter-spacing:.2em; margin-right:-.2em; color:var(--ink2);
+    background:var(--panel); border-radius:var(--r-sm);
+    backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px); }
+  .mhead span { font-weight:400; letter-spacing:0; color:var(--faint); margin-left:.9em; }
+
+  /* ── 圖牆：CSS 分欄，卡片高度隨標題長短自然錯落＝真的瀑布流，零 JS ── */
+  .wall { column-width:194px; column-gap:10px; }
+  .wc { display:block; width:100%; break-inside:avoid; margin:0 0 10px; padding:0; border:0;
+    text-align:left; cursor:pointer; background:var(--card); border-radius:var(--r-sm);
+    box-shadow:var(--e1); overflow:hidden;
+    transition:transform .18s cubic-bezier(.2,.8,.3,1), box-shadow .18s; }
+  .wc:hover { transform:translateY(-3px); box-shadow:var(--e2); }
+  .wc img { width:100%; aspect-ratio:16/9; object-fit:cover; display:block; background:var(--card-2); }
+  .wc .wt { display:block; padding:9px 11px 0; font-size:13px; font-weight:600; line-height:1.45; color:var(--ink); }
+  .wc .wy { display:block; padding:3px 11px 10px; font-size:11px; color:var(--faint); }
+  .wc .wy i, .why i { font-style:normal; }
+  .why { position:absolute; top:9px; left:9px; z-index:2; font-size:10px; letter-spacing:.14em;
+    margin-right:-.14em; color:var(--ink); background:var(--card); border-radius:99px;
+    padding:3px 9px; box-shadow:var(--e1); }
+  .wc .wy i { color:var(--ink2); }
+
+  /* ── 關聯星圖 ── */
+  .star { position:relative; margin:16px 0 0; background:var(--card);
+    border-radius:var(--r-lg); box-shadow:var(--e1); overflow:hidden; }
+  .star canvas { display:block; width:100%; height:472px; }
+  .starlab { position:absolute; inset:auto 0 12px; display:flex; justify-content:space-between;
+    padding:0 22px; font-size:10.5px; letter-spacing:.18em; margin-right:-.18em;
+    color:var(--faint); pointer-events:none; }
+  @media (max-width:640px){ .star canvas { height:400px; } .starlab span:nth-child(2) { display:none; } }
+
+  /* ── 年月分段：捲到哪一段，那一段的年月就黏在頂上 ── */
+  .mhead { position:sticky; top:0; z-index:4; margin:24px 0 11px; padding:9px 13px 8px;
+    font-size:12px; font-weight:600; letter-spacing:.2em; margin-right:-.2em; color:var(--ink2);
+    background:var(--panel); border-radius:var(--r-sm);
+    backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px); }
+  .mhead span { font-weight:400; letter-spacing:0; color:var(--faint); margin-left:.9em; }
+
+  /* ── 圖牆：CSS 分欄，卡片高度隨標題長短自然錯落＝真的瀑布流，零 JS ── */
+  .wall { column-width:194px; column-gap:10px; }
+  .wc { display:block; width:100%; break-inside:avoid; margin:0 0 10px; padding:0; border:0;
+    text-align:left; cursor:pointer; background:var(--card); border-radius:var(--r-sm);
+    box-shadow:var(--e1); overflow:hidden;
+    transition:transform .18s cubic-bezier(.2,.8,.3,1), box-shadow .18s; }
+  .wc:hover { transform:translateY(-3px); box-shadow:var(--e2); }
+  .wc img { width:100%; aspect-ratio:16/9; object-fit:cover; display:block; background:var(--card-2); }
+  .wc .wt { display:block; padding:9px 11px 0; font-size:13px; font-weight:600; line-height:1.45; color:var(--ink); }
+  .wc .wy { display:block; padding:3px 11px 10px; font-size:11px; color:var(--faint); }
+  .wc .wy i, .why i { font-style:normal; }
+  .why { position:absolute; top:9px; left:9px; z-index:2; font-size:10px; letter-spacing:.14em;
+    margin-right:-.14em; color:var(--ink); background:var(--card); border-radius:99px;
+    padding:3px 9px; box-shadow:var(--e1); }
+  .wc .wy i { color:var(--ink2); }
+
+  /* ── 關聯星圖 ── */
+  .star { position:relative; margin:16px 0 0; background:var(--card);
+    border-radius:var(--r-lg); box-shadow:var(--e1); overflow:hidden; }
+  .star canvas { display:block; width:100%; height:472px; }
+  .starlab { position:absolute; inset:auto 0 12px; display:flex; justify-content:space-between;
+    padding:0 22px; font-size:10.5px; letter-spacing:.18em; margin-right:-.18em;
+    color:var(--faint); pointer-events:none; }
+  @media (max-width:640px){ .star canvas { height:400px; } .starlab span:nth-child(2) { display:none; } }
+
+  /* ── 年月分段：捲到哪一段，那一段的年月就黏在頂上 ── */
+  .mhead { position:sticky; top:0; z-index:4; margin:24px 0 11px; padding:9px 13px 8px;
+    font-size:12px; font-weight:600; letter-spacing:.2em; margin-right:-.2em; color:var(--ink2);
+    background:var(--panel); border-radius:var(--r-sm);
+    backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px); }
+  .mhead span { font-weight:400; letter-spacing:0; color:var(--faint); margin-left:.9em; }
+
+  /* ── 圖牆：CSS 分欄，卡片高度隨標題長短自然錯落＝真的瀑布流，零 JS ── */
+  .wall { column-width:194px; column-gap:10px; }
+  .wc { display:block; width:100%; break-inside:avoid; margin:0 0 10px; padding:0; border:0;
+    text-align:left; cursor:pointer; background:var(--card); border-radius:var(--r-sm);
+    box-shadow:var(--e1); overflow:hidden;
+    transition:transform .18s cubic-bezier(.2,.8,.3,1), box-shadow .18s; }
+  .wc:hover { transform:translateY(-3px); box-shadow:var(--e2); }
+  .wc img { width:100%; aspect-ratio:16/9; object-fit:cover; display:block; background:var(--card-2); }
+  .wc .wt { display:block; padding:9px 11px 0; font-size:13px; font-weight:600; line-height:1.45; color:var(--ink); }
+  .wc .wy { display:block; padding:3px 11px 10px; font-size:11px; color:var(--faint); }
+  .wc .wy i, .why i { font-style:normal; }
+  .why { position:absolute; top:9px; left:9px; z-index:2; font-size:10px; letter-spacing:.14em;
+    margin-right:-.14em; color:var(--ink); background:var(--card); border-radius:99px;
+    padding:3px 9px; box-shadow:var(--e1); }
+  .wc .wy i { color:var(--ink2); }
+
+  /* ── 關聯星圖 ── */
+  .star { position:relative; margin:16px 0 0; background:var(--card);
+    border-radius:var(--r-lg); box-shadow:var(--e1); overflow:hidden; }
+  .star canvas { display:block; width:100%; height:472px; }
+  .starlab { position:absolute; inset:auto 0 12px; display:flex; justify-content:space-between;
+    padding:0 22px; font-size:10.5px; letter-spacing:.18em; margin-right:-.18em;
+    color:var(--faint); pointer-events:none; }
+  @media (max-width:640px){ .star canvas { height:400px; } .starlab span:nth-child(2) { display:none; } }
+
+  /* ── 年月分段：捲到哪一段，那一段的年月就黏在頂上 ── */
+  .mhead { position:sticky; top:0; z-index:4; margin:24px 0 11px; padding:9px 13px 8px;
+    font-size:12px; font-weight:600; letter-spacing:.2em; margin-right:-.2em; color:var(--ink2);
+    background:var(--panel); border-radius:var(--r-sm);
+    backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px); }
+  .mhead span { font-weight:400; letter-spacing:0; color:var(--faint); margin-left:.9em; }
+
+  /* ── 圖牆：CSS 分欄，卡片高度隨標題長短自然錯落＝真的瀑布流，零 JS ── */
+  .wall { column-width:194px; column-gap:10px; }
+  .wc { display:block; width:100%; break-inside:avoid; margin:0 0 10px; padding:0; border:0;
+    text-align:left; cursor:pointer; background:var(--card); border-radius:var(--r-sm);
+    box-shadow:var(--e1); overflow:hidden;
+    transition:transform .18s cubic-bezier(.2,.8,.3,1), box-shadow .18s; }
+  .wc:hover { transform:translateY(-3px); box-shadow:var(--e2); }
+  .wc img { width:100%; aspect-ratio:16/9; object-fit:cover; display:block; background:var(--card-2); }
+  .wc .wt { display:block; padding:9px 11px 0; font-size:13px; font-weight:600; line-height:1.45; color:var(--ink); }
+  .wc .wy { display:block; padding:3px 11px 10px; font-size:11px; color:var(--faint); }
+  .wc .wy i, .why i { font-style:normal; }
+  .why { position:absolute; top:9px; left:9px; z-index:2; font-size:10px; letter-spacing:.14em;
+    margin-right:-.14em; color:var(--ink); background:var(--card); border-radius:99px;
+    padding:3px 9px; box-shadow:var(--e1); }
+  .wc .wy i { color:var(--ink2); }
+
+  /* ── 關聯星圖 ── */
+  .star { position:relative; margin:16px 0 0; background:var(--card);
+    border-radius:var(--r-lg); box-shadow:var(--e1); overflow:hidden; }
+  .star canvas { display:block; width:100%; height:410px; }
+  .starlab { position:absolute; inset:auto 0 12px; display:flex; justify-content:space-between;
+    padding:0 22px; font-size:10.5px; letter-spacing:.18em; margin-right:-.18em;
+    color:var(--faint); pointer-events:none; }
+  @media (max-width:640px){ .star canvas { height:330px; } .starlab span:nth-child(2) { display:none; } }
+
+  /* ── 年月分段：捲到哪一段，那一段的年月就黏在頂上 ── */
+  .mhead { position:sticky; top:0; z-index:4; margin:24px 0 11px; padding:9px 13px 8px;
+    font-size:12px; font-weight:600; letter-spacing:.2em; margin-right:-.2em; color:var(--ink2);
+    background:var(--panel); border-radius:var(--r-sm);
+    backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px); }
+  .mhead span { font-weight:400; letter-spacing:0; color:var(--faint); margin-left:.9em; }
+
+  /* ── 圖牆：CSS 分欄，卡片高度隨標題長短自然錯落＝真的瀑布流，零 JS ── */
+  .wall { column-width:194px; column-gap:10px; }
+  .wc { display:block; width:100%; break-inside:avoid; margin:0 0 10px; padding:0; border:0;
+    text-align:left; cursor:pointer; background:var(--card); border-radius:var(--r-sm);
+    box-shadow:var(--e1); overflow:hidden;
+    transition:transform .18s cubic-bezier(.2,.8,.3,1), box-shadow .18s; }
+  .wc:hover { transform:translateY(-3px); box-shadow:var(--e2); }
+  .wc img { width:100%; aspect-ratio:16/9; object-fit:cover; display:block; background:var(--card-2); }
+  .wc .wt { display:block; padding:9px 11px 0; font-size:13px; font-weight:600; line-height:1.45; color:var(--ink); }
+  .wc .wy { display:block; padding:3px 11px 10px; font-size:11px; color:var(--faint); }
+  .wc .wy i, .why i { font-style:normal; }
+  .why { position:absolute; top:9px; left:9px; z-index:2; font-size:10px; letter-spacing:.14em;
+    margin-right:-.14em; color:var(--ink); background:var(--card); border-radius:99px;
+    padding:3px 9px; box-shadow:var(--e1); }
+  .wc .wy i { color:var(--ink2); }
+
+  /* ── 關聯星圖 ── */
+  .star { position:relative; margin:16px 0 0; background:var(--card);
+    border-radius:var(--r-lg); box-shadow:var(--e1); overflow:hidden; }
+  .star canvas { display:block; width:100%; height:410px; }
+  .starlab { position:absolute; inset:auto 0 12px; display:flex; justify-content:space-between;
+    padding:0 22px; font-size:10.5px; letter-spacing:.18em; margin-right:-.18em;
+    color:var(--faint); pointer-events:none; }
+  @media (max-width:640px){ .star canvas { height:330px; } .starlab span:nth-child(2) { display:none; } }
+  .row {
+    display:grid; grid-template-columns:56px 1fr auto; gap:16px; align-items:baseline;
+    padding:14px 2px; border-top:1px solid var(--hair); cursor:pointer; text-align:left;
+    border-left:0; border-right:0; border-bottom:0; background:transparent; width:100%;
+  }
+  .row:hover .r-title { color:var(--ink); }
+  .r-year { font-family:var(--mono); font-size:12px; color:var(--faint); }
+  .r-title { font-size:15px; font-weight:500; color:var(--ink); line-height:1.5; }
+  .r-note { font-size:12.5px; color:var(--faint); margin-top:2px; }
+  .r-role { font-size:13px; color:var(--ink2); text-align:right; white-space:nowrap; }
+
+  /* ─── 補登 ─── */
+  .add { margin-top:40px; background:var(--card); border-radius:var(--r-lg); box-shadow:var(--e1); padding:clamp(24px,3.6vw,36px); }
+  .add h2 { font-size:20px; font-weight:700; letter-spacing:-.005em; }
+  .add p { font-size:14px; color:var(--ink2); margin-top:8px; max-width:32em; }
+  .fields { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:10px; margin-top:22px; }
+  .f { display:flex; flex-direction:column; gap:6px; }
+  .f label { font-size:11.5px; letter-spacing:.2em; margin-right:-.2em; color:var(--faint); text-transform:uppercase; }
+  .f input, .f select {
+    border:0; outline:0; background:var(--card-2); border-radius:var(--r-sm);
+    padding:12px 14px; font-size:14.5px; width:100%;
+  }
+  .f input:focus, .f select:focus { box-shadow:0 0 0 2px var(--hair) inset; }
+  .submit {
+    margin-top:18px; border:0; cursor:pointer; font-size:14px; font-weight:500; color:#fff;
+    padding:13px 26px; border-radius:99px; background:var(--grad); box-shadow:var(--e1);
+    transition:transform .2s, box-shadow .2s;
+  }
+  .submit:hover { transform:translateY(-2px); box-shadow:var(--e2); }
+  .said { font-size:13px; color:var(--ink2); margin-top:14px; min-height:1.2em; }
+
+  /* ─── 頁尾原則 ─── */
+  .foot { max-width:1020px; margin:0 auto; padding:34px var(--side) 64px; }
+  .principles { display:grid; grid-template-columns:repeat(auto-fit,minmax(228px,1fr)); gap:26px; }
+  .pr h3 { font-size:13px; font-weight:600; letter-spacing:.2em; margin-right:-.2em; color:var(--ink2); }
+  .pr p { font-size:13.5px; color:var(--faint); margin-top:9px; line-height:1.72; }
+  .sig { font-size:12.5px; color:var(--faint); margin-top:34px; }
+  .sig b { color:var(--ink2); font-weight:500; }
+
+  @media (max-width:620px) {
+    .shell { margin:14px 10px 0; border-radius:var(--r-lg); }
+    .topbar { padding:20px 20px 0; }
+    .grid { grid-template-columns:1fr; }
+    .row { grid-template-columns:44px 1fr; }
+    .r-role { grid-column:2; text-align:left; margin-top:2px; }
+    .demo-tag { display:none; }
+  }
+</style>
+
+<style>
+  .blk { margin-top:52px; }
+  .blk h2 { font-size:22px; font-weight:600; letter-spacing:-.005em; margin-bottom:14px; }
+  .blk h3 { font-size:15.5px; font-weight:600; margin:0 0 6px; }
+  .blk p { font-size:15px; line-height:1.85; color:var(--ink2); margin-bottom:10px; }
+  .blk ol { font-size:15px; line-height:1.9; color:var(--ink2); padding-left:1.3em; margin-bottom:10px; }
+  .blk b { color:var(--ink); font-weight:600; }
+  code { font-family:var(--mono); font-size:.88em; background:var(--card-2); border-radius:5px; padding:1px 6px; }
+  .tiers { display:grid; grid-template-columns:repeat(auto-fit,minmax(198px,1fr)); gap:12px; margin-top:18px; }
+  .tr { background:var(--card); border-radius:var(--r-md); box-shadow:var(--e1); padding:20px 22px 18px; }
+  .tr p { font-size:13.5px; line-height:1.75; margin-bottom:8px; }
+  .lv { display:inline-block; font-size:10.5px; letter-spacing:.2em; margin-right:-.2em;
+    color:var(--faint); margin-bottom:9px; }
+  .cost { font-size:12px !important; color:var(--faint) !important; margin:0 !important; }
+  .grid2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; }
+  .f { margin-top:14px; }
+  .f label { display:block; font-size:11.5px; letter-spacing:.18em; margin-right:-.18em;
+    color:var(--faint); margin-bottom:7px; }
+  .hint { letter-spacing:0; margin-right:0; }
+  .f input { border:0; outline:0; background:var(--card-2); border-radius:var(--r-sm);
+    padding:12px 14px; font-size:14.5px; width:100%; }
+  .ob { margin-top:26px; }
+  .obh { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:8px; }
+  .obh b { font-size:13px; letter-spacing:.14em; margin-right:-.14em; }
+  .copy { border:0; cursor:pointer; background:var(--card); color:var(--ink2); box-shadow:var(--e1);
+    border-radius:99px; padding:6px 15px; font-size:12px; transition:transform .18s, box-shadow .18s; }
+  .copy:hover { transform:translateY(-1px); box-shadow:var(--e2); color:var(--ink); }
+  .out { font-family:var(--mono); font-size:12.5px; line-height:1.72; white-space:pre; overflow-x:auto;
+    background:var(--card); border-radius:var(--r-md); box-shadow:var(--e1); padding:18px 20px;
+    color:var(--ink2); }
+  .warn { background:var(--card); border-radius:var(--r-md); box-shadow:var(--e1);
+    padding:16px 20px; font-size:13.5px; color:var(--ink2); margin-top:22px; }
+  .note { font-size:12.5px !important; color:var(--faint) !important; line-height:1.75 !important; }
+  table.spec { width:100%; border-collapse:collapse; margin-top:16px; font-size:13.5px; }
+  table.spec th { text-align:left; font-size:11px; letter-spacing:.18em; margin-right:-.18em;
+    color:var(--faint); font-weight:500; padding:0 12px 10px 0; }
+  table.spec td { padding:9px 12px 9px 0; color:var(--ink2); vertical-align:top;
+    border-top:1px solid var(--hair); }
+  table.spec td:nth-child(2) { color:var(--faint); white-space:nowrap; }
+  .lic p { font-size:14px; }
+  .foot .sig { margin-top:0; }
+  a.demo-tag { text-decoration:none; }
+</style>
+</head>
+<body>
+<div class="sky"></div><div class="grain"></div>
+
+<div class="topbar">
+  <div class="mark">Staffroll · Spec</div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <a class="demo-tag" href="credits.html">← 回名冊</a>
+    <button class="orb" onclick="toggleTheme()" title="明暗切換">◐</button>
+  </div>
+</div>
+
+<main class="shell">
+  <header>
+    <h1>怎麼讓名單被讀到</h1>
+    <p class="sub">工作人員名單的公開格式　·　v0.1　·　任何人都可以用，不用問我</p>
+  </header>
+
+  <section class="blk">
+    <h2>先講一件事：名單不是作品</h2>
+    <p>「客戶不讓我發片」跟「不能登名單」是兩件事。名單需要的只有<b>片名、客戶、年月、誰做了什麼</b>——
+       影片本身可以不公開、可以沒有連結。作品未公開的那一筆，就標成未公開；
+       別人要核對，靠同一個案子上其他人的確認。</p>
+    <p>所以覆蓋率的天花板不是「有多少片能公開」，是<b>有多少人願意把名單寫成機器讀得到的樣子</b>。
+       下面四層，成本由低到高，做到哪一層都有用。</p>
+  </section>
+
+  <section class="blk">
+    <h2>四層做法</h2>
+    <div class="tiers">
+      <div class="tr"><span class="lv">第 0 層</span><h3>影片說明欄照格式寫</h3>
+        <p>Vimeo、YouTube、IG 貼文的說明欄，一行一個職務。零成本、現在就能做，也是目前這個資料庫唯一的來源。</p>
+        <p class="cost">成本：每支片兩分鐘</p></div>
+      <div class="tr"><span class="lv">第 1 層</span><h3>自己網站放「看得見的純文字」</h3>
+        <p>作品頁把名單當正文寫出來。<b>不要只放在圖片裡、不要只放 PDF、不要塞在 hover 提示裡</b>——
+           那些爬蟲跟 AI 都讀不到。看得見的純文字是所有機器的最大公約數。</p>
+        <p class="cost">成本：改一次版型</p></div>
+      <div class="tr"><span class="lv">第 2 層</span><h3>同一頁埋 JSON-LD</h3>
+        <p>schema.org 的 <code>VideoObject</code> 加 <code>Role</code>。搜尋引擎吃這個，也讓「攝影指導」
+           這種中文職務有明確結構，不用靠猜。下面的產生器會幫你產好。</p>
+        <p class="cost">成本：貼一段 script</p></div>
+      <div class="tr"><span class="lv">第 3 層</span><h3>網站根目錄放 <code>credits.json</code></h3>
+        <p>一個檔案列完你所有作品的名單，放在 <code>你的網域/credits.json</code>。
+           任何人的爬蟲一次抓完，不用解析網頁。你只要維護這一個檔。</p>
+        <p class="cost">成本：設定一次，之後只更新一個檔</p></div>
+    </div>
+  </section>
+
+  <section class="blk">
+    <h2>產生器</h2>
+    <p>把名單貼進來，三種格式一起產好。<b>格式隨便寫</b>——一行一個職務就行，
+       中英文、全形半形、用斜線或直線分隔都認得（跟名冊用的是同一張 141 條職務對照表）。</p>
+
+    <div class="grid2">
+      <div class="f"><label>片名</label><input id="g_title" placeholder="淨毒五郎形象廣告"></div>
+      <div class="f"><label>客戶</label><input id="g_client" placeholder="淨毒五郎 Chef Clean"></div>
+      <div class="f"><label>製作公司</label><input id="g_co" placeholder="錄人影像 Pezós"></div>
+      <div class="f"><label>年月</label><input id="g_date" placeholder="2026-07"></div>
+    </div>
+    <div class="f"><label>影片網址<span class="hint">　沒公開就留空，會標成「作品未公開」</span></label>
+      <input id="g_url" placeholder="https://vimeo.com/1212704374"></div>
+    <div class="f"><label>工作人員名單</label>
+      <textarea id="g_crew" rows="9" placeholder="導演｜王小明&#10;攝影指導：陳大文&#10;剪輯 李小華、張三&#10;燈光師 @someone 林大器"></textarea></div>
+    <button class="submit" onclick="gen()">產生</button>
+
+    <div id="g_out"></div>
+  </section>
+
+  <section class="blk">
+    <h2>credits.json 欄位</h2>
+    <table class="spec">
+      <tr><th>欄位</th><th>必填</th><th>說明</th></tr>
+      <tr><td><code>version</code></td><td>是</td><td>固定 <code>1</code></td></tr>
+      <tr><td><code>studio.name</code></td><td>是</td><td>你的名字或公司名</td></tr>
+      <tr><td><code>studio.base</code></td><td>—</td><td>據點城市。有寫才進得了地區分類</td></tr>
+      <tr><td><code>studio.url</code></td><td>—</td><td>官網</td></tr>
+      <tr><td><code>works[].title</code></td><td>是</td><td>片名</td></tr>
+      <tr><td><code>works[].date</code></td><td>是</td><td><code>YYYY-MM</code> 或 <code>YYYY-MM-DD</code>。排序與「近三年」都靠它</td></tr>
+      <tr><td><code>works[].client</code></td><td>—</td><td>客戶。主題判定會用到</td></tr>
+      <tr><td><code>works[].url</code></td><td>—</td><td>作品連結。<b>留空＝作品未公開</b>，名單照收</td></tr>
+      <tr><td><code>works[].public</code></td><td>—</td><td><code>false</code> 表示影片不公開。預設 <code>true</code></td></tr>
+      <tr><td><code>works[].credits[].role</code></td><td>是</td><td>職務。中英文都行，會正規化</td></tr>
+      <tr><td><code>works[].credits[].name</code></td><td>是</td><td>姓名</td></tr>
+      <tr><td><code>works[].credits[].ig</code></td><td>—</td><td>Instagram 帳號，不含 @</td></tr>
+    </table>
+    <p class="note">欄位只會增加不會改名。多寫的欄位不會被丟掉，讀不懂的會原樣保留。</p>
+  </section>
+
+  <section class="blk">
+    <h2>順便讓 AI 讀得到：<code>llms.txt</code></h2>
+    <p>放在網站根目錄，告訴 AI 爬蟲你的乾淨資料在哪。內容就這麼短：</p>
+    <pre class="out">
+# 錄人影像 Pezós
+
+> 高雄的影像製作公司。作品的完整工作人員名單以機器可讀格式公開。
+
+## 工作人員名單
+- [credits.json](https://你的網域/credits.json)：全部作品的名單，JSON
+
+## 作品
+- [作品集](https://你的網域/works)：每頁都有可見的純文字名單與 JSON-LD
+</pre>
+    <p class="note">這不是規範標準，是這兩年大家自己長出來的慣例。成本兩分鐘，做了沒壞處。</p>
+  </section>
+
+  <section class="blk">
+    <h2>怎麼讓這個名冊收到你</h2>
+    <p>兩條路，選一條就好：</p>
+    <ol>
+      <li><b>什麼都不用做</b>——只要說明欄有名單，被搜到就會進來。</li>
+      <li><b>給我一個 <code>credits.json</code> 的網址</b>——之後你更新那個檔，這邊就會跟著更新，
+          不需要再通知我，也不需要我來爬你。</li>
+    </ol>
+    <p class="note">要下架、要改、要匿名，都可以。你的資料，最後一句話是你的。</p>
+  </section>
+
+  <section class="blk lic">
+    <h2>授權</h2>
+    <p><b>這個格式：CC0</b>——公眾領域，拿去用不用問我，不用標示出處，也可以拿去蓋你自己的資料庫。<br>
+       <b>資料：CC BY</b>——可自由複製、重製、商用，標示來源即可。<br>
+       <b>程式：MIT</b>。</p>
+    <p class="note">會這樣訂，是因為一個名冊如果只能有一個，它遲早會變成收租的。
+       格式公開、資料可帶走、可以有第二個第三個——它才會是公共財，不是誰的平台。</p>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="sig">片尾名單 · 工作人員名單公開格式 v0.1 · 發起與維護：<b>小高</b>（高偉鳴）</div>
+</footer>
+
+<script>
+const ALIASES = {"執行導演": "執行導演", "副導演": "副導演", "副導": "副導演", "助導": "副導演", "導演助理": "導演助理", "Director Assistant": "導演助理", "導演": "導演", "Director": "導演", "總監": "總監", "Associate Producer": "總監", "發行人": "發行人", "Publisher": "發行人", "監製": "監製", "Executive Producer": "監製", "專案經理": "專案經理", "專案管理": "專案經理", "Project Manager": "專案經理", "執行製片": "執行製片", "Line Producer": "執行製片", "P.D.": "執行製片", "製片助理": "製片助理", "Production Assistant": "製片助理", "Producer Assistant": "製片助理", "製片": "製片", "Producer": "製片", "攝影指導": "攝影指導", "Director of Photography": "攝影指導", "D.O.P.": "攝影指導", "DP": "攝影指導", "攝影大助": "攝影大助", "First Assistant Camera": "攝影大助", "攝影助理": "攝影助理", "Camera Assistant": "攝影助理", "動態攝影": "動態攝影", "平面攝影": "平面攝影", "Photographer": "平面攝影", "平面": "平面攝影", "空拍助理": "空拍助理", "Aerial Assistant": "空拍助理", "空拍": "空拍", "Aerial": "空拍", "自由手": "自由手", "Freehand": "自由手", "側拍": "側拍", "BTS": "側拍", "攝影師": "攝影師", "攝影": "攝影師", "Film": "攝影師", "Cinematographer": "攝影師", "燈光指導": "燈光師", "燈光師": "燈光師", "Gaffer": "燈光師", "燈光場務助理": "燈光助理", "燈光助理": "燈光助理", "Lighting Assistant": "燈光助理", "Assistant Electrician": "燈光助理", "美術指導": "美術指導", "Art Director": "美術指導", "美術執行": "美術執行", "美術場務": "美術執行", "美術": "美術指導", "造型指導": "造型", "造型師": "造型", "Stylist": "造型", "服裝設計": "造型", "Costume": "造型", "服化": "造型", "妝髮": "妝髮", "彩妝師": "妝髮", "Makeup": "妝髮", "Mackup": "妝髮", "髮型師": "妝髮", "Hair": "妝髮", "剪接師": "剪輯師", "剪輯師": "剪輯師", "剪接": "剪輯師", "剪輯": "剪輯師", "後製": "剪輯師", "後期製作": "剪輯師", "Editor": "剪輯師", "調光師": "調光師", "調光": "調光師", "Colorist": "調光師", "後期特效": "後期特效", "Visual Effects": "後期特效", "VFX": "後期特效", "AI VFX": "AI 視覺特效", "動態設計": "動態設計", "動態圖像": "動態設計", "Motion Graphic": "動態設計", "視覺設計": "視覺設計", "Styleframe": "視覺設計", "Style Frame": "視覺設計", "Visual Design": "視覺設計", "角色設計": "角色設計", "Character Design": "角色設計", "插畫": "插畫", "Illustration": "插畫", "Illustrator": "插畫", "分鏡": "分鏡", "Storyboard": "分鏡", "合成": "合成", "Compositing": "合成", "Compositor": "合成", "動畫師": "動畫", "Animator": "動畫", "動畫": "動畫", "音樂製作人": "音樂製作", "Music Producer": "音樂製作", "音樂執行製作": "音樂製作", "Music Executive": "音樂製作", "混音": "混音音效", "音效": "混音音效", "Sound Design": "混音音效", "Mixing": "混音音效", "配唱": "配唱", "Vocal": "配唱", "旁白": "旁白", "Voice Over": "旁白", "配音": "旁白", "演員管理": "演員管理", "Casting": "演員管理", "女主角": "演員", "男主角": "演員", "主演": "演員", "Actress": "演員", "Actor": "演員", "演員": "演員", "Main Talent": "演員", "Cast": "演員", "舞者": "舞者", "Dancer": "舞者", "編舞": "編舞", "Choreographer": "編舞", "企劃執行": "企劃", "企劃": "企劃", "文案": "企劃", "Planning": "企劃", "Panning": "企劃", "平面設計": "平面設計", "設計": "平面設計"};
+/* ══════════ 名單產生器 ══════════
+   用的是名冊那邊同一張職務對照表：爬得到的格式，這裡也認得。 */
+const el = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const AK = Object.keys(ALIASES).sort((a, b) => b.length - a.length);
+const SEP = /\s*(?:\/\/|／／)\s*|\s*[｜|：:．]\s*|\s+[・·]\s+|\s*[・·]\s*(?=\S)|\s*[\/／]\s*/;
+const NSEP = /\s*[、,，]\s*|\s+[・·]\s+/;
+
+function parseCrew(text){
+  const out = [], bad = [];
+  (text || '').split(/\n+/).forEach(raw => {
+    const line = raw.trim(); if (!line) return;
+    let head = line, rest = '';
+    const m = line.split(SEP);
+    if (m.length > 1) { head = m[0]; rest = m.slice(1).join(' ').trim(); }
+    else { const k = AK.find(a => line.startsWith(a)); if (k) { head = k; rest = line.slice(k.length).trim(); } }
+    const key = AK.find(a => head.startsWith(a));
+    if (!key || !rest) { bad.push(line); return; }
+    rest.split(NSEP).forEach(n => {
+      const ig = (n.match(/@([\w.\-]+)/) || [])[1] || '';
+      n = n.replace(/@[\w.\-]+/g, '').replace(/[（(][^）)]*[）)]/g, '').trim();
+      if (n) out.push({ role: ALIASES[key], name: n, ig });
+    });
+  });
+  return { out, bad };
+}
+
+/* schema.org 對得上的放對應欄位，對不上的一律 contributor + Role */
+const SCHEMA_TOP = { '導演':'director', '監製':'producer', '製片':'producer', '執行製片':'producer', '演員':'actor' };
+const person = c => {
+  const p = { '@type':'Person', name:c.name };
+  if (c.ig) p.sameAs = ['https://instagram.com/' + c.ig];
+  return p;
+};
+
+function gen(){
+  const v = id => el(id).value.trim();
+  const title = v('g_title'), client = v('g_client'), co = v('g_co'), date = v('g_date'), url = v('g_url');
+  const { out, bad } = parseCrew(el('g_crew').value);
+  if (!title) return say('至少要有片名。');
+  if (!out.length) return say('名單還沒認出任何一個人。一行一個職務試試看。');
+
+  /* ── 1. 說明欄版 ── */
+  const byRole = new Map();
+  out.forEach(c => { const a = byRole.get(c.role) || []; a.push(c.name + (c.ig ? ' @' + c.ig : '')); byRole.set(c.role, a); });
+  const plain = [
+    client ? `客戶 Client｜${client}` : '', co ? `製作 Production｜${co}` : '',
+    ...[...byRole].map(([r, ns]) => `${r}｜${ns.join('、')}`)
+  ].filter(Boolean).join('\n');
+
+  /* ── 2. 網頁版：看得見的純文字 ＋ JSON-LD ── */
+  const ld = { '@context':'https://schema.org', '@type':'VideoObject', name:title };
+  if (date) ld.datePublished = date;
+  if (client) ld.about = { '@type':'Organization', name:client };
+  if (co) ld.productionCompany = { '@type':'Organization', name:co };
+  if (url) { ld.url = url; ld.embedUrl = url; }
+  const contrib = [];
+  out.forEach(c => {
+    const top = SCHEMA_TOP[c.role];
+    if (top) { (ld[top] = ld[top] || []).push(person(c)); }
+    else contrib.push({ '@type':'Role', roleName:c.role, contributor:person(c) });
+  });
+  if (contrib.length) ld.contributor = contrib;
+  const html = `<section class="credits">
+  <h2>${esc(title)}</h2>
+  <dl>
+${[...byRole].map(([r, ns]) => `    <dt>${esc(r)}</dt><dd>${esc(ns.join('、'))}</dd>`).join('\n')}
+  </dl>
+</section>
+<script type="application/ld+json">
+${JSON.stringify(ld, null, 2)}
+<\/script>`;
+
+  /* ── 3. credits.json ── */
+  const one = { title };
+  if (client) one.client = client;
+  if (date) one.date = date;
+  if (url) one.url = url; else one.public = false;
+  one.credits = out.map(c => { const o = { role:c.role, name:c.name }; if (c.ig) o.ig = c.ig; return o; });
+  const cj = { version:1, studio:{ name: co || '（你的名字或公司名）' }, works:[one] };
+
+  el('g_out').innerHTML =
+      block('貼進 Vimeo／YouTube／IG 說明欄', plain, '第 0 層。這樣寫，現在的爬蟲就收得到。')
+    + block('放進作品頁的 HTML', html, '第 1、2 層。上面那段是人看的純文字，下面那段是給機器的結構化資料，兩個都要。')
+    + block('credits.json', JSON.stringify(cj, null, 2), '第 3 層。多支片就往 works 陣列裡加，放在 你的網域/credits.json。')
+    + (bad.length ? `<div class="warn">這幾行認不出職務，會被略過：<br>${bad.map(esc).join('<br>')}</div>` : '');
+}
+const block = (t, body, note) => `<div class="ob">
+  <div class="obh"><b>${t}</b><button class="copy" onclick="cp(this)">複製</button></div>
+  ${note ? `<p class="note">${note}</p>` : ''}
+  <pre class="out">${esc(body)}</pre></div>`;
+const say = m => { el('g_out').innerHTML = `<div class="warn">${esc(m)}</div>`; };
+function cp(b){
+  const t = b.closest('.ob').querySelector('pre').textContent;
+  navigator.clipboard.writeText(t).then(() => { b.textContent = '已複製'; setTimeout(() => b.textContent = '複製', 1400); })
+    .catch(() => { b.textContent = '複製失敗，請手動選取'; });
+}
+
+</script>
+</body>
+</html>
