@@ -1,6 +1,6 @@
 {
-  "version": "1.3.0",
+  "version": "1.3.2",
   "url": "https://github.com/qwert2813434-ctrl/ALIGNED/releases/latest/download/ALIGNED-macOS-arm64.dmg",
   "urlWin": "https://github.com/qwert2813434-ctrl/ALIGNED/releases/latest/download/ALIGNED-windows-x64-setup.exe",
-  "notes": "去背來了（New）：一鍵抽出照片主體，可反轉、手動修邊，還能把去背形狀填上材質。軟鉛筆（Beta）：全新質感筆刷＋筆刷偏好設定視窗——紙張、紋路、黏性、顆粒全可調，參數會烤進筆畫，之後改設定不影響畫過的東西。外觀：跟系統／淺色／深色手動切換（齒輪選單）。播放更聰明：頁上有影片或動畫時，停留自動跟著播放長度走。塗鴉物件可整張縮放。"
+  "notes": "順很多了：照片多、去背多、或有開紙張材質的專案，拖曳跟縮放不再卡住——同樣的專案從一秒十幾格回到順暢。另外專案可以改名字了：在首頁的專案卡片上按右鍵，或進到編輯畫面點一下上方的標題，改完自動存檔，⌘Z 也退得回去。Windows 版仍是 1.3.0 的建置（打包機還沒開），這兩項目前只有 macOS 有。"
 }
