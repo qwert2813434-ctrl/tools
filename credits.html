@@ -898,10 +898,16 @@ function renderDetail(){
     ? (id[0] === 'p' ? mateChips(id) : '')
     : alikeGrid(W.find(x => x.id === id));
   const useStar = view === 'star';
+  /* 從關聯圖上點過來的，圖要留在原地——每點一下就把人彈回頁首，等於逼你重新捲下來找圖 */
+  const held = STAR.held ? (document.querySelector('.star') || {getBoundingClientRect:() => null})
+                            .getBoundingClientRect() : null;
+  STAR.held = false;
   el('view').innerHTML = (useStar ? h.replace('<div class="detail">', STAR_HTML + '<div class="detail">') : h)
                           + `</div></div>` + extra;
   if (useStar) starMount(() => starNodes(id));
-  window.scrollTo({top:0, behavior:'smooth'});
+  const now = held && document.querySelector('.star');
+  if (now) window.scrollBy(0, now.getBoundingClientRect().top - held.top);  /* 麵包屑換行時會差幾像素，補回來 */
+  else window.scrollTo({top:0, behavior:'smooth'});
 }
 
 /* 常合作的人：同一支片上一起出現過幾次 */
@@ -943,7 +949,7 @@ const alikeGrid = w => {
    這裡永遠只畫你正在看的那一個＋它最強的十來個鄰居：左邊是人、右邊是作品。
    點任一個節點，它就變成新的中心。成本固定，一千筆跟十萬筆畫起來一樣快。 */
 const FONT = "'Figtree','PingFang TC','Noto Sans TC',-apple-system,sans-serif";
-const STAR = { n:[], cv:null, cx:null, w:0, h:0, raf:0, hov:-1, t0:0, step:76 };
+const STAR = { n:[], cv:null, cx:null, w:0, h:0, raf:0, hov:-1, t0:0, step:76, held:false };
 /* 手機不是不能看連結圖，是橫式版面塞不下。窄螢幕改直式：中心在上，人與作品分兩欄往下長。 */
 const wide = () => STAR.w >= 660;
 /* 一邊放幾個：直式是高度說了算，矮螢幕自己少放幾個，不硬擠 */
@@ -1154,7 +1160,7 @@ function starMount(nodes){
   cv.onmousemove = ev => { const i = at(ev);
     if (i !== STAR.hov) { STAR.hov = i; cv.style.cursor = i > 0 ? 'pointer' : 'default'; if (!STAR.raf) starDraw(1); } };
   cv.onmouseleave = () => { if (STAR.hov >= 0) { STAR.hov = -1; if (!STAR.raf) starDraw(1); } };
-  cv.onclick = ev => { const i = at(ev); if (i > 0) open_(STAR.n[i].id); };
+  cv.onclick = ev => { const i = at(ev); if (i > 0) { STAR.held = true; open_(STAR.n[i].id); } };
   window.onresize = () => { if (document.getElementById('starcv') === cv) { size(); size(); starLayout(); starDraw(1); } };
 }
 
