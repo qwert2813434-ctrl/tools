@@ -289,7 +289,9 @@
         <div class="sec-t">邊緣（四邊各自控制）</div>
         <div class="f"><div class="f-head"><label>留紙寬度</label><span class="v" id="vBorder"></span></div>
           <input type="range" id="border" min="0" max="14" step="0.5" value="6"></div>
-        <div class="f"><div class="f-head"><label>撕裂隨機度</label><span class="v" id="vRand"></span></div>
+        <div class="f"><div class="f-head"><label>變形隨機（輪廓扭多大）</label><span class="v" id="vDeform"></span></div>
+          <input type="range" id="deform" min="0" max="100" step="1" value="50"></div>
+        <div class="f"><div class="f-head"><label>深淺隨機（波長與對比）</label><span class="v" id="vRand"></span></div>
           <input type="range" id="rand" min="0" max="100" step="1" value="50"></div>
         <div class="edge-grid" id="edges"></div>
         <div class="edge-tools">
@@ -303,7 +305,7 @@
 
   <p class="foot"><b>怎麼做的</b>：印刷是減色的——紙 × 每支油墨。取對數後對每個像素解最小平方，
   算出各油墨濃度，再各自角度 AM 過網、multiply 疊印。「撕毛邊」是照撕開的紙會露出纖維芯做的：
-  邊界用低頻雜訊起伏、毛鬚用高頻門檻雜訊，撕口內側露一圈紙芯白。「真撕紙」再進一步：紙斷掉的線與印刷停下的線是兩條各自起伏的曲線，中間夾出的紙芯白忽寬忽窄（會夾死也會鼓開），帶內做外唇亮、內側暗的立體明暗，撕邊外再壓一道細影。「撕裂隨機度」調的是曲線的波長與對比——低＝斯文長浪、高＝狂野碎撕，深度仍由各邊強度決定。<br>
+  邊界用低頻雜訊起伏、毛鬚用高頻門檻雜訊，撕口內側露一圈紙芯白。「真撕紙」再進一步：紙斷掉的線與印刷停下的線是兩條各自起伏的曲線，中間夾出的紙芯白忽寬忽窄（會夾死也會鼓開），帶內做外唇亮、內側暗的立體明暗，撕邊外再壓一道細影。「變形隨機」調輪廓整體扭多大（0＝近直線）、「深淺隨機」調波長與白帶對比（低＝斯文長浪、高＝狂野碎撕），咬進來多深仍由各邊強度決定。<br>
   配方沿革：ALIGNED 報紙濾鏡 → 2026-08-31 對照 tone App 實測反推（參考品量到 45°／135°＋藍版 0°、紙色 221·215·201；本工具採 45°／15°／75° 標準分色角避免摩爾紋）。</p>
 </div>
 
@@ -330,7 +332,8 @@ const st = {
   pitch: 4, hard: 0.45, reg: 2.25, dens: 0.9, grain: 7,
   sepAngle: true,
   border: 6,                               // 留紙寬度（% 短邊）
-  rand: 50,                                // 撕裂隨機度：調邊緣曲線的波長與對比，50＝原本的樣子
+  deform: 50,                              // 變形隨機：輪廓整體扭多大（波幅），50＝原本的樣子
+  rand: 50,                                // 深淺隨機：邊緣曲線的波長與對比，50＝原本的樣子
   edges: SIDES.map(() => ({ style: "riso", amt: 55 })),
   linkEdges: true,
   seed: 7,
@@ -428,17 +431,19 @@ function screenPlane(dens, W, H, angleDeg, pitch, hard, offx, offy){
    每邊一條 1D 曲線：m(t)＝這一點的「吃進來多深」。
    riso＝低頻起伏的實邊；torn＝低頻大浪＋高頻毛鬚＋露一圈紙芯白；feather＝往紙色淡出。 */
 function edgeCurves(W, H, k, seed){
-  // 隨機度：只動「多亂」不動「多深」——波長縮放（低＝斯文長浪、高＝狂野碎撕）＋ tear 的對比
+  // 深淺隨機：波長縮放（低＝斯文長浪、高＝狂野碎撕）＋ tear 白帶對比；變形隨機：輪廓波幅
   const r = st.rand / 100;
   const ff = 1.55 - 1.1 * r;                         // 波長倍率：0→1.55、50→1.0（原樣）、100→0.45
+  const rd = st.deform / 100;
+  const af = rd <= 0.5 ? rd * 2 : 1 + (rd - 0.5) * 2.4;  // 波幅倍率：0→0（近直線）、50→1（原樣）、100→2.2
   const mk = (len, e, sideIdx) => {
     if (e.style === "none") return null;
     const I = e.amt * 0.6 * k;                       // 強度 → px
     const lo = noise1D(len, 34 * k * ff, seed + sideIdx * 7);
-    if (e.style === "riso") return { base: lo, hi: null, I };
+    if (e.style === "riso") return { base: lo, hi: null, I, af };
     if (e.style === "torn"){
       const hi = noise1D(len, 4 * k * ff, seed + 100 + sideIdx * 7);
-      return { base: lo, hi, I };
+      return { base: lo, hi, I, af };
     }
     if (e.style === "tear"){
       // 真撕紙＝兩條各自起伏的線：紙在哪裡斷（大浪＋中頻＋毛鬚）、印刷在哪裡停。
@@ -453,31 +458,46 @@ function edgeCurves(W, H, k, seed){
       const ja = 0.04 + 0.16 * r;                    // 斷線毛鬚幅度
       const mo = new Float32Array(len), bw = new Float32Array(len);
       for (let t = 0; t < len; t++){
-        mo[t] = I * (0.22 + 0.50 * big[t] + 0.26 * mid[t]) + (hi[t] - 0.5) * I * ja;
+        // 平均咬深 0.60*I 固定，af 只放大／壓平繞著平均的擺動——調變形不會整圈變深
+        const wob = 0.50 * big[t] + 0.26 * mid[t] - 0.38;
+        mo[t] = Math.max(I * (0.60 + af * wob) + (hi[t] - 0.5) * I * ja, I * 0.04);
         bw[t] = I * (0.06 + 1.5 * Math.pow(0.15 + 0.85 * band[t], ex)) * (1 + (bmid[t] - 0.5) * r);
       }
       return { I, mo, bw, sh };
     }
-    return { base: lo, hi: null, I };                // feather
+    return { base: lo, hi: null, I, af };            // feather
   };
   return [ mk(W, st.edges[0], 0), mk(H, st.edges[1], 1),
            mk(W, st.edges[2], 2), mk(H, st.edges[3], 3) ];
 }
 /* 回傳：{p:1,sh}＝整格紙（sh＝撕邊壓出的細影）、{core:亮度}＝紙芯白、{a:0–1}＝與紙的混合率、null＝不受影響 */
+const _d = new Float32Array(4);
 function edgeAt(x, y, W, H, curves, borderPx, seed, k){
   let paperHit = false, paperSh = 1, coreSh = 0, alpha = 0;
+  // 第一趟：先算四邊各自的 d（離自己輪廓多遠），細影要靠它判斷「照片旁邊」
   for (let s = 0; s < 4; s++){
     const c = curves[s]; const e = st.edges[s];
     let dist, t;
     if (s === 0){ dist = y; t = x; } else if (s === 1){ dist = W - 1 - x; t = y; }
     else if (s === 2){ dist = H - 1 - y; t = x; } else { dist = x; t = y; }
-    if (c === null){ if (dist < borderPx) paperHit = true; continue; }
+    if (c === null || e.style === "feather") _d[s] = dist - borderPx;
+    else if (e.style === "tear") _d[s] = dist - (borderPx + c.mo[t]);
+    else _d[s] = dist - (borderPx + c.I * Math.max(0.675 + c.af * 0.65 * (c.base[t] - 0.5), 0.02));
+  }
+  for (let s = 0; s < 4; s++){
+    const c = curves[s]; const e = st.edges[s];
+    const d = _d[s], t = (s === 0 || s === 2) ? x : y;
+    if (c === null){ if (d < 0) paperHit = true; continue; }
     if (e.style === "tear"){
-      const d = dist - (borderPx + c.mo[t]);          // 紙斷掉的線
       if (d < 0){
         paperHit = true;
-        const sw = Math.max(c.I * 0.14, 3);           // 撕邊壓在紙上的細影，賣「疊在上面」的立體感
-        if (d > -sw) paperSh = Math.min(paperSh, 1 - 0.10 * (1 + d / sw));
+        // 細影只落在照片旁邊：超出垂直兩側輪廓（照片角落以外的紙面）就不畫，
+        // 不然影線會沿輪廓延伸橫過整張紙＝穿幫（2026-08-31 小高抓到）
+        const o1 = (s === 0 || s === 2) ? 3 : 0, o2 = (s === 0 || s === 2) ? 1 : 2;
+        if (_d[o1] >= 0 && _d[o2] >= 0){
+          const sw = Math.max(c.I * 0.14, 3);         // 撕邊壓在紙上的細影，賣「疊在上面」的立體感
+          if (d > -sw) paperSh = Math.min(paperSh, 1 - 0.10 * (1 + d / sw));
+        }
         continue;
       }
       const bw = c.bw[t];                             // 紙芯白帶：忽寬忽窄
@@ -492,8 +512,6 @@ function edgeAt(x, y, W, H, curves, borderPx, seed, k){
       }
       continue;
     }
-    const m = borderPx + (e.style === "feather" ? 0 : c.I * (0.35 + 0.65 * c.base[t]));
-    const d = dist - m;
     if (e.style === "riso"){
       if (d < 0) paperHit = true;
     } else if (e.style === "torn"){
@@ -659,14 +677,14 @@ function exportPNG(){
 function fmt(){ $("vPitch").textContent = st.pitch.toFixed(1)+" px"; $("vHard").textContent = st.hard.toFixed(2);
   $("vReg").textContent = st.reg.toFixed(2)+" px"; $("vDens").textContent = st.dens.toFixed(2)+"×";
   $("vGrain").textContent = st.grain; $("vBorder").textContent = st.border.toFixed(1)+"%";
-  $("vRand").textContent = st.rand; }
+  $("vRand").textContent = st.rand; $("vDeform").textContent = st.deform; }
 
 function bindRange(id, key){
   const el = $(id);
   el.value = st[key];
   el.addEventListener("input", () => { st[key] = +el.value; fmt(); markPreset(); requestRender(); });
 }
-["pitch","hard","reg","dens","grain","border","rand"].forEach(id => bindRange(id, id));
+["pitch","hard","reg","dens","grain","border","rand","deform"].forEach(id => bindRange(id, id));
 $("sepAngle").addEventListener("input", e => { st.sepAngle = e.target.checked; markPreset(); requestRender(); });
 $("paper").addEventListener("input", e => { st.paper = e.target.value; markPreset(); requestRender(); });
 
