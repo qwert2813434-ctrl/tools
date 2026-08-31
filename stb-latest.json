@@ -1,6 +1,7 @@
 {
   "version": "1.8.0",
   "url": "https://github.com/qwert2813434-ctrl/STB/raw/main/release/STB_1.8.0_aarch64.dmg",
+  "urlWin": "https://github.com/qwert2813434-ctrl/STB/raw/main/release/STB_1.8.0_x64-setup.exe",
   "notes": "新增「工作人員」章：通告單那份名單可以獨立成一頁給客戶看，不印電話、職務自動帶英日對照，可匯出 credits.json 給片尾名單；每個人有「通告」開關，沒開的不會出現在通告單上。新增畫幅 4:3（紀錄片、資料帶、要裁 IG 方形的案子都合用，STB Camera 同步支援）。預設 LOGO 改成自己在「關於」設定一次。修正 3:2／4:3 匯出 PPTX 時分鏡描述會壓到下一排",
   "notesI18n": {
     "zh": "新增「工作人員」章：通告單那份名單可以獨立成一頁給客戶看，不印電話、職務自動帶英日對照，可匯出 credits.json 給片尾名單；每個人有「通告」開關，沒開的不會出現在通告單上。新增畫幅 4:3（紀錄片、資料帶、要裁 IG 方形的案子都合用，STB Camera 同步支援）。預設 LOGO 改成自己在「關於」設定一次。修正 3:2／4:3 匯出 PPTX 時分鏡描述會壓到下一排",
