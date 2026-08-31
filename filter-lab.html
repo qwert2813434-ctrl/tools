@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="soft">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>濾鏡工坊 — 小高工具間</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+/* ── 主題：平常跟著日夜自動切；手動切了就聽你的，到下一次日夜交替為止 ──
+   放在 <head> 先跑，避免先閃一下亮色再變暗。全站共用同一把 key。 */
+(function(){
+  var MAP = {day:'soft', night:'dusk'};
+  var KEY = 'tools.theme';
+  function isDay(d){ var h = d.getHours(); return h >= 7 && h < 19; }
+  function phaseKey(d){
+    var t = new Date(d.getTime());
+    if(t.getHours() < 7) t.setDate(t.getDate() - 1);
+    return t.toDateString() + (isDay(d) ? '|day' : '|night');
+  }
+  function auto(d){
+    try{ if(matchMedia('(prefers-color-scheme: dark)').matches) return 'night'; }catch(e){}
+    return isDay(d) ? 'day' : 'night';
+  }
+  function override(d){
+    try{ var o = JSON.parse(localStorage.getItem(KEY) || 'null');
+         return (o && o.k === phaseKey(d)) ? o.v : null; }catch(e){ return null; }
+  }
+  window.themeNow = function(){ var d = new Date(); return override(d) || auto(d); };
+  window.applyTheme = function(v){ document.documentElement.dataset.theme = MAP[v]; };
+  window.toggleTheme = function(){
+    var d = new Date(), v = themeNow() === 'night' ? 'day' : 'night';
+    try{ localStorage.setItem(KEY, JSON.stringify({v:v, k:phaseKey(d)})); }catch(e){}
+    applyTheme(v); return v;
+  };
+  applyTheme(themeNow());
+})();
+</script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ══ 柔霧（預設）══ */
+  :root {
+    --base:#EDE7E1;
+    --wash-1:#BFD9CD; --wash-2:#EFCEC6; --wash-3:#E9DCCA; --wash-4:#CBDDD5;
+    --panel:rgba(255,255,255,.42); --panel-top:rgba(255,255,255,.26);
+    --card:#FCFAF9; --card-2:#F6F2EF;
+    --ink:#1B1917; --ink2:#6B6560; --faint:#A49C96; --hair:rgba(27,25,23,.06);
+    --sel:#6E9A8C; --warm:#C0857A;
+    --e1: 0 1px 1px rgba(58,46,40,.035), 0 10px 26px -14px rgba(58,46,40,.22);
+    --e2: 0 2px 3px rgba(58,46,40,.05),  0 24px 50px -22px rgba(58,46,40,.30);
+    --e-panel: 0 1px 2px rgba(58,46,40,.04), 0 40px 90px -40px rgba(58,46,40,.34);
+    --inset: inset 0 1px 2px rgba(58,46,40,.05);
+    --r-xl:34px; --r-lg:26px; --r-md:18px;
+    --sans:'Figtree','PingFang TC','Noto Sans TC',-apple-system,sans-serif;
+    --mono:ui-monospace,'SF Mono',Menlo,monospace;
+    --side: clamp(18px,4vw,42px);
+  }
+  /* ══ 夜霧 ══ */
+  :root[data-theme="dusk"] {
+    --base:#141317;
+    --wash-1:#1D2A26; --wash-2:#2B2020; --wash-3:#201D1B; --wash-4:#17201E;
+    --panel:rgba(255,255,255,.045); --panel-top:rgba(255,255,255,.02);
+    --card:#211F24; --card-2:#191820;
+    --ink:#F1EDE9; --ink2:#A8A19B; --faint:#726B67; --hair:rgba(255,255,255,.07);
+    --sel:#8FB2A6; --warm:#D9A5A2;
+    --e1: 0 1px 1px rgba(0,0,0,.30), 0 12px 30px -16px rgba(0,0,0,.75);
+    --e2: 0 2px 4px rgba(0,0,0,.35),  0 26px 55px -24px rgba(0,0,0,.85);
+    --e-panel: 0 40px 100px -46px rgba(0,0,0,.9);
+    --inset: inset 0 1px 2px rgba(0,0,0,.35);
+  }
+
+  html { font-size:16px; }
+  body {
+    font-family:var(--sans); font-weight:400; line-height:1.72;
+    color:var(--ink); background:var(--base);
+    -webkit-font-smoothing:antialiased; min-height:100vh; overflow-x:hidden;
+    transition:background .5s ease, color .5s ease;
+  }
+  .sky {
+    position:fixed; inset:-20vh -10vw; z-index:-2; pointer-events:none;
+    background:
+      radial-gradient(58% 42% at 12%  4%, var(--wash-1) 0%, transparent 62%),
+      radial-gradient(52% 38% at 96% 20%, var(--wash-3) 0%, transparent 62%),
+      radial-gradient(72% 46% at 34% 74%, var(--wash-2) 0%, transparent 64%),
+      radial-gradient(50% 40% at 88% 96%, var(--wash-4) 0%, transparent 62%);
+    filter:blur(30px); transition:background .5s ease;
+  }
+  .grain-bg {
+    position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.05;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .topbar {
+    max-width:1180px; margin:0 auto; padding:26px var(--side) 0;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .mark { font-size:13px; letter-spacing:.22em; text-transform:uppercase; color:var(--ink2); font-weight:500;
+          display:inline-flex; align-items:center; gap:9px; padding:8px 16px 8px 12px; border-radius:999px;
+          background:var(--card); box-shadow:var(--e1); text-decoration:none;
+          transition:transform .2s cubic-bezier(.2,.8,.3,1), box-shadow .2s, color .2s; }
+  .mark:hover { color:var(--ink); transform:translateX(-2px); box-shadow:var(--e2); }
+  .mark svg { width:14px; height:14px; stroke:currentColor; fill:none; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
+  .orb {
+    width:42px; height:42px; border-radius:50%; border:0; cursor:pointer;
+    background:var(--card); color:var(--ink2); box-shadow:var(--e1);
+    display:flex; align-items:center; justify-content:center;
+    transition:transform .2s cubic-bezier(.2,.8,.3,1), box-shadow .2s;
+  }
+  .orb:hover { transform:scale(1.07); box-shadow:var(--e2); }
+  .orb svg { width:17px; height:17px; stroke:currentColor; fill:none; stroke-width:1.6; }
+
+  .shell {
+    max-width:1180px; margin:22px auto 60px;
+    padding:clamp(30px,4.6vw,52px) clamp(20px,3.4vw,44px) clamp(36px,4.6vw,50px);
+    border-radius:var(--r-xl);
+    background:linear-gradient(170deg, var(--panel-top), var(--panel));
+    -webkit-backdrop-filter:blur(22px) saturate(1.15);
+    backdrop-filter:blur(22px) saturate(1.15);
+    box-shadow:var(--e-panel);
+  }
+  .eyebrow { font-size:11px; letter-spacing:.26em; text-transform:uppercase; color:var(--faint); font-weight:500; margin-bottom:14px; }
+  h1 { font-weight:500; font-size:clamp(30px,5.4vw,52px); line-height:1.18; }
+  .rule { width:2.6em; height:1px; background:var(--ink); opacity:.26; margin:clamp(18px,2.6vw,26px) 0 16px; }
+  .lede { max-width:34em; color:var(--ink2); font-size:15px; }
+  .lede b { color:var(--ink); font-weight:600; }
+
+  .work { display:grid; grid-template-columns:minmax(0,1fr) 348px; gap:18px; margin-top:clamp(26px,3.6vw,38px); align-items:start; }
+  @media (max-width:900px){ .work { grid-template-columns:1fr; } }
+
+  .card {
+    background:linear-gradient(180deg,var(--card) 0%, var(--card-2) 220%);
+    border-radius:var(--r-lg); box-shadow:var(--e1); padding:clamp(16px,2.2vw,22px);
+  }
+  .stage { position:sticky; top:16px; }
+  @media (max-width:900px){ .stage { position:static; } }
+  .canvas-wrap { position:relative; border-radius:var(--r-md); overflow:hidden; background:var(--card-2); box-shadow:var(--inset); }
+  .canvas-wrap canvas { display:block; width:100%; height:auto; }
+  .canvas-wrap.empty { aspect-ratio:4/3; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  .canvas-wrap.empty canvas { display:none; }
+  .drop-hint { text-align:center; color:var(--ink2); font-size:13.5px; padding:0 24px; line-height:2; }
+  .drop-hint svg { width:34px; height:34px; stroke:var(--faint); fill:none; stroke-width:1.4; stroke-linecap:round; stroke-linejoin:round; margin-bottom:8px; }
+  .drop-hint b { color:var(--ink); font-weight:600; }
+  .canvas-wrap.dragover { outline:2px dashed var(--sel); outline-offset:-8px; }
+  .stagebar { display:flex; gap:8px; align-items:center; margin-top:12px; flex-wrap:wrap; }
+  .stagebar .gap { flex:1; }
+  .busy { position:absolute; inset:0; display:none; align-items:center; justify-content:center;
+          background:color-mix(in srgb, var(--card) 55%, transparent); font-size:13px; color:var(--ink); backdrop-filter:blur(3px); }
+  .busy.on { display:flex; }
+
+  .btn {
+    border:0; cursor:pointer; font-family:var(--sans); font-size:12.5px; font-weight:600;
+    user-select:none; -webkit-user-select:none; -webkit-touch-callout:none; touch-action:manipulation;
+    padding:9px 16px; border-radius:999px; background:var(--ink); color:var(--base);
+    box-shadow:var(--e1); transition:transform .15s, box-shadow .15s, opacity .15s;
+    display:inline-flex; align-items:center; gap:7px; text-decoration:none;
+  }
+  .btn:hover { transform:translateY(-1px); box-shadow:var(--e2); }
+  .btn.quiet { background:var(--card); color:var(--ink2); }
+  .btn.quiet:hover { color:var(--ink); }
+  .btn svg { width:13px; height:13px; stroke:currentColor; fill:none; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
+  .btn:disabled { opacity:.4; pointer-events:none; }
+
+  .sec { margin-bottom:16px; }
+  .sec:last-child { margin-bottom:0; }
+  .sec-t { font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--faint); font-weight:600; margin-bottom:11px;
+           display:flex; align-items:center; gap:8px; }
+  .sec-t::after { content:""; flex:1; height:1px; background:var(--hair); }
+
+  .presets { display:flex; gap:7px; flex-wrap:wrap; }
+  .chip {
+    border:1px solid var(--hair); background:var(--card-2); color:var(--ink2); cursor:pointer;
+    font-family:var(--sans); font-size:12px; font-weight:600; padding:7px 12px; border-radius:999px;
+    display:inline-flex; align-items:center; gap:7px; transition:all .15s;
+  }
+  .chip:hover { color:var(--ink); box-shadow:var(--e1); }
+  .chip.on { background:var(--ink); color:var(--base); border-color:transparent; }
+  .chip .dots { display:inline-flex; gap:3px; }
+  .chip .dots i { width:9px; height:9px; border-radius:50%; display:inline-block; }
+
+  .f { margin-bottom:12px; }
+  .f:last-child { margin-bottom:0; }
+  .f-head { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px; }
+  .f-head label { font-size:12.5px; color:var(--ink2); }
+  .f-head .v { font-family:var(--mono); font-size:11.5px; color:var(--sel); font-weight:600; }
+  input[type=range] { width:100%; accent-color:var(--sel); height:22px; }
+  .chk { display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--ink2); cursor:pointer; padding:3px 0; }
+  .chk input { accent-color:var(--sel); width:14px; height:14px; }
+
+  .inkrow { display:flex; align-items:center; gap:9px; margin-bottom:8px; }
+  .inkrow input[type=color] { width:34px; height:28px; border:0; border-radius:8px; background:none; cursor:pointer; padding:0; }
+  .inkrow input[type=color]::-webkit-color-swatch-wrapper { padding:0; }
+  .inkrow input[type=color]::-webkit-color-swatch { border:1px solid var(--hair); border-radius:8px; }
+  .inkrow .lb { font-size:12.5px; color:var(--ink2); flex:1; }
+  .inkrow .x { border:0; background:none; color:var(--faint); cursor:pointer; font-size:15px; line-height:1; padding:4px; }
+  .inkrow .x:hover { color:var(--warm); }
+  .addink { font-size:12px; color:var(--sel); background:none; border:0; cursor:pointer; font-weight:600; padding:2px 0; font-family:var(--sans); }
+  .addink:hover { text-decoration:underline; }
+
+  /* 邊緣：四邊各一列 */
+  .edge-grid { display:grid; grid-template-columns:2.2em 1fr 84px; gap:8px 10px; align-items:center; }
+  .edge-grid .en { font-size:12px; color:var(--ink2); font-weight:600; }
+  .edge-grid select {
+    width:100%; background:var(--card-2); color:var(--ink); border:1px solid var(--hair);
+    border-radius:9px; padding:6px 8px; font-size:12px; font-family:var(--sans);
+  }
+  .edge-grid input[type=range] { height:18px; }
+  .edge-tools { display:flex; gap:10px; align-items:center; margin-top:10px; flex-wrap:wrap; }
+  .link-note { font-size:11.5px; color:var(--faint); }
+
+  @media (max-width:620px){
+    .shell { margin-left:10px; margin-right:10px; padding-left:18px; padding-right:18px; border-radius:26px; }
+  }
+  .foot { margin-top:22px; font-size:12px; color:var(--faint); line-height:1.9; }
+  .foot b { color:var(--ink2); font-weight:600; }
+  input[type=file] { display:none; }
+</style>
+</head>
+<body>
+<div class="sky"></div><div class="grain-bg"></div>
+
+<div class="topbar">
+  <a class="mark" href="index.html"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>小高工具間</a>
+  <button class="orb" id="orb" aria-label="切換日夜主題"><svg viewBox="0 0 24 24" id="orbIcon"></svg></button>
+</div>
+
+<div class="shell">
+  <div class="eyebrow">Filter Lab</div>
+  <h1>濾鏡工坊</h1>
+  <div class="rule"></div>
+  <p class="lede">把照片變成<b>孔版印刷</b>（Risograph）質感：先把顏色減成兩三支油墨，
+  每支各自角度過網，再一層層疊印回紙上。邊緣可以留紙、撕毛邊，四個邊各自控制。
+  照片全程在你自己的電腦上處理，不會上傳。</p>
+
+  <div class="work">
+    <div class="stage">
+      <div class="card">
+        <div class="canvas-wrap empty" id="cw">
+          <canvas id="cv"></canvas>
+          <div class="drop-hint" id="hint">
+            <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.6" cy="10" r="1.6"/><path d="M3 16.5l5-4.5 4.2 3.8L16 12l5 4.5"/></svg><br>
+            <b>把照片拖進來</b>，或點一下選檔<br>也可以直接 ⌘V 貼上
+          </div>
+          <div class="busy" id="busy">輸出中…</div>
+        </div>
+        <div class="stagebar">
+          <button class="btn quiet" id="pick"><svg viewBox="0 0 24 24"><path d="M12 16V4m0 0L7 9m5-5l5 5"/><path d="M4 20h16"/></svg>換照片</button>
+          <button class="btn quiet" id="demoBtn">用測試圖</button>
+          <button class="btn quiet" id="orig">按住看原圖</button>
+          <span class="gap"></span>
+          <button class="btn" id="save" disabled><svg viewBox="0 0 24 24"><path d="M12 4v12m0 0l-5-5m5 5l5-5"/><path d="M4 20h16"/></svg>輸出 PNG（原始解析度）</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="sec">
+        <div class="sec-t">定案配方</div>
+        <div class="presets" id="presets"></div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-t">油墨與紙</div>
+        <div id="inks"></div>
+        <button class="addink" id="addInk">＋ 加一支油墨（最多 3）</button>
+        <div class="inkrow" style="margin-top:10px">
+          <input type="color" id="paper" value="#ddd7c9">
+          <span class="lb">紙色</span>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-t">網點</div>
+        <div class="f"><div class="f-head"><label>網點間距</label><span class="v" id="vPitch"></span></div>
+          <input type="range" id="pitch" min="2" max="12" step="0.5" value="4"></div>
+        <div class="f"><div class="f-head"><label>網點硬度</label><span class="v" id="vHard"></span></div>
+          <input type="range" id="hard" min="0" max="1" step="0.05" value="0.45"></div>
+        <div class="f"><div class="f-head"><label>套印偏移</label><span class="v" id="vReg"></span></div>
+          <input type="range" id="reg" min="0" max="4" step="0.25" value="2.25"></div>
+        <div class="f"><div class="f-head"><label>油墨濃度</label><span class="v" id="vDens"></span></div>
+          <input type="range" id="dens" min="0.5" max="1.8" step="0.05" value="0.9"></div>
+        <div class="f"><div class="f-head"><label>紙張顆粒</label><span class="v" id="vGrain"></span></div>
+          <input type="range" id="grain" min="0" max="24" step="1" value="7"></div>
+        <label class="chk"><input type="checkbox" id="sepAngle" checked>每支油墨各自網屏角度（45°／15°／75°）</label>
+      </div>
+
+      <div class="sec">
+        <div class="sec-t">邊緣（四邊各自控制）</div>
+        <div class="f"><div class="f-head"><label>留紙寬度</label><span class="v" id="vBorder"></span></div>
+          <input type="range" id="border" min="0" max="14" step="0.5" value="6"></div>
+        <div class="edge-grid" id="edges"></div>
+        <div class="edge-tools">
+          <label class="chk" style="padding:0"><input type="checkbox" id="linkEdges" checked>四邊同步</label>
+          <button class="btn quiet" id="reseed" style="padding:6px 12px">換一個邊</button>
+          <span class="link-note">同步時調任何一邊＝四邊一起動</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="foot"><b>怎麼做的</b>：印刷是減色的——紙 × 每支油墨。取對數後對每個像素解最小平方，
+  算出各油墨濃度，再各自角度 AM 過網、multiply 疊印。「撕毛邊」是照撕開的紙會露出纖維芯做的：
+  邊界用低頻雜訊起伏、毛鬚用高頻門檻雜訊，撕口內側露一圈紙芯白。<br>
+  配方沿革：ALIGNED 報紙濾鏡 → 2026-08-31 對照 tone App 實測反推（參考品量到 45°／135°＋藍版 0°、紙色 221·215·201；本工具採 45°／15°／75° 標準分色角避免摩爾紋）。</p>
+</div>
+
+<script>
+"use strict";
+/* ════════════════════ 主題鈕 ════════════════════ */
+const ICONS = {
+  day:'<circle cx="12" cy="12" r="4.4"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.4 5.4l1.7 1.7M16.9 16.9l1.7 1.7M18.6 5.4l-1.7 1.7M7.1 16.9l-1.7 1.7"/>',
+  night:'<path d="M20.2 14.2A8.2 8.2 0 1 1 9.8 3.8a6.8 6.8 0 1 0 10.4 10.4z"/>'
+};
+function orbIcon(){ document.getElementById('orbIcon').innerHTML = ICONS[themeNow()==='night'?'day':'night']; }
+document.getElementById('orb').onclick = () => { toggleTheme(); orbIcon(); };
+orbIcon();
+
+/* ════════════════════ 狀態 ════════════════════ */
+const $ = id => document.getElementById(id);
+const SIDES = ["上","右","下","左"];
+const EDGE_STYLES = [["none","無"],["riso","孔版粗邊"],["torn","撕毛邊"],["feather","羽化"]];
+const ANGLES = [45, 15, 75];
+
+const st = {
+  inks: ["#236996", "#966946"],           // 定案：藍＋暖棕
+  paper: "#ddd7c9",                        // RGB(221,215,201)，tone 實測值
+  pitch: 4, hard: 0.45, reg: 2.25, dens: 0.9, grain: 7,
+  sepAngle: true,
+  border: 6,                               // 留紙寬度（% 短邊）
+  edges: SIDES.map(() => ({ style: "riso", amt: 55 })),
+  linkEdges: true,
+  seed: 7,
+};
+
+/* 三組定案（2026-08-31 小高在樣本間選的；參數同一組，差油墨） */
+const PRESETS = [
+  { name:"藍＋暖棕", inks:["#236996","#966946"] },
+  { name:"綠＋暖棕", inks:["#3c7846","#a06e46"] },
+  { name:"單墨・黑", inks:["#282622"] },
+];
+
+let srcImg = null;          // 原始 Image / canvas（全解析度）
+let prev = null;            // 縮圖 ImageData（原圖）
+let prevW = 0, prevH = 0;
+
+/* ════════════════════ 小工具 ════════════════════ */
+const hex2rgb = h => [parseInt(h.slice(1,3),16), parseInt(h.slice(3,5),16), parseInt(h.slice(5,7),16)];
+const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
+
+/* 固定種子雜湊（同一顆種子每次渲染長一樣，調滑桿時邊不會跳） */
+function hash1(i, seed){ let s = (i*374761393 + seed*668265263) >>> 0;
+  // ⚠️ 一定要無號位移 >>>：帶號 >> 會做符號延伸，bit31 自我抵消，輸出永遠 < 0.5
+  //（症狀＝顆粒只變暗不變亮、邊緣起伏比係數小一半，2026-08-31 審查實測抓到）
+  s = (s ^ (s >>> 13)) >>> 0; s = Math.imul(s, 1274126177) >>> 0; return ((s ^ (s >>> 16)) >>> 0) / 4294967295; }
+function hash2(x, y, seed){ return hash1(x*73856093 ^ y*19349663, seed); }
+
+/* 1D 值雜訊曲線：len 長、cell 一格幾 px、回 0–1 */
+function noise1D(len, cell, seed){
+  const n = Math.ceil(len / cell) + 2, g = new Float32Array(n);
+  for (let i = 0; i < n; i++) g[i] = hash1(i, seed);
+  const out = new Float32Array(len);
+  for (let x = 0; x < len; x++){
+    const u = x / cell, i = u | 0, t = u - i, s = t * t * (3 - 2 * t);
+    out[x] = g[i] * (1 - s) + g[i + 1] * s;
+  }
+  return out;
+}
+
+/* ════════════════════ 分色（log 空間最小平方）════════════════════ */
+function invert(M, n){
+  const a = M.map((r,i) => r.concat(Array.from({length:n},(_,j)=> i===j?1:0)));
+  for (let i = 0; i < n; i++){
+    const piv = a[i][i] || 1e-9;
+    for (let j = 0; j < 2*n; j++) a[i][j] /= piv;
+    for (let k = 0; k < n; k++) if (k !== i){
+      const f = a[k][i];
+      for (let j = 0; j < 2*n; j++) a[k][j] -= f * a[i][j];
+    }
+  }
+  return a.map(r => r.slice(n));
+}
+function separate(data, W, H, inks, paper){
+  const N = inks.length, P = W * H;
+  const A = inks.map(c => [0,1,2].map(k => Math.log(Math.max(c[k],1) / paper[k])));
+  const AtA = [];
+  for (let i = 0; i < N; i++){ AtA.push([]);
+    for (let j = 0; j < N; j++) AtA[i][j] = A[i][0]*A[j][0] + A[i][1]*A[j][1] + A[i][2]*A[j][2]; }
+  const inv = invert(AtA, N);
+  const out = Array.from({length:N}, () => new Float32Array(P));
+  const b = [0,0,0], Atb = new Float32Array(N);
+  for (let p = 0, i = 0; p < P; p++, i += 4){
+    for (let k = 0; k < 3; k++) b[k] = Math.log(Math.max(data[i+k],1) / paper[k]);
+    for (let n = 0; n < N; n++) Atb[n] = A[n][0]*b[0] + A[n][1]*b[1] + A[n][2]*b[2];
+    for (let n = 0; n < N; n++){
+      let d = 0; for (let m = 0; m < N; m++) d += inv[n][m] * Atb[m];
+      out[n][p] = clamp01(d);
+    }
+  }
+  return out;
+}
+
+/* ════════════════════ 過網 ════════════════════ */
+function screenPlane(dens, W, H, angleDeg, pitch, hard, offx, offy){
+  const rad = angleDeg * Math.PI / 180, ca = Math.cos(rad), sa = Math.sin(rad);
+  const cov = new Float32Array(W * H);
+  const soft = Math.max((0.55 - hard * 0.5) * 0.5, 0.02);
+  for (let y = 0; y < H; y++){
+    for (let x = 0; x < W; x++){
+      const px = x + offx, py = y + offy;
+      const u = ( px * ca + py * sa) / pitch;
+      const v = (-px * sa + py * ca) / pitch;
+      const fu = u - Math.floor(u) - 0.5, fv = v - Math.floor(v) - 0.5;
+      const r = Math.hypot(fu, fv);
+      const d = dens[y * W + x];
+      const R = Math.sqrt(d) * 0.72;
+      const t = (R - r) / soft;
+      cov[y * W + x] = t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t);
+    }
+  }
+  return cov;
+}
+
+/* ════════════════════ 邊緣 ════════════════════
+   每邊一條 1D 曲線：m(t)＝這一點的「吃進來多深」。
+   riso＝低頻起伏的實邊；torn＝低頻大浪＋高頻毛鬚＋露一圈紙芯白；feather＝往紙色淡出。 */
+function edgeCurves(W, H, k, seed){
+  const mk = (len, e, sideIdx) => {
+    if (e.style === "none") return null;
+    const I = e.amt * 0.6 * k;                       // 強度 → px
+    const lo = noise1D(len, 34 * k, seed + sideIdx * 7);
+    if (e.style === "riso") return { base: lo, hi: null, I };
+    if (e.style === "torn"){
+      const hi = noise1D(len, 4 * k, seed + 100 + sideIdx * 7);
+      return { base: lo, hi, I };
+    }
+    return { base: lo, hi: null, I };                // feather
+  };
+  return [ mk(W, st.edges[0], 0), mk(H, st.edges[1], 1),
+           mk(W, st.edges[2], 2), mk(H, st.edges[3], 3) ];
+}
+/* 回傳：{p:1}＝整格紙、{core:1}＝紙芯白、{a:0–1}＝與紙的混合率、null＝不受影響 */
+function edgeAt(x, y, W, H, curves, borderPx, seed){
+  let paperHit = false, core = false, alpha = 0;
+  for (let s = 0; s < 4; s++){
+    const c = curves[s]; const e = st.edges[s];
+    let dist, t;
+    if (s === 0){ dist = y; t = x; } else if (s === 1){ dist = W - 1 - x; t = y; }
+    else if (s === 2){ dist = H - 1 - y; t = x; } else { dist = x; t = y; }
+    if (c === null){ if (dist < borderPx) paperHit = true; continue; }
+    const m = borderPx + (e.style === "feather" ? 0 : c.I * (0.35 + 0.65 * c.base[t]));
+    const d = dist - m;
+    if (e.style === "riso"){
+      if (d < 0) paperHit = true;
+    } else if (e.style === "torn"){
+      if (d < 0){ paperHit = true; continue; }
+      const F = Math.max(c.I * 0.55, 2);
+      if (d < F){
+        const u = d / F;
+        const h = c.hi[t] * 0.7 + hash2(x, y, seed + 900) * 0.3;
+        if (h > u) core = true;                       // 撕口露出的纖維芯
+        else if (hash2(x, y, seed + 901) > u * 1.6) core = true;
+      }
+    } else {                                          // feather
+      if (d < 0){ paperHit = true; continue; }
+      const F = Math.max(c.I, 2);
+      if (d < F) alpha = Math.max(alpha, 1 - d / F);
+    }
+  }
+  if (paperHit) return { p: 1 };
+  if (core) return { core: 1 };
+  if (alpha > 0) return { a: alpha };
+  return null;
+}
+
+/* ════════════════════ 主渲染 ════════════════════
+   k＝這張畫布相對「預覽尺寸」的倍率：網點間距、套印、邊緣強度都是空間量，
+   要跟著放大，輸出跟預覽的質感才會一樣（顆粒是每像素隨機，不用縮）。 */
+function renderTo(imgData, W, H, k){
+  const paper = hex2rgb(st.paper);
+  const inks = st.inks.map(hex2rgb);
+  const planes = separate(imgData.data, W, H, inks, paper);
+  const rgb = new Float32Array(W * H * 3);
+  for (let i = 0; i < W * H; i++){ rgb[i*3] = paper[0]; rgb[i*3+1] = paper[1]; rgb[i*3+2] = paper[2]; }
+
+  planes.forEach((pl, n) => {
+    if (st.dens !== 1) for (let i = 0; i < pl.length; i++) pl[i] = Math.min(1, pl[i] * st.dens);
+    const ang = st.sepAngle ? ANGLES[n % ANGLES.length] : 45;
+    const ox = st.reg * k * Math.cos(n * 2.1), oy = st.reg * k * Math.sin(n * 2.1);
+    const cov = screenPlane(pl, W, H, ang, st.pitch * k, st.hard, ox, oy);
+    const ink = inks[n];
+    for (let i = 0; i < W * H; i++){
+      const c = cov[i];
+      if (c <= 0) continue;
+      for (let q = 0; q < 3; q++) rgb[i*3+q] *= 1 - c * (1 - ink[q] / 255);
+    }
+  });
+
+  const borderPx = st.border / 100 * Math.min(W, H);
+  const curves = edgeCurves(W, H, k, st.seed);
+  const anyEdge = st.border > 0 || st.edges.some(e => e.style !== "none");
+  const corePaper = [Math.min(paper[0]*1.09,250), Math.min(paper[1]*1.09,248), Math.min(paper[2]*1.08,244)];
+
+  const out = new Uint8ClampedArray(W * H * 4);
+  for (let i = 0, p = 0; i < W * H; i++, p += 4){
+    // 顆粒取樣座標除以 k：匯出時顆粒斑點放大成 k×k 塊，縮回同視覺尺寸才跟預覽一樣
+    //（逐像素白噪在縮圖時會被 k² 顆平均掉——「不用縮」是錯的，審查實測 σ 掉成 1/k）。
+    // 種子固定 55：「換一個邊」只換邊形，不重骰整張紙的顆粒。
+    const g = st.grain ? (hash2(((i % W) / k) | 0, (((i / W) | 0) / k) | 0, 55) - 0.5) * st.grain : 0;
+    let r = rgb[i*3], gg = rgb[i*3+1], b = rgb[i*3+2];
+    if (anyEdge){
+      const x = i % W, y = (i / W) | 0;
+      const e = edgeAt(x, y, W, H, curves, borderPx, st.seed);
+      if (e){
+        if (e.p){ r = paper[0]; gg = paper[1]; b = paper[2]; }
+        else if (e.core){ r = corePaper[0]; gg = corePaper[1]; b = corePaper[2]; }
+        else { r = r + (paper[0]-r)*e.a; gg = gg + (paper[1]-gg)*e.a; b = b + (paper[2]-b)*e.a; }
+      }
+    }
+    out[p] = r + g; out[p+1] = gg + g; out[p+2] = b + g; out[p+3] = 255;
+  }
+  return new ImageData(out, W, H);
+}
+
+/* ════════════════════ 預覽管線 ════════════════════ */
+let raf = 0;
+function requestRender(){ if (!prev) return; cancelAnimationFrame(raf); raf = requestAnimationFrame(renderPreview); }
+let showingOrig = false;
+function renderPreview(){
+  if (!prev) return;
+  const cv = $("cv"), ctx = cv.getContext("2d");
+  if (showingOrig){ ctx.putImageData(prev, 0, 0); return; }
+  const src = new ImageData(new Uint8ClampedArray(prev.data), prevW, prevH);
+  ctx.putImageData(renderTo(src, prevW, prevH, 1), 0, 0);
+}
+
+function loadImage(img){
+  srcImg = img;
+  const MAXW = 900;
+  const s = Math.min(1, MAXW / Math.max(img.width, img.height));
+  prevW = Math.max(1, Math.round(img.width * s));
+  prevH = Math.max(1, Math.round(img.height * s));
+  const cv = $("cv");
+  cv.width = prevW; cv.height = prevH;
+  const ctx = cv.getContext("2d");
+  ctx.drawImage(img, 0, 0, prevW, prevH);
+  prev = ctx.getImageData(0, 0, prevW, prevH);
+  $("cw").classList.remove("empty");
+  $("hint").style.display = "none";
+  $("save").disabled = false;
+  requestRender();
+}
+
+/* 測試圖：漸層天空＋遠山＋前景，自己畫的，不用等使用者找照片 */
+function demoImage(){
+  const c = document.createElement("canvas"); c.width = 900; c.height = 675;
+  const x = c.getContext("2d");
+  const sky = x.createLinearGradient(0,0,0,420);
+  sky.addColorStop(0,"#7fb2d9"); sky.addColorStop(1,"#d9e4e4");
+  x.fillStyle = sky; x.fillRect(0,0,900,420);
+  x.fillStyle = "rgba(255,255,255,.85)";
+  for (const [cx,cy,rr] of [[190,110,46],[240,120,60],[300,105,44],[640,70,38],[690,80,50],[736,66,34]])
+    { x.beginPath(); x.arc(cx,cy,rr,0,7); x.fill(); }
+  x.fillStyle = "#5a7d8c";
+  x.beginPath(); x.moveTo(0,420); x.lineTo(150,290); x.lineTo(330,420); x.closePath(); x.fill();
+  x.beginPath(); x.moveTo(240,420); x.lineTo(470,250); x.lineTo(740,420); x.closePath(); x.fill();
+  const gr = x.createLinearGradient(0,420,0,675);
+  gr.addColorStop(0,"#8fae6e"); gr.addColorStop(1,"#4f7042");
+  x.fillStyle = gr; x.fillRect(0,420,900,255);
+  x.strokeStyle = "rgba(60,80,50,.5)"; x.lineWidth = 2;
+  for (let i = 0; i < 60; i++){
+    const gx = hash1(i,3)*900, gy = 430 + hash1(i,4)*230;
+    x.beginPath(); x.moveTo(gx,gy); x.lineTo(gx + (hash1(i,5)-0.5)*14, gy-16-hash1(i,6)*14); x.stroke();
+  }
+  x.fillStyle = "#c2543a";
+  x.fillRect(560,470,150,110); x.beginPath();
+  x.moveTo(548,470); x.lineTo(635,412); x.lineTo(722,470); x.closePath(); x.fill();
+  x.fillStyle = "#e8e2d4"; x.fillRect(600,505,40,75);
+  loadImage(c);
+}
+
+/* ════════════════════ 匯出（原始解析度）════════════════════ */
+function exportPNG(){
+  if (!srcImg) return;
+  $("busy").classList.add("on");
+  setTimeout(() => {
+    try{
+      let W = srcImg.width, H = srcImg.height;
+      // Chrome 的 canvas 超過約 2.68 億畫素會**靜默**產出廢圖——上限前先等比縮
+      const CAP = 150_000_000;
+      if (W * H > CAP){ const f = Math.sqrt(CAP / (W * H)); W = Math.round(W * f); H = Math.round(H * f); }
+      const k = Math.max(W, H) / Math.max(prevW, prevH);   // 空間參數跟預覽同質感
+      const c = document.createElement("canvas"); c.width = W; c.height = H;
+      const x = c.getContext("2d");
+      x.drawImage(srcImg, 0, 0, W, H);
+      const out = renderTo(x.getImageData(0, 0, W, H), W, H, k);
+      x.putImageData(out, 0, 0);
+      // toBlob 不是 toDataURL：12MP 的 dataURL 是 2500 萬字元的字串，手機上會靜默失敗
+      c.toBlob(b => {
+        try{
+          if (!b) return;
+          const a = document.createElement("a");
+          a.download = "濾鏡工坊-孔版.png";
+          a.href = URL.createObjectURL(b);
+          a.click();
+          setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+        } finally { $("busy").classList.remove("on"); }
+      }, "image/png");
+    } catch(err){ $("busy").classList.remove("on"); }
+  }, 30);
+}
+
+/* ════════════════════ UI 綁定 ════════════════════ */
+function fmt(){ $("vPitch").textContent = st.pitch.toFixed(1)+" px"; $("vHard").textContent = st.hard.toFixed(2);
+  $("vReg").textContent = st.reg.toFixed(2)+" px"; $("vDens").textContent = st.dens.toFixed(2)+"×";
+  $("vGrain").textContent = st.grain; $("vBorder").textContent = st.border.toFixed(1)+"%"; }
+
+function bindRange(id, key){
+  const el = $(id);
+  el.value = st[key];
+  el.addEventListener("input", () => { st[key] = +el.value; fmt(); markPreset(); requestRender(); });
+}
+["pitch","hard","reg","dens","grain","border"].forEach(id => bindRange(id, id));
+$("sepAngle").addEventListener("input", e => { st.sepAngle = e.target.checked; markPreset(); requestRender(); });
+$("paper").addEventListener("input", e => { st.paper = e.target.value; markPreset(); requestRender(); });
+
+function drawInks(){
+  const box = $("inks"); box.innerHTML = "";
+  st.inks.forEach((hex, i) => {
+    const row = document.createElement("div"); row.className = "inkrow";
+    row.innerHTML = `<input type="color" value="${hex}"><span class="lb">油墨 ${i+1}</span>` +
+      (st.inks.length > 1 ? `<button class="x" aria-label="移除">×</button>` : "");
+    row.querySelector("input").addEventListener("input", e => { st.inks[i] = e.target.value; markPreset(); requestRender(); });
+    const x = row.querySelector(".x");
+    if (x) x.addEventListener("click", () => { st.inks.splice(i,1); drawInks(); markPreset(); requestRender(); });
+    box.appendChild(row);
+  });
+  $("addInk").style.display = st.inks.length >= 3 ? "none" : "";
+}
+$("addInk").addEventListener("click", () => { st.inks.push("#c04070"); drawInks(); markPreset(); requestRender(); });
+
+function drawPresets(){
+  const box = $("presets"); box.innerHTML = "";
+  PRESETS.forEach((p, i) => {
+    const b = document.createElement("button"); b.className = "chip"; b.dataset.i = i;
+    b.innerHTML = `<span class="dots">${p.inks.map(c=>`<i style="background:${c}"></i>`).join("")}</span>${p.name}`;
+    b.addEventListener("click", () => {
+      st.inks = p.inks.slice();
+      Object.assign(st, { pitch:4, hard:0.45, reg:2.25, dens:0.9, grain:7, sepAngle:true, paper:"#ddd7c9" });
+      ["pitch","hard","reg","dens","grain"].forEach(id => $(id).value = st[id]);
+      $("sepAngle").checked = true; $("paper").value = "#ddd7c9";
+      drawInks(); fmt(); markPreset(); requestRender();
+    });
+    box.appendChild(b);
+  });
+}
+function markPreset(){
+  document.querySelectorAll(".chip").forEach(ch => {
+    const p = PRESETS[+ch.dataset.i];
+    const same = p.inks.length === st.inks.length && p.inks.every((c,i) => c === st.inks[i])
+      && st.pitch === 4 && st.hard === 0.45 && st.reg === 2.25 && st.dens === 0.9
+      && st.grain === 7 && st.sepAngle && st.paper === "#ddd7c9";
+    ch.classList.toggle("on", same);
+  });
+}
+
+function drawEdges(){
+  const box = $("edges"); box.innerHTML = "";
+  SIDES.forEach((name, i) => {
+    const e = st.edges[i];
+    const en = document.createElement("div"); en.className = "en"; en.textContent = name;
+    const sel = document.createElement("select");
+    sel.innerHTML = EDGE_STYLES.map(([v,l]) => `<option value="${v}"${e.style===v?" selected":""}>${l}</option>`).join("");
+    sel.addEventListener("input", () => {
+      if (st.linkEdges) st.edges.forEach(x => x.style = sel.value); else e.style = sel.value;
+      drawEdges(); requestRender();
+    });
+    const rg = document.createElement("input"); rg.type = "range"; rg.min = 5; rg.max = 100; rg.step = 1; rg.value = e.amt;
+    rg.addEventListener("input", () => {
+      // 同步模式**不能重建 DOM**：正在被拖的滑桿一被 innerHTML 拔掉，拖曳當場死掉
+      //（只吃到第一格）。改成就地把其他三支的值同步過去。
+      if (st.linkEdges){
+        st.edges.forEach(x => x.amt = +rg.value);
+        box.querySelectorAll('input[type=range]').forEach(r => { r.value = rg.value; });
+      } else e.amt = +rg.value;
+      requestRender();
+    });
+    box.append(en, sel, rg);
+  });
+}
+$("linkEdges").addEventListener("input", e => { st.linkEdges = e.target.checked; });
+$("reseed").addEventListener("click", () => { st.seed = (st.seed + 1) % 9999; requestRender(); });
+
+/* 照片進來的三條路：選檔、拖放、貼上 */
+const fileIn = document.createElement("input"); fileIn.type = "file"; fileIn.accept = "image/*";
+document.body.appendChild(fileIn);
+function fromFile(f){
+  if (!f || !f.type.startsWith("image/")) return;
+  const img = new Image();
+  img.onload = () => { URL.revokeObjectURL(img.src); loadImage(img); };
+  // HEIC 過得了 image/* 檢查但 Chrome 解不了（授權問題，永不支援）——
+  // 沒有這行，iPhone 照片拖進來就是「毫無反應」，使用者只會覺得工具壞了。
+  img.onerror = () => {
+    URL.revokeObjectURL(img.src);
+    $("hint").innerHTML = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg><br><b>這張讀不進來</b><br>iPhone 的 HEIC 請先轉 JPG（或改用 Safari 開這頁）';
+    $("hint").style.display = ""; $("cw").classList.add("empty");
+  };
+  img.src = URL.createObjectURL(f);
+}
+fileIn.addEventListener("change", () => fromFile(fileIn.files[0]));
+$("pick").addEventListener("click", () => fileIn.click());
+$("cw").addEventListener("click", () => { if (!prev) fileIn.click(); });
+$("demoBtn").addEventListener("click", demoImage);
+["dragover","dragleave","drop"].forEach(ev => $("cw").addEventListener(ev, e => {
+  e.preventDefault();
+  $("cw").classList.toggle("dragover", ev === "dragover");
+  if (ev === "drop") fromFile(e.dataTransfer.files[0]);
+}));
+// 照片放手偏出畫布框＝瀏覽器預設會直接開那張圖、整頁跳走，調好的參數全沒。window 層攔掉。
+window.addEventListener("dragover", e => e.preventDefault());
+window.addEventListener("drop", e => e.preventDefault());
+window.addEventListener("paste", e => {
+  for (const it of e.clipboardData?.items || []) if (it.type.startsWith("image/")) return fromFile(it.getAsFile());
+});
+
+/* 按住看原圖 */
+const origBtn = $("orig");
+const setOrig = v => { showingOrig = v && !!prev; renderPreview(); };
+origBtn.addEventListener("pointerdown", () => setOrig(true));
+origBtn.addEventListener("contextmenu", e => e.preventDefault());   // 長按不出選單，pointer 才不會被 cancel
+["pointerup","pointerleave","pointercancel"].forEach(ev => origBtn.addEventListener(ev, () => setOrig(false)));
+
+$("save").addEventListener("click", exportPNG);
+
+/* 起手。#demo＝直接載測試圖（說明連結與自動化驗證用） */
+drawPresets(); drawInks(); drawEdges(); fmt(); markPreset();
+if (location.hash === "#demo") demoImage();
+</script>
+</body>
+</html>
