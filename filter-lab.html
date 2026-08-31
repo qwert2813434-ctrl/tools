@@ -301,7 +301,7 @@
 
   <p class="foot"><b>怎麼做的</b>：印刷是減色的——紙 × 每支油墨。取對數後對每個像素解最小平方，
   算出各油墨濃度，再各自角度 AM 過網、multiply 疊印。「撕毛邊」是照撕開的紙會露出纖維芯做的：
-  邊界用低頻雜訊起伏、毛鬚用高頻門檻雜訊，撕口內側露一圈紙芯白。<br>
+  邊界用低頻雜訊起伏、毛鬚用高頻門檻雜訊，撕口內側露一圈紙芯白。「真撕紙」再進一步：紙斷掉的線與印刷停下的線是兩條各自起伏的曲線，中間夾出的紙芯白忽寬忽窄（會夾死也會鼓開），帶內做外唇亮、內側暗的立體明暗，撕邊外再壓一道細影。<br>
   配方沿革：ALIGNED 報紙濾鏡 → 2026-08-31 對照 tone App 實測反推（參考品量到 45°／135°＋藍版 0°、紙色 221·215·201；本工具採 45°／15°／75° 標準分色角避免摩爾紋）。</p>
 </div>
 
@@ -319,7 +319,7 @@ orbIcon();
 /* ════════════════════ 狀態 ════════════════════ */
 const $ = id => document.getElementById(id);
 const SIDES = ["上","右","下","左"];
-const EDGE_STYLES = [["none","無"],["riso","孔版粗邊"],["torn","撕毛邊"],["feather","羽化"]];
+const EDGE_STYLES = [["none","無"],["riso","孔版粗邊"],["torn","撕毛邊"],["tear","真撕紙"],["feather","羽化"]];
 const ANGLES = [45, 15, 75];
 
 const st = {
@@ -434,20 +434,56 @@ function edgeCurves(W, H, k, seed){
       const hi = noise1D(len, 4 * k, seed + 100 + sideIdx * 7);
       return { base: lo, hi, I };
     }
+    if (e.style === "tear"){
+      // 真撕紙＝兩條各自起伏的線：紙在哪裡斷（大浪＋中頻＋毛鬚）、印刷在哪裡停。
+      // 中間夾出的紙芯白寬度自己一條低頻線，冪次讓它會夾到近零、也會鼓開（照參考撕紙量的）。
+      const big  = noise1D(len, 120 * k, seed + 500 + sideIdx * 7);
+      const mid  = noise1D(len, 26 * k,  seed + 510 + sideIdx * 7);
+      const hi   = noise1D(len, 3 * k,   seed + 520 + sideIdx * 7);
+      const band = noise1D(len, 90 * k,  seed + 530 + sideIdx * 7);
+      const bmid = noise1D(len, 18 * k,  seed + 540 + sideIdx * 7);
+      const sh   = noise1D(len, 40 * k,  seed + 550 + sideIdx * 7);
+      const mo = new Float32Array(len), bw = new Float32Array(len);
+      for (let t = 0; t < len; t++){
+        mo[t] = I * (0.22 + 0.50 * big[t] + 0.26 * mid[t]) + (hi[t] - 0.5) * I * 0.12;
+        bw[t] = I * (0.06 + 1.5 * Math.pow(0.15 + 0.85 * band[t], 2.2)) * (0.75 + 0.5 * bmid[t]);
+      }
+      return { I, mo, bw, sh };
+    }
     return { base: lo, hi: null, I };                // feather
   };
   return [ mk(W, st.edges[0], 0), mk(H, st.edges[1], 1),
            mk(W, st.edges[2], 2), mk(H, st.edges[3], 3) ];
 }
-/* 回傳：{p:1}＝整格紙、{core:1}＝紙芯白、{a:0–1}＝與紙的混合率、null＝不受影響 */
-function edgeAt(x, y, W, H, curves, borderPx, seed){
-  let paperHit = false, core = false, alpha = 0;
+/* 回傳：{p:1,sh}＝整格紙（sh＝撕邊壓出的細影）、{core:亮度}＝紙芯白、{a:0–1}＝與紙的混合率、null＝不受影響 */
+function edgeAt(x, y, W, H, curves, borderPx, seed, k){
+  let paperHit = false, paperSh = 1, coreSh = 0, alpha = 0;
   for (let s = 0; s < 4; s++){
     const c = curves[s]; const e = st.edges[s];
     let dist, t;
     if (s === 0){ dist = y; t = x; } else if (s === 1){ dist = W - 1 - x; t = y; }
     else if (s === 2){ dist = H - 1 - y; t = x; } else { dist = x; t = y; }
     if (c === null){ if (dist < borderPx) paperHit = true; continue; }
+    if (e.style === "tear"){
+      const d = dist - (borderPx + c.mo[t]);          // 紙斷掉的線
+      if (d < 0){
+        paperHit = true;
+        const sw = Math.max(c.I * 0.14, 3);           // 撕邊壓在紙上的細影，賣「疊在上面」的立體感
+        if (d > -sw) paperSh = Math.min(paperSh, 1 - 0.10 * (1 + d / sw));
+        continue;
+      }
+      const bw = c.bw[t];                             // 紙芯白帶：忽寬忽窄
+      if (d < bw){
+        const u = d / Math.max(bw, 1);
+        // 撕口立體感：外唇亮、靠印刷面漸暗，沿邊再一層明暗起伏
+        coreSh = Math.max(coreSh, 1.03 + 0.05 * (1 - u) - 0.16 * u * u + (c.sh[t] - 0.5) * 0.14);
+      } else {
+        const f = Math.max(c.I * 0.10, 2);            // 印刷停線上的一小段纖維
+        if (d < bw + f && hash2((x / k) | 0, (y / k) | 0, seed + 902) > (d - bw) / f)
+          coreSh = Math.max(coreSh, 0.99);
+      }
+      continue;
+    }
     const m = borderPx + (e.style === "feather" ? 0 : c.I * (0.35 + 0.65 * c.base[t]));
     const d = dist - m;
     if (e.style === "riso"){
@@ -457,9 +493,10 @@ function edgeAt(x, y, W, H, curves, borderPx, seed){
       const F = Math.max(c.I * 0.55, 2);
       if (d < F){
         const u = d / F;
-        const h = c.hi[t] * 0.7 + hash2(x, y, seed + 900) * 0.3;
-        if (h > u) core = true;                       // 撕口露出的纖維芯
-        else if (hash2(x, y, seed + 901) > u * 1.6) core = true;
+        // 毛鬚取樣座標除以 k，理由同顆粒：匯出時才不會縮成細沙
+        const h = c.hi[t] * 0.7 + hash2((x / k) | 0, (y / k) | 0, seed + 900) * 0.3;
+        if (h > u) coreSh = Math.max(coreSh, 1);      // 撕口露出的纖維芯
+        else if (hash2((x / k) | 0, (y / k) | 0, seed + 901) > u * 1.6) coreSh = Math.max(coreSh, 1);
       }
     } else {                                          // feather
       if (d < 0){ paperHit = true; continue; }
@@ -467,8 +504,8 @@ function edgeAt(x, y, W, H, curves, borderPx, seed){
       if (d < F) alpha = Math.max(alpha, 1 - d / F);
     }
   }
-  if (paperHit) return { p: 1 };
-  if (core) return { core: 1 };
+  if (paperHit) return { p: 1, sh: paperSh };
+  if (coreSh > 0) return { core: coreSh };
   if (alpha > 0) return { a: alpha };
   return null;
 }
@@ -510,10 +547,10 @@ function renderTo(imgData, W, H, k){
     let r = rgb[i*3], gg = rgb[i*3+1], b = rgb[i*3+2];
     if (anyEdge){
       const x = i % W, y = (i / W) | 0;
-      const e = edgeAt(x, y, W, H, curves, borderPx, st.seed);
+      const e = edgeAt(x, y, W, H, curves, borderPx, st.seed, k);
       if (e){
-        if (e.p){ r = paper[0]; gg = paper[1]; b = paper[2]; }
-        else if (e.core){ r = corePaper[0]; gg = corePaper[1]; b = corePaper[2]; }
+        if (e.p){ r = paper[0] * e.sh; gg = paper[1] * e.sh; b = paper[2] * e.sh; }
+        else if (e.core){ r = corePaper[0] * e.core; gg = corePaper[1] * e.core; b = corePaper[2] * e.core; }
         else { r = r + (paper[0]-r)*e.a; gg = gg + (paper[1]-gg)*e.a; b = b + (paper[2]-b)*e.a; }
       }
     }
@@ -672,8 +709,12 @@ function drawEdges(){
     const sel = document.createElement("select");
     sel.innerHTML = EDGE_STYLES.map(([v,l]) => `<option value="${v}"${e.style===v?" selected":""}>${l}</option>`).join("");
     sel.addEventListener("input", () => {
-      if (st.linkEdges) st.edges.forEach(x => x.style = sel.value); else e.style = sel.value;
-      drawEdges(); requestRender();
+      // 同滑桿的教訓：handler 不重建自己所在的 DOM（鍵盤操作 select 一重建就斷焦）。
+      if (st.linkEdges){
+        st.edges.forEach(x => x.style = sel.value);
+        box.querySelectorAll("select").forEach(x => { x.value = sel.value; });
+      } else e.style = sel.value;
+      requestRender();
     });
     const rg = document.createElement("input"); rg.type = "range"; rg.min = 5; rg.max = 100; rg.step = 1; rg.value = e.amt;
     rg.addEventListener("input", () => {
