@@ -1,10 +1,10 @@
 {
-  "version": "1.7.1",
-  "url": "https://github.com/qwert2813434-ctrl/STB/raw/main/release/STB_1.7.1_aarch64.dmg",
-  "notes": "塗鴉筆刷補完：新增鉛筆（紙紋＋筆壓深淺）與墨筆，四支筆收成「筆刷」選單；筆刷／粗細／顏色跟著案子記住；Apple Pencil 筆壓自動貼手；匯出新增深色版面（黑底 PDF），並修正深色主題匯出半黑半白；大量筆畫的擦除／換層／復原全面加速",
+  "version": "1.8.0",
+  "url": "https://github.com/qwert2813434-ctrl/STB/raw/main/release/STB_1.8.0_aarch64.dmg",
+  "notes": "新增「工作人員」章：通告單那份名單可以獨立成一頁給客戶看，不印電話、職務自動帶英日對照，可匯出 credits.json 給片尾名單；每個人有「通告」開關，沒開的不會出現在通告單上。新增畫幅 4:3（紀錄片、資料帶、要裁 IG 方形的案子都合用，STB Camera 同步支援）。預設 LOGO 改成自己在「關於」設定一次。修正 3:2／4:3 匯出 PPTX 時分鏡描述會壓到下一排",
   "notesI18n": {
-    "zh": "塗鴉筆刷補完：新增鉛筆（紙紋＋筆壓深淺）與墨筆，四支筆收成「筆刷」選單；筆刷／粗細／顏色跟著案子記住；Apple Pencil 筆壓自動貼手；匯出新增深色版面（黑底 PDF），並修正深色主題匯出半黑半白；大量筆畫的擦除／換層／復原全面加速",
-    "en": "Brush set completed: new Pencil (paper grain, pressure shading) and Ink pen, all four brushes in one Brush menu; brush, size and color are remembered per project; Apple Pencil pressure auto-calibrates to your hand; new Dark layout PDF export (fixes half-dark pages in dark theme); erasing, layer switching and undo are much faster with many strokes",
-    "ja": "ブラシ機能を完成：紙目と筆圧の濃淡を持つ鉛筆とインクペンを追加し、4本をブラシメニューに集約。ブラシ・太さ・色は案件ごとに記憶。Apple Pencil の筆圧は自動で手に合わせて調整。書き出しにダークレイアウト（黒背景PDF）を追加し、ダークテーマでの白黒混在も修正。大量ストローク時の消しゴム・レイヤー切替・取り消しを高速化"
+    "zh": "新增「工作人員」章：通告單那份名單可以獨立成一頁給客戶看，不印電話、職務自動帶英日對照，可匯出 credits.json 給片尾名單；每個人有「通告」開關，沒開的不會出現在通告單上。新增畫幅 4:3（紀錄片、資料帶、要裁 IG 方形的案子都合用，STB Camera 同步支援）。預設 LOGO 改成自己在「關於」設定一次。修正 3:2／4:3 匯出 PPTX 時分鏡描述會壓到下一排",
+    "en": "New CONTACTS chapter: the call-sheet crew list can stand as its own page for the client — no phone numbers, English/Japanese role names alongside, and an export to credits.json for end credits. Each person has a Call toggle, and anyone with it off stays off the call sheet. New 4:3 aspect for documentaries, archive footage and anything you crop to square for social (STB Camera supports it too). The default cover logo is now yours to set once under About. Fixed: shot descriptions could overlap the row below when exporting 3:2 and 4:3 projects to PPTX",
+    "ja": "「スタッフリスト」章を新設：香盤表のスタッフ一覧を、クライアント向けの独立したページにできます。電話番号は載せず、役職名に英語・日本語を併記。エンドクレジット用に credits.json も書き出せます。各人の「香盤」トグルをオフにすれば香盤表には出ません。画角 4:3 を追加（ドキュメンタリー、アーカイブ映像、SNS用に正方形へ切り出す案件に。STB Camera も対応）。表紙のデフォルトロゴは「概要」で一度設定すれば新規案件に使われます。3:2 と 4:3 の案件で PPTX 書き出し時にカットの説明文が下の段に重なる問題を修正"
   }
 }
