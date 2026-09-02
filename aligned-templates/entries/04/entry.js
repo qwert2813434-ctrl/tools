@@ -1,0 +1,1 @@
+(window.__ENTRIES=window.__ENTRIES||[]).push({"no": "04", "name": "上海 四分之一秒", "pageCount": 1, "pageWidth": 1080, "pageHeight": 1440, "pages": [{"type": "image", "src": "assets/p01.jpg"}], "guidesX": [108, 389, 460, 691, 972], "guidesY": [59, 304, 857, 919, 1166, 1387.859375], "template": "上海 四分之一秒 範本.alignproj"});

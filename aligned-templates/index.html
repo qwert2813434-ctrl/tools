@@ -1,55 +1,32 @@
 <!doctype html>
-<html lang="zh-Hant" data-theme="dark">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>排版分享 — ALIGNED</title>
-<script>
-/* ── 主題：平常跟著日夜自動切；手動切了就聽你的，到下一次日夜交替為止 ──
-   放在 <head> 先跑，避免先閃一下亮色再變暗。全站共用同一把 key。 */
-(function(){
-  var MAP = {day:'light', night:'dark'};
-  var KEY = 'tools.theme';
-  function isDay(d){ var h = d.getHours(); return h >= 7 && h < 19; }
-  /* 覆寫的有效範圍＝「這一個白天」或「這一個夜晚」，所以要帶日期。
-     凌晨算前一天的夜，半夜才不會自己跳回去。 */
-  function phaseKey(d){
-    var t = new Date(d.getTime());
-    if(t.getHours() < 7) t.setDate(t.getDate() - 1);
-    return t.toDateString() + (isDay(d) ? '|day' : '|night');
-  }
-  function auto(d){
-    try{ if(matchMedia('(prefers-color-scheme: dark)').matches) return 'night'; }catch(e){}
-    return isDay(d) ? 'day' : 'night';
-  }
-  function override(d){
-    try{ var o = JSON.parse(localStorage.getItem(KEY) || 'null');
-         return (o && o.k === phaseKey(d)) ? o.v : null; }catch(e){ return null; }
-  }
-  window.themeNow = function(){ var d = new Date(); return override(d) || auto(d); };
-  window.applyTheme = function(v){ document.documentElement.dataset.theme = MAP[v]; };
-  window.toggleTheme = function(){
-    var d = new Date(), v = themeNow() === 'night' ? 'day' : 'night';
-    try{ localStorage.setItem(KEY, JSON.stringify({v:v, k:phaseKey(d)})); }catch(e){}
-    applyTheme(v); return v;
-  };
-  applyTheme(themeNow());
-})();
-</script>
+<title>Layout Templates — ALIGNED</title>
 <style>
+  /* 髮絲線派（2026-09-02 改）：uiinspoo 那種「白底＋一條淺灰框」的資訊型畫廊。
+     照排版標準：分層只用一種手段——這裡選框線，所以**一律沒有陰影**；
+     底也不用純白（鐵則 1），用柔霧的米白。預設跟著系統日夜，按鈕才寫死。 */
   :root{
-    --base:#141317; --card:#211F24; --card2:#191820;
-    --ink:#F1EDE9; --ink2:#A8A19B; --faint:#726B67; --hair:rgba(255,255,255,.07);
-    --shadow:0 1px 1px rgba(0,0,0,.30), 0 14px 30px -18px rgba(0,0,0,.75);
-    --shadow-up:0 2px 3px rgba(0,0,0,.34), 0 22px 42px -20px rgba(0,0,0,.85);
-    --wash-a:rgba(143,178,166,.10); --wash-b:rgba(217,165,162,.08);
+    --base:#EDE7E1; --card:#FCFAF9; --card2:#F2EEEA;
+    --ink:#1B1917; --ink2:#6B6560; --faint:#A49C96;
+    --line:rgba(27,25,23,.13); --hair:rgba(27,25,23,.07);
+    --chip:#F1EDE8;
   }
-  :root[data-theme="light"]{
-    --base:#EDE7E1; --card:#FCFAF9; --card2:#F6F2EF;
-    --ink:#1B1917; --ink2:#6B6560; --faint:#A49C96; --hair:rgba(27,25,23,.06);
-    --shadow:0 1px 1px rgba(27,25,23,.035), 0 12px 26px -16px rgba(27,25,23,.30);
-    --shadow-up:0 2px 3px rgba(27,25,23,.05), 0 20px 38px -18px rgba(27,25,23,.40);
-    --wash-a:rgba(143,178,166,.35); --wash-b:rgba(217,165,162,.30);
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --base:#141317; --card:#1B1A1F; --card2:#232128;
+      --ink:#F1EDE9; --ink2:#A8A19B; --faint:#726B67;
+      --line:rgba(255,255,255,.13); --hair:rgba(255,255,255,.07);
+      --chip:#232128;
+    }
+  }
+  :root[data-theme="dark"]{
+    --base:#141317; --card:#1B1A1F; --card2:#232128;
+    --ink:#F1EDE9; --ink2:#A8A19B; --faint:#726B67;
+    --line:rgba(255,255,255,.13); --hair:rgba(255,255,255,.07);
+    --chip:#232128;
   }
   *{box-sizing:border-box;margin:0}
   html{-webkit-text-size-adjust:100%}
@@ -58,11 +35,6 @@
     font:400 15px/1.7 "Inter",-apple-system,"PingFang TC","Noto Sans TC",sans-serif;
     min-height:100vh;
   }
-  .wash{position:fixed;inset:0;pointer-events:none;z-index:0;background:
-    radial-gradient(52% 44% at 12% 8%, var(--wash-a), transparent 70%),
-    radial-gradient(46% 40% at 88% 20%, var(--wash-b), transparent 70%),
-    radial-gradient(50% 46% at 20% 92%, var(--wash-b), transparent 72%),
-    radial-gradient(54% 48% at 90% 86%, var(--wash-a), transparent 72%);}
   .grain{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.05;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");}
   main{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:64px 24px 88px}
@@ -74,18 +46,37 @@
   .note{color:var(--ink2);max-width:34em}
   .howto{margin-top:10px;font-size:13px;color:var(--faint);max-width:40em}
 
-  #theme{background:none;border:0;padding:8px;cursor:pointer;color:var(--faint);border-radius:12px}
-  #theme:hover{color:var(--ink)}
-  #theme svg{display:block}
-  :root[data-theme="light"] #theme .moon{display:none}
-  :root:not([data-theme="light"]) #theme .sun{display:none}
+  /* 參考線層（2026-09-02）：分享間跟別人不一樣的地方——一鍵看見版面的骨架。
+     線畫在被 scale 的畫布裡，所以粗細與字級都要乘 --gs（＝1/縮放比）才不會變成 0.2px。 */
+  .guides{position:absolute;inset:0;pointer-events:none;z-index:6;display:none}
+  body.showg .guides{display:block}
+  .guides .pg{position:absolute;top:0;height:100%}
+  .guides i{position:absolute;background:#1F6FEB;opacity:.9}
+  /* 座標數字只在滑到卡片時出現——小卡上十幾個數字會把預覽蓋掉 */
+  .guides b{position:absolute;display:none;
+    font:500 calc(10px * var(--gs,1))/1 ui-monospace,"SF Mono",Menlo,monospace;
+    color:#fff;background:#1F6FEB;padding:calc(2px * var(--gs,1)) calc(4px * var(--gs,1));
+    border-radius:calc(3px * var(--gs,1));white-space:nowrap}
+  body.showg .entry:hover .guides b{display:block}
+  .tbtn{display:inline-flex;align-items:center;gap:6px;background:var(--card);cursor:pointer;
+    border:1px solid var(--line);color:var(--ink2);border-radius:9px;padding:8px 12px;
+    font:600 12px/1 "Inter",-apple-system,sans-serif;letter-spacing:.01em}
+  .tbtn:hover{color:var(--ink);border-color:var(--ink2)}
+  .tbtn svg{display:block}
+  body.showg #guidebtn{background:#1F6FEB;border-color:#1F6FEB;color:#fff}
+  .topbtns{display:flex;align-items:center;gap:10px}
+
+  :root[data-theme="light"] #theme .moon,
+  :root[data-theme="dark"] #theme .sun{display:none}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) #theme .sun{display:none}}
+  @media (prefers-color-scheme: light){:root:not([data-theme="dark"]) #theme .moon{display:none}}
 
   /* 瀑布流牆：卡片絕對定位，JS 把每張放進「目前最矮的那一欄」 */
   .wall{position:relative;width:100%;margin-top:46px}
   .entry{position:absolute;visibility:hidden;
-    background:var(--card);border-radius:22px;overflow:hidden;
-    box-shadow:var(--shadow);transition:transform .18s ease, box-shadow .18s ease}
-  .entry:hover{transform:translateY(-3px);box-shadow:var(--shadow-up)}
+    background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    transition:transform .16s ease, border-color .16s ease}
+  .entry:hover{transform:translateY(-2px);border-color:var(--ink2)}
 
   .viewport{overflow-x:auto;overflow-y:hidden;background:var(--card2);
     scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
@@ -96,10 +87,15 @@
   .canvas video,.canvas img{width:100%;height:100%;object-fit:cover;display:block}
   .snap{position:absolute;top:0;height:100%;scroll-snap-align:start}
 
-  .ebody{padding:13px 16px 16px}
-  .ehead{display:flex;align-items:baseline;gap:11px}
-  .eno{font:500 21px/1 ui-monospace,"SF Mono",Menlo,monospace;color:var(--faint)}
-  .ename{font-size:15px;font-weight:600;line-height:1.4}
+  .ebody{padding:13px 15px 15px;border-top:1px solid var(--line)}
+  .ehead{display:flex;align-items:baseline;gap:10px}
+  .eno{font:500 12px/1 ui-monospace,"SF Mono",Menlo,monospace;color:var(--faint);letter-spacing:.06em}
+  .ename{font-size:14.5px;font-weight:600;line-height:1.4}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .chip{font:500 10.5px/1 ui-monospace,"SF Mono",Menlo,monospace;letter-spacing:.06em;
+    color:var(--ink2);background:var(--chip);border:1px solid var(--hair);
+    border-radius:6px;padding:5px 7px;white-space:nowrap}
+  .chip.on{color:#1F6FEB;border-color:rgba(31,111,235,.35);background:rgba(31,111,235,.08)}
 
   .ctrl{display:flex;align-items:center;gap:11px;margin:11px 0 9px}
   .counter{font:400 10.5px/1 ui-monospace,"SF Mono",Menlo,monospace;
@@ -111,10 +107,10 @@
   .emeta{font:400 10.5px/1 ui-monospace,"SF Mono",Menlo,monospace;
     letter-spacing:.08em;color:var(--faint)}
   .actions{display:flex;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap}
-  .dl{display:inline-flex;align-items:center;gap:8px;text-decoration:none;
-    background:var(--ink);color:var(--base);font-size:13px;font-weight:600;
-    padding:10px 17px;border-radius:13px;transition:transform .15s ease}
-  .dl:hover{transform:translateY(-2px)}
+  .dl{display:inline-flex;align-items:center;gap:7px;text-decoration:none;
+    background:var(--ink);color:var(--base);font-size:12.5px;font-weight:600;
+    padding:9px 14px;border-radius:9px;transition:opacity .15s ease}
+  .dl:hover{opacity:.82}
   .dlsize{font-size:11px;color:var(--faint)}
 
   footer{margin-top:70px;text-align:center;font-size:12px;color:var(--faint)}
@@ -127,28 +123,35 @@
 </style>
 </head>
 <body>
-<div class="wash"></div><div class="grain"></div>
+<div class="grain"></div>
 <main>
   <div class="top">
     <div>
       <div class="kicker">ALIGNED · Templates</div>
-      <h1>排版分享</h1>
-      <p class="note">我自己排的專案，做成可下載的範本。用 ALIGNED 開啟，換上你的內容。</p>
-      <p class="howto">每張卡都可以左右滑看完整輪播；下載 .alignproj → AirDrop 或檔案 App 傳到 iPad，用 ALIGNED 開啟；Mac 版 ⌘O。</p>
-      <p class="howto">還沒有 ALIGNED？<a href="https://aligned-app.github.io/zh-Hant/" style="color:inherit">官網</a>　·　<a href="../" style="color:inherit">回工具間</a></p>
+      <h1>Layout Templates</h1>
+      <p class="note">Real projects I laid out in ALIGNED, opened up as downloadable templates.
+        Swipe any card. Toggle <b>Guides</b> to see the grid underneath.</p>
+      <p class="howto">Download the .alignproj → AirDrop or Files to iPad → open in ALIGNED. Mac: ⌘O.</p>
+      <p class="howto"><a href="https://aligned-app.github.io/zh-Hant/" style="color:inherit">Get ALIGNED</a>　·　<a href="../" style="color:inherit">All tools</a></p>
     </div>
-    <button id="theme" aria-label="切換深淺色">
-      <svg class="sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="4.4"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M19.1 4.9l-1.7 1.7M6.6 17.4l-1.7 1.7"/></svg>
-      <svg class="moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/></svg>
-    </button>
+    <div class="topbtns">
+      <button class="tbtn" id="guidebtn" title="Show the alignment guides on every layout">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 8h18M3 16h18M8 3v18M16 3v18"/></svg>
+        <span>Guides</span></button>
+      <button class="tbtn" id="theme" aria-label="Toggle theme">
+        <svg class="sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="4.4"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M19.1 4.9l-1.7 1.7M6.6 17.4l-1.7 1.7"/></svg>
+        <svg class="moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/></svg>
+      </button>
+    </div>
   </div>
   <div class="wall" id="wall"></div>
-  <footer><span class="dash">——</span>　小高 · ALIGNED</footer>
+  <footer><span class="dash">——</span>　Armin Kao · ALIGNED</footer>
 </main>
 
 <script src="entries/01/entry.js"></script>
 <script src="entries/02/entry.js"></script>
 <script src="entries/03/entry.js"></script>
+<script src="entries/04/entry.js"></script>
 <script>
 const FONTS = {
   "Inter": '"Inter",-apple-system,"Helvetica Neue",sans-serif',
@@ -162,6 +165,11 @@ const fontStack = n => {
   return `"${n}",-apple-system,"PingFang TC",sans-serif`;
 };
 const ALIGN = {leading:"left", center:"center", trailing:"right"};
+// 比例字串：約分到最簡（1080×1350→4:5、1080×1440→3:4、1080×1397→ 近似值就直接寫小數）
+function ratio(w,h){
+  const g=(a,b)=>b?g(b,a%b):a, d=g(w,h), a=w/d, b=h/d;
+  return (a<=32 && b<=32) ? `${a}:${b}` : (w/h).toFixed(3).replace(/0+$/,"");
+}
 
 const WALL = document.getElementById("wall");
 const GAP = 22, MIN_COL = 290;
@@ -174,7 +182,7 @@ function buildEntry(e){
     <div class="actions">
       <a class="dl" href="entries/${e.no}/${encodeURIComponent(e.template)}" download>
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13M6.5 11.5L12 17l5.5-5.5M4 20.5h16"/></svg>
-        下載範本</a>
+        Download</a>
       <span class="dlsize"></span>
     </div>` : "";
   card.innerHTML = `
@@ -183,7 +191,12 @@ function buildEntry(e){
       <div class="ehead"><span class="eno">${e.no}</span><span class="ename">${e.name}</span></div>
       <div class="ctrl"><span class="counter">01 / ${String(e.pageCount).padStart(2,"0")}</span>
         <div class="track"><div class="fill"></div></div></div>
-      <div class="emeta">${e.pageCount} PAGES · ${e.pageWidth}×${e.pageHeight} · 4:5</div>
+      <div class="chips">
+        <span class="chip">${e.pageCount} ${e.pageCount>1?"PAGES":"PAGE"}</span>
+        <span class="chip">${e.pageWidth}×${e.pageHeight}</span>
+        <span class="chip">${ratio(e.pageWidth,e.pageHeight)}</span>
+        ${((e.guidesX||[]).length+(e.guidesY||[]).length) ? `<span class="chip on">${(e.guidesX||[]).length+(e.guidesY||[]).length} GUIDES</span>` : ""}
+      </div>
       ${dl}
     </div>`;
   WALL.appendChild(card);
@@ -240,6 +253,18 @@ function buildEntry(e){
       el.style.letterSpacing = (b.kerningEm || 0) + "em";
       el.style.whiteSpace = "pre-wrap";
       el.textContent = b.text;
+    } else if (b.type === "shape"){
+      el.style.width = b.w + "px"; el.style.height = b.h + "px";
+      const col = "#" + (b.colorHex || "888888");
+      if (b.kind === "ellipse"){ el.style.background = col; el.style.borderRadius = "50%"; }
+      else if (b.kind === "line"){
+        const t = b.lineWidth || Math.max(2, b.h * .5);
+        el.style.height = t + "px"; el.style.top = (b.y + b.h/2 - t/2) + "px";
+        el.style.background = col;
+      } else {
+        el.style.background = col;
+        if (b.cornerRadius) el.style.borderRadius = b.cornerRadius + "px";
+      }
     } else {
       el.style.width = b.w + "px"; el.style.height = b.h + "px";
       el.style.overflow = "hidden";
@@ -255,6 +280,39 @@ function buildEntry(e){
       }
     }
     canvas.appendChild(el);
+  }
+
+  // 參考線層：每頁一組，線的粗細與座標字都用 --gs 反縮放（fit() 會更新）
+  const gx = e.guidesX || [], gy = e.guidesY || [];
+  if (gx.length || gy.length){
+    const g = document.createElement("div");
+    g.className = "guides";
+    for (let i = 0; i < e.pageCount; i++){
+      const pg = document.createElement("div");
+      pg.className = "pg";
+      pg.style.left = (i * e.pageWidth) + "px";
+      pg.style.width = e.pageWidth + "px";
+      for (const x of gx){
+        const ln = document.createElement("i");
+        ln.style.cssText = `left:${x}px;top:0;height:100%;width:calc(1px * var(--gs,1))`;
+        pg.appendChild(ln);
+        const lb = document.createElement("b");
+        lb.textContent = Math.round(x);
+        lb.style.cssText = `left:${x}px;top:0;transform:translate(calc(4px * var(--gs,1)), calc(4px * var(--gs,1)))`;
+        pg.appendChild(lb);
+      }
+      for (const y of gy){
+        const ln = document.createElement("i");
+        ln.style.cssText = `top:${y}px;left:0;width:100%;height:calc(1px * var(--gs,1))`;
+        pg.appendChild(ln);
+        const lb = document.createElement("b");
+        lb.textContent = Math.round(y);
+        lb.style.cssText = `left:0;top:${y}px;transform:translate(calc(4px * var(--gs,1)), calc(-100% - 4px * var(--gs,1)))`;
+        pg.appendChild(lb);
+      }
+      g.appendChild(pg);
+    }
+    canvas.appendChild(g);
   }
 
   // 影片要「這張卡在畫面上」**而且**「這頁滑到了」才播——牆上同時掛十幾支
@@ -277,6 +335,7 @@ function buildEntry(e){
   // 卡片寬度由瀑布流決定，這裡只負責把畫布縮到卡片寬
   function fit(){
     const s = viewport.clientWidth / e.pageWidth;
+    canvas.style.setProperty("--gs", 1 / (s || 1));
     strip.style.width = totalW * s + "px";
     strip.style.height = e.pageHeight * s + "px";
     canvas.style.transform = `scale(${s})`;
@@ -345,7 +404,24 @@ new ResizeObserver(() => {
 }).observe(WALL);
 addEventListener("load", () => layoutWall());
 
-document.getElementById("theme").addEventListener("click", () => toggleTheme());
+// 一鍵開關參考線：全牆一起切，記在 localStorage
+const gbtn = document.getElementById("guidebtn");
+if (localStorage.getItem("showg") === "1") document.body.classList.add("showg");
+gbtn.addEventListener("click", () => {
+  const on = document.body.classList.toggle("showg");
+  localStorage.setItem("showg", on ? "1" : "0");
+});
+
+// 主題：預設跟著系統日夜（排版標準 §七），按了才寫死並記住
+const tbtn = document.getElementById("theme"), rootEl = document.documentElement;
+if (localStorage.getItem("theme")) rootEl.dataset.theme = localStorage.getItem("theme");
+tbtn.addEventListener("click", () => {
+  const dark = rootEl.dataset.theme
+    ? rootEl.dataset.theme === "dark"
+    : matchMedia("(prefers-color-scheme: dark)").matches;
+  const t = dark ? "light" : "dark";
+  rootEl.dataset.theme = t; localStorage.setItem("theme", t);
+});
 </script>
 </body>
 </html>
