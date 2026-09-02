@@ -154,6 +154,7 @@
 <script src="entries/02/entry.js"></script>
 <script src="entries/03/entry.js"></script>
 <script src="entries/04/entry.js"></script>
+<script src="entries/05/entry.js"></script>
 <script>
 const FONTS = {
   "Inter": '"Inter",-apple-system,"Helvetica Neue",sans-serif',
@@ -278,6 +279,17 @@ function buildEntry(e){
       } else {
         const im = document.createElement("img");
         im.src = base + b.src; im.alt = "";
+        // cropRect＝[[x,y],[w,h]]（0–1 的原圖座標）。App 是
+        // drawImage(img, cx*iw, cy*ih, cw*iw, ch*ih, 0,0,w,h)，
+        // 等價於「整張圖放大到 w/cw × h/ch 再平移 −cx/cw、−cy/ch」，外框裁掉。
+        // 沒有 cropRect（哨兵值）才走 object-fit:cover 那條置中裁切。
+        const cr = b.cropRect;
+        if (cr){
+          const [[cx, cy], [cw, ch]] = cr;
+          im.style.cssText = `position:absolute;object-fit:fill;` +
+            `width:${100 / cw}%;height:${100 / ch}%;` +
+            `left:${-100 * cx / cw}%;top:${-100 * cy / ch}%`;
+        }
         el.appendChild(im);
       }
     }
