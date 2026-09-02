@@ -410,11 +410,16 @@ function layoutWall(tries){
   const cols = Math.max(1, Math.floor((W + GAP) / (MIN_COL + GAP)));
   const colW = (W - GAP * (cols - 1)) / cols;
 
-  for (const c of cards){ c.el.style.width = colW + "px"; c.fit(); }
-  const heights = cards.map(c => c.el.offsetHeight);
+  // 只排「現在看得見的」——分類篩選會把不合的卡設成 display:none，
+  // 若照舊全部排進去，被藏的那幾張仍佔著 top，牆前面就會空出坑（2026-09-03 修）。
+  const shown = cards.filter(c => c.el.style.display !== "none");
+  if (!shown.length){ WALL.style.height = "0px"; return; }
+
+  for (const c of shown){ c.el.style.width = colW + "px"; c.fit(); }
+  const heights = shown.map(c => c.el.offsetHeight);
 
   const colH = new Array(cols).fill(0);
-  cards.forEach((c, i) => {
+  shown.forEach((c, i) => {
     let k = 0;
     for (let j = 1; j < cols; j++) if (colH[j] < colH[k]) k = j;
     c.el.style.left = Math.round(k * (colW + GAP)) + "px";
@@ -444,6 +449,7 @@ function layoutWall(tries){
       bar.querySelectorAll(".cbtn").forEach(x => x.classList.remove("on"));
       b.classList.add("on");
       cardsEls.forEach(c => { c.style.display = (!key || c.dataset.cat === key) ? "" : "none"; });
+      layoutWall();   // 絕對定位的瀑布流，改了顯示就必須重排，否則留下空坑
     });
     bar.appendChild(b);
   };
