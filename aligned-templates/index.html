@@ -395,7 +395,8 @@ function layoutWall(tries){
   WALL.style.height = Math.max(...colH) - GAP + "px";
 }
 
-(window.__ENTRIES||[]).sort((a,b)=>a.no.localeCompare(b.no)).forEach(buildEntry);
+// 逆序：編號大的（新的）排最上面。加新條目就往後編號，不用動這裡。
+(window.__ENTRIES||[]).sort((a,b)=>b.no.localeCompare(a.no)).forEach(buildEntry);
 layoutWall();
 // 只在**寬度**變了才重排：layoutWall 自己會改 WALL 的高度，
 // 無條件重排會被自己觸發成迴圈。
