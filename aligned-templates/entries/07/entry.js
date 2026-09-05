@@ -1,0 +1,1 @@
+(window.__ENTRIES=window.__ENTRIES||[]).push({"no": "07", "name": "HDR 片尾", "pageCount": 1, "pageWidth": 1080, "pageHeight": 1350, "pages": [{"type": "image", "src": "assets/p01.jpg"}], "guidesX": [277, 453, 613, 804], "guidesY": [252, 1116], "template": "HDR 片尾 範本.alignproj"});
