@@ -1,0 +1,30 @@
+{
+ "code": "DctZbVHE7IQ",
+ "taken_at": 1788189704,
+ "caption": "這樣呀 運鏡可以不抽卡\n拿Blender當做線稿\n\n我不是用Higgsfield做的\n\n因為我還在嘗試看看差異，我是在開源畫布上做的走API接fal ，3D是Claude 做的。",
+ "slides": [
+  {
+   "t": "i",
+   "f": "01.jpg"
+  },
+  {
+   "t": "v",
+   "f": "02.mp4",
+   "p": "02_poster.jpg"
+  },
+  {
+   "t": "v",
+   "f": "03.mp4",
+   "p": "03_poster.jpg"
+  },
+  {
+   "t": "v",
+   "f": "04.mp4",
+   "p": "04_poster.jpg"
+  },
+  {
+   "t": "i",
+   "f": "05.jpg"
+  }
+ ]
+}

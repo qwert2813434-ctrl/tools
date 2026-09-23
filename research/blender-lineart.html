@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="soft">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>拿 Blender 當線稿：運鏡不用抽卡 — 小高工具間 研究</title>
+<meta name="description" content="用 Claude 在 Blender 蓋一顆灰模、攝影機約束跟拍，把灰模片當 @Video1 餵給 Seedance 2.5——運鏡照灰模走，不用抽卡。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="../assets/theme.js"></script>
+<link rel="stylesheet" href="research.css">
+</head>
+<body>
+<div class="sky"></div><div class="grain"></div>
+<div class="topbar">
+  <a href="../">TOOL.AI · 小高工具間</a>
+  <div class="topr"><a class="home" href="https://arminkao.com/">作品集 ↗</a><button class="orb" onclick="toggleTheme()" title="明暗切換">◐</button></div>
+</div>
+
+<main class="shell">
+<article>
+  <div class="rid">R-01 · AI 影像 · 方法</div>
+  <h1>拿 Blender 當線稿：運鏡不用抽卡</h1>
+  <div class="facts"><span>讀 <b>4 分鐘</b></span><span>最後驗證 <b>2026.08.31</b></span><span>原文發在 <a href="https://www.instagram.com/p/DctZbVHE7IQ/">Instagram</a></span></div>
+
+  <div class="get"><strong>你會知道：</strong>一支灰模片＋三張定妝照＋一張場景圖，怎麼讓 Seedance 2.5 照著你排好的運鏡走。這是後面幾篇（單板、中央車站、H3）的起點。</div>
+
+  <div class="cara">
+    <div class="track">
+      <div class="slide"><img src="media/DctZbVHE7IQ/01.jpg" loading="lazy" alt=""></div>
+      <div class="slide"><video src="media/DctZbVHE7IQ/02.mp4" poster="media/DctZbVHE7IQ/02_poster.jpg" muted loop playsinline preload="none"></video></div>
+      <div class="slide"><video src="media/DctZbVHE7IQ/03.mp4" poster="media/DctZbVHE7IQ/03_poster.jpg" muted loop playsinline preload="none"></video></div>
+      <div class="slide"><video src="media/DctZbVHE7IQ/04.mp4" poster="media/DctZbVHE7IQ/04_poster.jpg" muted loop playsinline preload="none"></video></div>
+      <div class="slide"><img src="media/DctZbVHE7IQ/05.jpg" loading="lazy" alt=""></div>
+    </div>
+    <button class="nav prev" aria-label="上一張">‹</button><button class="nav next" aria-label="下一張">›</button>
+    <div class="count"></div><div class="dots"></div>
+  </div>
+  <div class="orig"><span class="who">IG 原文 · 2026.08.31</span>這樣呀 運鏡可以不抽卡
+拿Blender當做線稿
+
+我不是用Higgsfield做的
+
+因為我還在嘗試看看差異，我是在開源畫布上做的走API接fal ，3D是Claude 做的。</div>
+
+  <h2>方法：四步</h2>
+  <ol>
+    <li>用 Claude 在 Blender 蓋灰模場景，攝影機用約束跟拍，出一支 6 秒灰模片。</li>
+    <li>用 Nano Banana 生同一台車的三個角度（定妝照）＋一張場景圖。</li>
+    <li>提示詞五段：<b>硬規則／主體／參考／運鏡／環境</b>。</li>
+    <li>全部餵給 Seedance 2.5 reference-to-video，一發出片。</li>
+  </ol>
+  <p>關鍵在「參考」那一段：告訴模型 @Video1 只是攝影機運動參考，灰色方塊不是內容、只是佔位，還要講清楚灰模車哪一端是車頭。換車款只動【主體】。</p>
+
+  <h2>每一頁在講什麼</h2>
+  <ol class="pages">
+    <li><b>輸入</b>：車的三角度定妝照＋一張雨夜山道參考圖。</li>
+    <li><b>成片 vs 灰模</b>：上＝Seedance 2.5 成片、下＝Blender 灰模（@Video1）。</li>
+    <li><b>第二個機位</b>，同上對照。</li>
+    <li><b>第三個機位</b>，同上對照。</li>
+    <li><b>方法</b>：四步驟、提示詞關鍵那一段、畫布截圖；工具＝Claude Code、Blender、Seedance 2.5。</li>
+  </ol>
+
+  <h2>三個機位的提示詞（可複製）</h2>
+  <p class="muted">Seedance 2.5 reference-to-video · 6 秒。@Image1–3＝車的三個角度、@Image4＝雨夜山道、@Video1＝灰模片。五段只有【運鏡】不一樣。</p>
+  <div class="prompt"><div class="ph"><span>A · 貼車尾低角度跟拍<small>過彎時鏡頭被慣性甩向彎外</small></span><button class="copy">複製</button></div><pre>【硬規則】畫面裡唯一的載具就是這台車。沒有無人機、沒有四軸機、沒有飛行器、任何時刻都不出現第二台車。攝影機是隱形視點，不是場景中的物件，絕不入鏡。車從第一格就在畫面內，絕不用空路開場。
+
+【主體】@Image1、@Image2、@Image3 是同一台車的三個角度（斜前、正側、斜後）——整支片都是這台車：同車型、同塗裝、同輪圈、同尾翼，不改任何細節。參考圖中攝影棚裡的車＝主體車；雨夜山路空景＝場景。車上不出現任何標誌或文字。
+
+【參考】@Video1 只是攝影機運動參考。逐格複製它的攝影機路徑、旋轉、速度變化與時間節奏，其他一切忽略。灰色無材質的方塊、板子與地面不是內容，只是佔位：灰模車淺色端＝車頭、深色帶尾翼端＝車尾。
+
+【運鏡】攝影機全程貼在車尾正後方、低角度跟拍：0–1.5 秒直路硬跟；1.5 秒起過彎，鏡頭被慣性甩向彎外約半個車身、再慢慢收回正後方；後段路面爬升，鏡頭跟著上仰，始終鎖定車尾，速度感強。
+
+【環境】地形與路線完全照 @Video1（山路＋髮夾彎）；材質、光線、天氣與色調照 @Image4：雨夜日本山道，橘黃路燈、細密雨絲、濕柏油強反光、空氣帶雨霧。真實攝影質感、動態模糊自然。</pre></div>
+  <div class="prompt"><div class="ph"><span>C · FPV 穿越機<small>高空俯衝、貼路面追車、急拉升</small></span><button class="copy">複製</button></div><pre>【硬規則】畫面裡唯一的載具就是這台車。沒有無人機、沒有四軸機、沒有飛行器、任何時刻都不出現第二台車。攝影機是隱形視點，不是場景中的物件，絕不入鏡。車從第一格就在畫面內，絕不用空路開場。
+
+【主體】@Image1、@Image2、@Image3 是同一台車的三個角度（斜前、正側、斜後）——整支片都是這台車：同車型、同塗裝、同輪圈、同尾翼，不改任何細節。參考圖中攝影棚裡的車＝主體車；雨夜山路空景＝場景。車上不出現任何標誌或文字。
+
+【參考】@Video1 只是攝影機運動參考。逐格複製它的攝影機路徑、旋轉、速度變化與時間節奏，其他一切忽略。灰色無材質的方塊、板子與地面不是內容，只是佔位：灰模車淺色端＝車頭、深色帶尾翼端＝車尾。
+
+【運鏡】FPV 穿越機：0–1.5 秒高空遠處俯瞰、快速下降；1.5–4 秒俯衝掠過山坡、貼近路面追上車；4–6 秒與車交會後急拉升遠離，收在髮夾彎全景。
+
+【環境】地形與路線完全照 @Video1（山路＋髮夾彎）；材質、光線、天氣與色調照 @Image4：雨夜日本山道，橘黃路燈、細密雨絲、濕柏油強反光、空氣帶雨霧。真實攝影質感、動態模糊自然。</pre></div>
+  <div class="prompt"><div class="ph"><span>D · 髮夾彎外側固定機位<small>只旋轉不移動，目送甩尾</small></span><button class="copy">複製</button></div><pre>【硬規則】畫面裡唯一的載具就是這台車。沒有無人機、沒有四軸機、沒有飛行器、任何時刻都不出現第二台車。攝影機是隱形視點，不是場景中的物件，絕不入鏡。車從第一格就在畫面內，絕不用空路開場。
+
+【主體】@Image1、@Image2、@Image3 是同一台車的三個角度（斜前、正側、斜後）——整支片都是這台車：同車型、同塗裝、同輪圈、同尾翼，不改任何細節。參考圖中攝影棚裡的車＝主體車；雨夜山路空景＝場景。車上不出現任何標誌或文字。
+
+【參考】@Video1 只是攝影機運動參考。逐格複製它的攝影機路徑、旋轉、速度變化與時間節奏，其他一切忽略。灰色無材質的方塊、板子與地面不是內容，只是佔位：灰模車淺色端＝車頭、深色帶尾翼端＝車尾。
+
+【運鏡】機位固定在髮夾彎外側、輪胎高度，整段完全不動只旋轉：0–2.5 秒車從遠方逼近、鏡頭緩慢迎車；2.5–3.5 秒車貼身轟然掃過鏡頭前；3.5–6 秒鏡頭目送車甩尾遠去。
+
+【環境】地形與路線完全照 @Video1（山路＋髮夾彎）；材質、光線、天氣與色調照 @Image4：雨夜日本山道，橘黃路燈、細密雨絲、濕柏油強反光、空氣帶雨霧。真實攝影質感、動態模糊自然。</pre></div>
+
+  <div class="src">工具：Claude Code（寫 Blender 程式與提示詞）、Blender（灰模）、Nano Banana（定妝照與場景圖）、fal 上的 Seedance 2.5。畫布是我們自己的節點畫布，走 API 接 fal。</div>
+  <a class="back" href="../#research">← 回到研究列表</a>
+</article>
+</main>
+<footer>高偉鳴 Armin Kao ／ <a href="https://arminkao.com">arminkao.com</a> ／ <a href="https://www.instagram.com/17187kao/">Instagram</a></footer>
+<script src="carousel.js"></script>
+</body>
+</html>

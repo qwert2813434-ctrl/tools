@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="soft">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人形問題：灰模裡的人要怎麼給 — 小高工具間 研究</title>
+<meta name="description" content="中央車站 800 人灰模：運鏡已經沒問題，人還會飄、會變假人。一顆 4 秒試片測三種人形給法，加一句硬規則就不飄了；高空盲區還沒解。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="../assets/theme.js"></script>
+<link rel="stylesheet" href="research.css">
+</head>
+<body>
+<div class="sky"></div><div class="grain"></div>
+<div class="topbar">
+  <a href="../">TOOL.AI · 小高工具間</a>
+  <div class="topr"><a class="home" href="https://arminkao.com/">作品集 ↗</a><button class="orb" onclick="toggleTheme()" title="明暗切換">◐</button></div>
+</div>
+
+<main class="shell">
+<article>
+  <div class="rid">R-03 · AI 影像 · 實測</div>
+  <h1>人形問題：灰模裡的人要怎麼給</h1>
+  <div class="facts"><span>讀 <b>6 分鐘</b></span><span>最後驗證 <b>2026.09.02</b></span><span>原文發在 <a href="https://www.instagram.com/p/Dcyu_b6khyB/">Instagram</a></span></div>
+
+  <div class="get"><strong>你會知道：</strong>灰模帶運鏡已經穩了，剩下的難題是「人」。怎麼用一顆 4 秒、約 US$1 的試片一次測三種給法；哪一句話讓路人不再飄著走；以及還沒解決的高空盲區。</div>
+
+  <div class="cara">
+    <div class="track">
+      <div class="slide"><video src="media/Dcyu_b6khyB/01.mp4" poster="media/Dcyu_b6khyB/01_poster.jpg" muted loop playsinline preload="none"></video></div>
+      <div class="slide"><video src="media/Dcyu_b6khyB/02.mp4" poster="media/Dcyu_b6khyB/02_poster.jpg" muted loop playsinline preload="none"></video></div>
+      <div class="slide"><video src="media/Dcyu_b6khyB/03.mp4" poster="media/Dcyu_b6khyB/03_poster.jpg" muted loop playsinline preload="none"></video></div>
+      <div class="slide"><video src="media/Dcyu_b6khyB/04.mp4" poster="media/Dcyu_b6khyB/04_poster.jpg" muted loop playsinline preload="none"></video></div>
+      <div class="slide"><video src="media/Dcyu_b6khyB/05.mp4" poster="media/Dcyu_b6khyB/05_poster.jpg" muted loop playsinline preload="none"></video></div>
+      <div class="slide"><img src="media/Dcyu_b6khyB/06.jpg" loading="lazy" alt=""></div>
+      <div class="slide"><img src="media/Dcyu_b6khyB/07.jpg" loading="lazy" alt=""></div>
+      <div class="slide"><img src="media/Dcyu_b6khyB/08.jpg" loading="lazy" alt=""></div>
+    </div>
+    <button class="nav prev" aria-label="上一張">‹</button><button class="nav next" aria-label="下一張">›</button>
+    <div class="count"></div><div class="dots"></div>
+  </div>
+  <div class="orig"><span class="who">IG 原文 · 2026.09.03</span>人形問題，我其實目前還找不到怎麼改善
+
+灰模上面的人，但運鏡這點應該已經沒事難題
+車子模還算簡單，真人材料到目前為止還是會檔。
+
+（即夢有時候可以夾帶資料包）
+莫名其妙就可以了
+
+但確實可以透過3D做一個外觀到人物前一鏡</div>
+
+  <h2>一顆 4 秒試片，一次測三種給法</h2>
+  <p>人形是唯一還不穩的變因。與其跑整支 16 秒，先用一顆 4 秒固定機位，把三排人放在不同深度，各用一種給法：</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>排</th><th>給法</th><th>在測什麼</th><th>結果</th></tr></thead>
+    <tbody>
+      <tr><td>前排</td><td>滑行：只給位移，零步態</td><td>模型會不會自己編出步態</td><td>會，自然步行</td></tr>
+      <tr><td>中排</td><td>位移＋起伏＋微擺</td><td>半套步態會不會被照抄成僵硬</td><td>自然步行</td></tr>
+      <tr><td>後排</td><td>全靜：完全凍結</td><td>模型會不會自己讓人動起來</td><td>不會，變成深色人偶剪影</td></tr>
+      <tr><td>綠色人形</td><td>綠色標記＋提示詞指定主角</td><td>主角會不會被認出來</td><td>認得出來，而且沒穿綠衣</td></tr>
+    </tbody>
+  </table></div>
+  <p>第一次試片有人「站著飄移」：姿勢是站的、位置卻在滑。在硬規則加上一句<b>「腳步與位移同步、不滑行；站定的人不漂移」</b>，複測就正常了。起伏微擺是「這個人在走路」的訊號，不能省。</p>
+
+  <h2>還沒解的：高空盲區</h2>
+  <p>同一套人形在眼高機位很完美，攝影機一拉到高空，中遠景的人又凍成假人柱。AI 的判斷是 480P 在高空畫不出人、像素不夠；我認為不是，但點數不夠試 720P，這是唯一還沒測的變因。有更新再補。</p>
+
+  <h2>每一頁在講什麼</h2>
+  <ol class="pages">
+    <li><b>灰模＋參考圖 → 成品</b>：運鏡、人流、建築量體全由灰模決定，材質光線與人物由模型補。16 秒一鏡到底、800 人。</li>
+    <li><b>無參考圖純灰模</b>：沒有參考圖也算得出來，差別主要在色調與光線；片中發現幾個假人。</li>
+    <li><b>人形試片（修正前）</b>：4 秒定機位、三排人形給法＋綠色主角標記——有人飄著走。</li>
+    <li><b>人形試片（修正後）</b>：加了「腳步必須與位移同步」那句，看起來正常許多。</li>
+    <li><b>高空盲區（未解決）</b>：中遠景凍成假人柱。</li>
+    <li><b>提示詞全文</b>（現行版，下面可複製）。</li>
+    <li><b>參考圖</b>：用自己拍的照片轉算新的環境。</li>
+    <li>後來發現中央車站根本不用參考圖——模型早就認得它。</li>
+  </ol>
+
+  <h2>提示詞（可複製）</h2>
+  <p class="muted">人形試片 · Seedance 2.5 reference-to-video · 4 秒固定機位 · 480P。@Video1＝三排人形灰模。</p>
+  <div class="prompt"><div class="ph"><span>人形試片（現行版）<small>已含「腳步與位移同步」與「星座只在穹頂」兩條修正</small></span><button class="copy">複製</button></div><pre>【硬規則】固定機位：攝影機從第一格到最後一格完全不動、不搖、不變焦、不剪接，一鏡到底 4 秒。畫面裡絕不出現攝影機或無人機。全片不出現任何文字、字幕、介面或浮水印。大廳的地面上不可以出現石墩、矮柱、圍欄或雕塑——灰模裡每一個深色形體都是人，一個都不是物件。人潮必須是活的：絕大多數人隨時都在行走移動，只有少數人站定等人。**不管距離多遠，畫面裡絕不出現雕像、假人、人偶、藝術裝置或成排的深色柱體**——每一個深色形體都是一個正在趕路的真人。看得見腳的距離裡，腳步與位移同步、不滑行；站定的人不漂移。
+
+【主體】紐約中央車站主大廳，尖峰時段，通勤路人從畫面左右兩側穿過。每一個路人都是不同的真實人——不同性別、年齡、體型、衣著、行李、走路速度，沒有兩個人長一樣。**綠色的人形是主角**：一位穿深灰大衣的年輕女子，戴罩耳式耳機，步伐比別人慢。綠色只是灰模裡的標記，**她絕對不穿綠色衣服**。
+
+【參考】@Video1 是灰模動態分鏡，攝影機固定。每一個深色人形＝一個路人：逐格對齊每個人的位置、前進方向與移動速度。人形只標位置與方向，**步態、四肢、手怎麼擺、表情完全由你決定**——走路要自然、有重量感，每個人的步態都不一樣。灰白色的建築量體照抄構圖：詢問處與背景人潮落在畫面哪裡、多大，全部照 @Video1。
+
+【環境】紐約中央車站主大廳：米白色石灰岩、大理石地板、天青色星座穹頂，背景中央偏右是圓形詢問處（矮大理石檯面＋開放的銅框玻璃亭）。清晨低角度陽光從東南斜射，地板長條光斑，薄霧讓光柱看得見。真實攝影質感、自然動態模糊。兩端大拱窗是透明玻璃，窗外是天空與陽光；天青色的星座圖案只在穹頂上，絕不出現在窗玻璃上。
+
+【聲音】只要現場環境音：月台廣播回音、腳步、行李輪、人聲。不要配樂、不要旁白。</pre></div>
+
+  <div class="src">工具：Claude Code（Blender 程式與提示詞）、Blender（灰模與人形）、即夢與 fal 上的 Seedance 2.5。</div>
+  <a class="back" href="../#research">← 回到研究列表</a>
+</article>
+</main>
+<footer>高偉鳴 Armin Kao ／ <a href="https://arminkao.com">arminkao.com</a> ／ <a href="https://www.instagram.com/17187kao/">Instagram</a></footer>
+<script src="carousel.js"></script>
+</body>
+</html>

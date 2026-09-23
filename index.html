@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>小高工具間 — 導演自用的影像工具</title>
+<title>TOOL.AI 小高工具間 — 導演自用的工具與研究</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -306,6 +306,30 @@
     .row { flex-direction: column; gap: 2px; }
     .row time { flex: none; }
   }
+  /* ─── 研究（2026-09-24）：卡片同一套無框浮起，編號用薄荷色跟工具區分 ─── */
+  .topr { display: flex; align-items: center; gap: 12px; }
+  .home { font-size: 12px; font-weight: 600; letter-spacing: .12em; color: var(--ink2); padding: 10px 16px; border-radius: 999px; background: var(--card); box-shadow: var(--e1); white-space: nowrap; }
+  .home:hover { color: var(--ink); box-shadow: var(--e2); }
+  @media (max-width: 520px) { .hm-en { display: none; } .home { padding: 9px 13px; } }
+  @media (max-width: 380px) { .mark-zh { display: none; } }
+  .mark-zh { letter-spacing: .08em; opacity: .7; margin-left: 6px; text-transform: none; }
+  .hero h1 .g { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .rgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .rcard {
+    display: block; background: var(--card); border-radius: var(--r-lg); box-shadow: var(--e1);
+    padding: 22px 22px 20px; transition: transform .28s cubic-bezier(.2,.8,.3,1), box-shadow .28s;
+  }
+  a.rcard:hover { transform: translateY(-3px); box-shadow: var(--e2); }
+  .rcard .rid { font-family: 'SF Mono', ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: .06em; color: #6E9A8B; }
+  :root[data-theme="dusk"] .rcard .rid { color: #8FB2A6; }
+  .rcard h3 { font-size: 16.5px; font-weight: 600; line-height: 1.45; margin: 6px 0 8px; }
+  .rcard p { font-size: 13.5px; line-height: 1.75; color: var(--ink2); }
+  .rcard p b { color: var(--ink); font-weight: 600; }
+  .rmeta { display: flex; flex-wrap: wrap; gap: 2px 12px; margin-top: 12px; font-size: 12px; color: var(--faint); }
+  .rmeta span:not(:last-child)::after { content: "·"; margin-left: 12px; opacity: .6; }
+  .rcard.soon { opacity: .55; box-shadow: none; background: var(--card-2); }
+  @media (max-width: 860px) { .rgrid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 620px) { .rgrid { grid-template-columns: 1fr; gap: 12px; } }
 </style>
 </head>
 <body>
@@ -317,18 +341,31 @@
 </defs></svg>
 
 <div class="topbar">
-  <div class="mark">Armin Kao</div>
-  <button class="orb" onclick="flip()" title="明暗切換（平常跟著日夜自動切，手動切了就聽你的）">◐</button>
+  <div class="mark">TOOL.AI <span class="mark-zh">小高工具間</span></div>
+  <div class="topr"><a class="home" href="https://arminkao.com/"><span class="hm-en">ARMIN KAO </span>作品集 ↗</a>
+  <button class="orb" onclick="flip()" title="明暗切換（平常跟著日夜自動切，手動切了就聽你的）">◐</button></div>
 </div>
 
 <main class="shell">
 
   <header class="hero">
-    <div class="eyebrow">個人工具發佈站</div>
-    <h1>小高工具間</h1>
+    <div class="eyebrow">導演自用 · 全部免費</div>
+    <h1>拍片時順手做的<br><span class="g">工具與研究</span></h1>
     <div class="rule"></div>
-    <p>廣告導演做給自己現場和後期真的在用的工具。<b>免費下載。</b>不好用直接跟我說，我每週都在改。</p>
+    <p>影像業十年，遇到重複的事就做一個工具、遇到想不通的就去實測。<b>工具免費下載，</b>研究每一篇都標最後驗證日。</p>
   </header>
+
+  <div class="listhead" id="research">
+    <div class="label">研究 · 實測過才寫 · 新的在前</div>
+  </div>
+  <div class="rgrid">
+    <a class="rcard" href="research/platform-cost.html"><div class="rid">R-06</div><h3>同一發 15 秒影片，換平台差 2.3 倍</h3><p><b>你會知道：</b>同一組輸入在四個平台各花多少、各等多久、差在哪。</p><div class="rmeta"><span>AI 影像</span><span>比價</span><span>驗證 09.23</span></div></a>
+    <a class="rcard" href="research/h3-greybox.html"><div class="rid">R-05</div><h3>MiniMax H3 Max：灰模管運鏡，人交給模型</h3><p><b>你會知道：</b>路人為什麼不要放進灰模、誰建模比較划算、同一顆灰模換插畫風。</p><div class="rmeta"><span>AI 影像</span><span>附提示詞</span><span>驗證 09.23</span></div></a>
+    <a class="rcard" href="research/phone-reference.html"><div class="rid">R-04</div><h3>用手機拍參考，讓 AI 模仿成廣告鏡頭</h3><p><b>你會知道：</b>iPhone 隨手拍變 FX3 質感，哪些抄得到、提示詞怎麼分八段寫。</p><div class="rmeta"><span>AI 影像</span><span>附提示詞</span><span>驗證 09.05</span></div></a>
+    <a class="rcard" href="research/crowd-in-greybox.html"><div class="rid">R-03</div><h3>人形問題：灰模裡的人要怎麼給</h3><p><b>你會知道：</b>一顆 4 秒試片測三種給法，一句話讓路人不再飄著走。</p><div class="rmeta"><span>AI 影像</span><span>附提示詞</span><span>驗證 09.02</span></div></a>
+    <a class="rcard" href="research/snowboard-no-body.html"><div class="rid">R-02</div><h3>人形會影響算圖：四輪之後只留一塊板</h3><p><b>你會知道：</b>灰模放人偶，人就僵；什麼都不給，模型才自己編動作。</p><div class="rmeta"><span>AI 影像</span><span>附提示詞</span><span>驗證 09.01</span></div></a>
+    <a class="rcard" href="research/blender-lineart.html"><div class="rid">R-01</div><h3>拿 Blender 當線稿：運鏡不用抽卡</h3><p><b>你會知道：</b>一支灰模片＋三張定妝照，讓 Seedance 照你排的運鏡走。</p><div class="rmeta"><span>AI 影像</span><span>附提示詞</span><span>驗證 08.31</span></div></a>
+  </div>
 
   <div class="listhead">
     <div class="label">工具 · 全部免費 · 附安裝說明</div>
@@ -336,37 +373,30 @@
       <button role="tab" aria-selected="true"  data-cat="all">全部</button>
       <button role="tab" aria-selected="false" data-cat="ae">AE 插件</button>
       <button role="tab" aria-selected="false" data-cat="mac">桌面工具</button>
-      <button role="tab" aria-selected="false" data-cat="app">行動 App</button>
+      <button role="tab" aria-selected="false" data-cat="app">App</button>
       <button role="tab" aria-selected="false" data-cat="web">網頁元件</button>
     </div>
   </div>
 
   <article class="tool" data-cat="mac">
     <div class="tool-media">
-      <div class="glyph"><svg viewBox="0 0 48 48" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="4" y="8" width="16" height="32" rx="2"/>
-        <path d="M8 15h8M8 21h8M8 27h5"/>
-        <path d="M23 24h6M26 21l3 3-3 3"/>
-        <path d="M34 18 40 15 46 18 46 26 40 29 34 26 Z"/>
-        <path d="M34 18 40 21 46 18M40 21 40 29"/>
-      </svg></div>
+      <div class="shot"><img src="assets/aloud-shot.jpg" alt="Aloud：選單列的朗讀窗正在唸 AI 的回覆" loading="lazy"></div>
     </div>
     <div class="tool-body">
-      <h3>兩支工具的規格書 <span class="tag live">開源 · 給 AI 讀</span> <span class="tag">Mac</span></h3>
-      <p class="desc">我自己天天在用的兩支工具，開源了，但沒有放程式碼——放的是讓你的 AI 照著蓋的施工圖。分階段的施工順序、每個介面的規格、二十幾個不會噴錯的地雷，還有每一步該怎麼驗收。整包丟給你的 AI，說「照著蓋」，它會蓋出屬於你的那一版：你的快捷鍵、你的聲音、你的辭典。</p>
+      <h3>讓 Agent 講話＋語音輸入 <span class="tag live">開源 · 規格書</span> <span class="tag">Mac</span></h3>
+      <p class="desc">AI 回你的話，直接唸給你聽；你開口講，字就打進游標。兩支都是我每天在用的工具，開源的是<b>施工圖</b>：整包丟給你的 AI，說「照著蓋」，它就蓋出你自己的那一版。</p>
       <ul>
-        <li><b>Aloud</b>　選單列朗讀窗：任何 App 選字右鍵就唸給你聽，逐句串流所以首字延遲不到半秒、跟文章多長無關，唸到哪句亮哪句</li>
-        <li><b>WhisperBar</b>　本機語音輸入：按一下 Fn 開始講、再按一下就貼進游標；轉譯全程在自己機器上跑，錄音不上傳</li>
-        <li>為什麼不給程式碼：這兩支跟我的機器、我的辭典、我的快捷鍵綁太緊，原封不動給你也裝不起來。而真正花時間的是那些<b>不會報錯</b>的坑，寫成文件比程式碼耐久</li>
-        <li>每個 repo 五份文件：施工順序／介面契約／地雷清單／驗收條件／給 agent 的入口指示</li>
+        <li><b>Aloud　讓 Agent 講話</b>：AI 的回覆一推過來就開始唸，唸到哪句亮哪句；任何 App 選字按右鍵也能唸</li>
+        <li><b>WhisperBar　語音輸入</b>：按一下 Fn 開始講，再按一下，文字就貼進游標；全程在自己電腦上轉，錄音不上傳</li>
+        <li>為什麼給施工圖、不給程式碼：程式碼綁著我的電腦，原封不動給你也裝不起來；真正花時間的是那些<b>不會報錯</b>的坑，全寫在文件裡</li>
       </ul>
-      <a class="btn" href="https://github.com/qwert2813434-ctrl/aloud">Aloud · 朗讀窗</a>
+      <a class="btn" href="https://github.com/qwert2813434-ctrl/aloud">Aloud · 讓 Agent 講話</a>
       <a class="btn quiet" href="https://github.com/qwert2813434-ctrl/whisperbar">WhisperBar · 語音輸入</a>
-      <div class="note">macOS ／ WhisperBar 的本機轉譯需要 Apple Silicon ／ MIT 授權 ／ 不含任何錄音或個人資料 ／ 上架 2026.08.29</div>
+      <div class="note">macOS ／ WhisperBar 需要 Apple Silicon ／ MIT 授權 ／ 不含任何錄音或個人資料 ／ 上架 2026.08.29</div>
     </div>
   </article>
 
-  <article class="tool flip" data-cat="web">
+  <article class="tool" data-cat="web">
     <div class="tool-media">
       <div class="glyph"><svg viewBox="0 0 48 48" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="24" cy="24" r="5"/>
@@ -391,7 +421,7 @@
     </div>
   </article>
 
-  <article class="tool flip" data-cat="web">
+  <article class="tool" data-cat="web">
     <div class="tool-media">
       <div class="glyph"><svg viewBox="0 0 48 48" stroke-linecap="round" stroke-linejoin="round">
         <path d="M8 10 q3 -3 6 -1 t7 -1 t7 1 t7 -1 t5 2 M8 10 q-2 3 -1 6 t-1 8 t1 8 t-1 6 M40 10 q2 3 1 6 t1 8 t-1 8 t1 6 M8 38 q3 3 6 1 t7 1 t7 -1 t7 1 t5 -2"/>
@@ -435,7 +465,7 @@
     </div>
   </article>
 
-  <article class="tool flip" data-cat="mac">
+  <article class="tool" data-cat="mac">
     <div class="tool-media">
       <div class="shot"><img src="assets/rheo-shot.jpg" alt="RHEO 編輯畫面：人像被抹成流動的絲綢"></div>
       <span class="appicon"><span class="sq"><img src="assets/rheo-icon.png" alt=""></span></span>
@@ -472,37 +502,6 @@
     </div>
   </article>
 
-  <article class="tool flip" data-cat="app">
-    <div class="tool-media">
-      <div class="glyph"><svg viewBox="0 0 48 48" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="4" y="10" width="17" height="28" rx="2"/>
-        <rect x="27" y="10" width="17" height="28" rx="2"/>
-        <path d="M14 18 H 34"/><path d="M14 24 H 34"/>
-        <path d="M8 31 H 16"/><path d="M31 31 H 40"/>
-      </svg></div>
-    </div>
-    <div class="tool-body">
-      <h3>ALIGNED 排版分享 <span class="tag live">網頁 · 範本</span></h3>
-      <p class="desc" style="margin-bottom:6px"><b>「點子都是偷來的」Steal Like an Artist</b></p>
-      <p class="desc">我自己排的 ALIGNED 專案，做成範本開放下載。頁面上直接左右滑預覽輪播，會動的頁就在頁面上動——靜態版面從專案檔座標即時渲染，有出場動畫或 3D 的則是 App 逐頁匯出的成品。喜歡就下載 .alignproj，換上自己的內容。</p>
-      <ul>
-        <li><b>Guides 一鍵</b>：把每張版面的對齊參考線與座標叫出來——別的範本站只給成品，這裡讓你看見骨架</li>
-        <li>編號制，做了新的就上架</li>
-        <li>下載後 iPad 用檔案 App／AirDrop 開啟，Mac 版 ⌘O</li>
-        <li>01：分鏡展示——9 格影片牆＋逐頁大畫面，7 頁 4:5</li>
-        <li>02：STB 介紹輪播——打字機出場的軟體介紹，11 頁 4:5</li>
-        <li>03：ALIGNED 1.1.1 更新說明（EN）——動畫與 3D 物件，7 頁 4:5</li>
-        <li>04：上海 四分之一秒——單張海報，3:4</li>
-        <li>05：同一件事講兩次——同兩張照片各用兩次，一次放大當底、一次原樣當小圖，左右對調，2 頁 4:5</li>
-        <li>06：覆蓋回憶——滿版照片，一句話拆成全大寫的字逐行分散對齊橫貫版面，2 頁 9:16</li>
-        <li>07：HDR樣片 片尾卡——滿版一格畫面，左邊四欄拍攝地點、右邊特別感謝與工作人員，1 頁 16:9</li>
-        <li>08：切片網格——去背照片鋪在 6×8 網格、部分格子留空，交點小方塊＋描邊大字拆段，1 頁 3:4</li>
-      </ul>
-      <a class="btn" href="aligned-templates/">進去逛</a>
-      <a class="btn quiet" href="https://aligned-app.github.io/zh-Hant/">ALIGNED 官網</a>
-      <div class="note">需要 ALIGNED App 開啟範本 ／ 上架 2026.08.08，02、03 於 08.16，04 與 Guides 於 09.02，05 同日，06 於 09.03，07、08 於 09.05</div>
-    </div>
-  </article>
 
   <article class="tool" data-cat="web">
     <div class="tool-media">
@@ -528,7 +527,7 @@
     </div>
   </article>
 
-  <article class="tool flip" data-cat="web">
+  <article class="tool" data-cat="web">
     <div class="tool-media">
       <div class="glyph"><svg viewBox="0 0 48 48" stroke-linecap="round" stroke-linejoin="round">
         <path d="M14 8 C 14 16, 12 22, 14 30 S 17 38, 15 42"/>
@@ -567,11 +566,12 @@
       <a class="btn" href="https://aligned-app.github.io/zh-Hant/">官網下載（Mac／Windows）</a>
       <a class="btn quiet" href="https://apps.apple.com/tw/app/id6791646266">App Store（iPhone／iPad）</a>
       <a class="btn quiet" href="https://github.com/qwert2813434-ctrl/ALIGNED">GitHub 原始碼</a>
+      <a class="btn quiet" href="aligned-templates/">排版分享 · 範本</a>
       <div class="note">Mac：Apple Silicon・macOS 13+（DMG 已公證）／Windows 10+ 安裝檔未簽章，首次開啟點「其他資訊 → 仍要執行」；影片頁與動畫匯出暫僅 Mac。GPL-3.0 授權 ／ 回饋 alignediosapp@gmail.com</div>
     </div>
   </article>
 
-  <article class="tool flip" data-cat="app">
+  <article class="tool" data-cat="app">
     <div class="tool-media">
       <div class="shot"><img src="assets/stb-shot.jpg" alt="STB 分鏡頁畫面"></div>
       <span class="appicon"><span class="sq"><img src="assets/stb-icon.png" alt=""></span></span>
@@ -612,7 +612,7 @@
     </div>
   </article>
 
-  <article class="tool flip" data-cat="ae">
+  <article class="tool" data-cat="ae">
     <div class="tool-media">
       <div class="glyph"><svg viewBox="0 0 48 48" stroke-linecap="round" stroke-linejoin="round">
         <path d="M8 36 C 17 36, 19 15, 26 15 S 35 26, 42 26"/>
@@ -636,6 +636,7 @@
 
   <div class="label">更新紀錄</div>
   <div class="list">
+    <div class="row"><time>2026.09.24</time><span>新增「研究」：實測過才寫、每篇標最後驗證日。R-01～05 從 IG 搬來的 AI 影像研究（可滑動輪播、提示詞可複製）＋R-06 比價；網址改為 tools.arminkao.com</span></div>
     <div class="row"><time>2026.08.21</time><span>ALIGNED iOS 1.0 過審上架（申訴後當天過，iPhone／iPad universal）——四平台到齊</span></div>
     <div class="row"><time>2026.08.21</time><span>ALIGNED 與 STB 官網上線——aligned-app.github.io／stb-app.github.io，繁中英文雙語；STB iPad 1.7 同日過審上架</span></div>
     <div class="row"><time>2026.08.16</time><span>STB 1.7.0：塗鴉分鏡改版（筆刷粗細拉桿、自訂圖層、套索選取、參考章自動分頁）＋<b>Windows 版首發</b>——Mac／Windows 已可下載（iPad 版 08.21 過審上架）</span></div>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="soft">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人形會影響算圖：四輪之後只留一塊板 — 小高工具間 研究</title>
+<meta name="description" content="單板滑雪灰模測了四輪：給手臂、拿掉四肢、正確比例都僵硬，最後把人整個拿掉、灰模只留一塊板才成功。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="../assets/theme.js"></script>
+<link rel="stylesheet" href="research.css">
+</head>
+<body>
+<div class="sky"></div><div class="grain"></div>
+<div class="topbar">
+  <a href="../">TOOL.AI · 小高工具間</a>
+  <div class="topr"><a class="home" href="https://arminkao.com/">作品集 ↗</a><button class="orb" onclick="toggleTheme()" title="明暗切換">◐</button></div>
+</div>
+
+<main class="shell">
+<article>
+  <div class="rid">R-02 · AI 影像 · 實測</div>
+  <h1>人形會影響算圖：四輪之後只留一塊板</h1>
+  <div class="facts"><span>讀 <b>5 分鐘</b></span><span>最後驗證 <b>2026.09.01</b></span><span>原文發在 <a href="https://www.instagram.com/p/DcvcoVDE45X/">Instagram</a></span></div>
+
+  <div class="get"><strong>你會知道：</strong>灰模裡放人偶，模型會逐格照抄人偶的姿勢，人就僵了。四輪測下來，最好的做法是灰模只留一塊雪板，動作交給模型自己編。</div>
+
+  <div class="cara">
+    <div class="track">
+      <div class="slide"><video src="media/DcvcoVDE45X/01.mp4" poster="media/DcvcoVDE45X/01_poster.jpg" muted loop playsinline preload="none"></video></div>
+      <div class="slide"><video src="media/DcvcoVDE45X/02.mp4" poster="media/DcvcoVDE45X/02_poster.jpg" muted loop playsinline preload="none"></video></div>
+      <div class="slide"><video src="media/DcvcoVDE45X/03.mp4" poster="media/DcvcoVDE45X/03_poster.jpg" muted loop playsinline preload="none"></video></div>
+      <div class="slide"><video src="media/DcvcoVDE45X/04.mp4" poster="media/DcvcoVDE45X/04_poster.jpg" muted loop playsinline preload="none"></video></div>
+      <div class="slide"><img src="media/DcvcoVDE45X/05.jpg" loading="lazy" alt=""></div>
+      <div class="slide"><img src="media/DcvcoVDE45X/06.jpg" loading="lazy" alt=""></div>
+      <div class="slide"><img src="media/DcvcoVDE45X/07.jpg" loading="lazy" alt=""></div>
+      <div class="slide"><img src="media/DcvcoVDE45X/08.jpg" loading="lazy" alt=""></div>
+      <div class="slide"><img src="media/DcvcoVDE45X/09.jpg" loading="lazy" alt=""></div>
+    </div>
+    <button class="nav prev" aria-label="上一張">‹</button><button class="nav next" aria-label="下一張">›</button>
+    <div class="count"></div><div class="dots"></div>
+  </div>
+  <div class="orig"><span class="who">IG 原文 · 2026.09.01</span>人形會影響算圖
+
+做了四輪，只用板子最好！
+
+做了人物就變得很僵硬，但目前運鏡沒問題。
+
+但我也只是測試四次，即夢可
+
+即夢動作會更帥不知道為什麼（圖中沒有）
+
+圖中都是fal APl來的，我即夢點數不夠玩</div>
+
+  <h2>四輪測試</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>版本</th><th>灰模給了什麼</th><th>結果</th></tr></thead>
+    <tbody>
+      <tr><td>v2</td><td>有關節的手臂，還編了張開平衡的動作</td><td>模型逐格照抄 → 人很僵硬</td></tr>
+      <tr><td>v3</td><td>拿掉四肢，只留軀幹</td><td>動作自然了，但比例壞掉（腫、大軀幹小腿）</td></tr>
+      <tr><td>v4</td><td>正確人體比例，提示詞明寫「別照抄四肢」</td><td>還是僵硬</td></tr>
+      <tr><td><b>v5</b></td><td><b>把人整個拿掉，灰模只留一塊板</b></td><td><b>成功</b></td></tr>
+    </tbody>
+  </table></div>
+  <p>道理是：灰模裡有什麼，模型就抄什麼。給它手腳，它就照著人偶的姿勢動；什麼都不給，它才會用自己知道的「真實滑雪者」去補。灰模只負責運鏡、板子的位置、傾斜、轉向與起跳時間點。</p>
+  <p class="muted">另外一個限制：Seedance 會擋照片級真人臉的參考圖（422）。所以定妝照裡的滑雪者全罩安全帽＋雪鏡＋頸套，全片看不到臉。</p>
+
+  <h2>每一頁在講什麼</h2>
+  <ol class="pages">
+    <li><b>三組定位圖</b>：滑雪者定妝照（同一個人兩個角度，決定長相、服裝、雪板）、雪地場景（決定材質光線色調，地形不看它看灰模）、Blender 灰模（決定運鏡、時間節奏，以及板子在每一格的位置與姿態）。</li>
+    <li><b>Shot C · 穿越機追擊</b>：俯衝進場 → 貼身穿梭 → 隨他起跳被拋高 → 拉開離去。</li>
+    <li><b>Shot F · 貼底仰拍 S</b>：28mm 貼雪面，跑在他前方三公尺回頭拍，隨換刃擺盪。</li>
+    <li><b>Shot E · 長焦刷樹林</b>：165mm 並行追拍，速度感全由前景樹幹給。</li>
+    <li><b>提示詞結構</b>：硬規則／主體／動作／參考／運鏡／環境／聲音。</li>
+    <li><b>C 的提示詞全文（上）</b>。</li>
+    <li><b>C 的提示詞全文（下）</b>。</li>
+    <li><b>四輪測試</b>：v2 → v5（上面那張表）。</li>
+    <li><b>畫布截圖</b>：Blender＋Seedance 2.5，2026-09-01 實測。</li>
+  </ol>
+
+  <h2>提示詞（可複製）</h2>
+  <p class="muted">Seedance 2.5 reference-to-video · 6 秒。@Image1–2＝滑雪者兩個角度、@Image3＝雪地場景、@Video1＝只有一塊板的灰模。</p>
+  <div class="prompt"><div class="ph"><span>C · 穿越機追擊<small>v5：灰模只留一塊板</small></span><button class="copy">複製</button></div><pre>【硬規則】畫面裡唯一的人物就是這位單板滑雪者，任何時刻都不出現第二個人、纜車或無人機。攝影機是隱形視點，不是場景中的物件，絕不入鏡。滑雪者從第一格就在畫面內，絕不用空雪坡開場。**每一格都必須有人騎在雪板上**，絕不出現沒有人的空雪板。
+
+【主體】@Image1、@Image2 是同一位滑雪者的不同角度——整支片都是這個人：同橘色外套、同炭灰雪褲、同黑色全罩安全帽、同鏡面雪鏡（全程戴著蓋住眼睛）、同黑色頸套、同雪板，不改任何細節。全片看不到他的臉。
+
+【動作】四肢與身體細節**由你自己編排**成真實單板滑雪該有的技術動作，不要照抄灰模的手腳：
+連續刻滑換刃——換刃時上半身先轉、下半身跟上，雙臂自然張開平衡，板緣切進雪裡刮起一道雪牆；
+深刻滑時身體壓低、內側手掠過雪面（hand drag）；
+中段一次轉體（轉出去再轉回來），轉體是連續有慣性的，收尾肩膀回正；
+後段衝上雪坡跳台起跳——**空中這一段是慢動作**，人與板緩慢翻轉、一手往下抓板緣（grab），雪粉在身後散開；
+落地時膝蓋深深吸震、板緣咬雪、雪花爆開，再收回刻滑。
+整體要**流暢、放鬆、有重量感**——不要僵硬、不要機械式對稱、不要一格一格頓住。雪板明顯彎曲。
+
+【參考】@Video1 是灰模動態分鏡，**畫面裡只有一塊雪板，沒有人**。那塊板子就是滑雪者腳下的板——把 @Image1 的滑雪者**站上那塊板**，身體隨板子的姿態自然運動。
+要逐格對齊的只有六件事：攝影機的路徑、旋轉、速度與時間節奏；板子在畫面中的位置與大小；板子的傾斜方向與角度（換刃）；板子的轉向方向與圈數；離地與落地的時間點；前進方向（板頭中灰、板尾全黑）。
+**身體怎麼擺、手怎麼動、膝蓋怎麼吸震，完全由你決定**——灰模刻意不給任何姿勢資訊，因為那該是真實滑雪者自己的動作。灰白色的方塊、圓錐與地面不是內容。
+
+【運鏡】FPV 穿越機：0–1.8 秒從高空遠處俯衝進場並快速逼近；1.8–4 秒貼近雪面在他左右穿梭、時而超前時而落後；4–5.4 秒隨他起跳一起被拋高、繞到側前方近距離看他在空中翻轉；5.4–6 秒拉開離去。全程廣角、傾斜、有速度殘影。
+
+【環境】地形與路線完全照 @Video1（十六度雪坡、三個 S 彎、兩側針葉林）；材質、光線與色調照 @Image3。滑過的雪面留下清晰板痕、揚起雪粉，真實攝影質感、動態模糊自然。
+
+【聲音】只要環境音：風聲、板刃切進雪裡的沙沙刮聲、雪粉噴起聲、起跳離地的空白與落地的悶響。不要配樂、不要人聲、不要旁白。</pre></div>
+  <div class="prompt"><div class="ph"><span>F · 貼底仰拍 S<small>同一套結構，【動作】與【運鏡】不同</small></span><button class="copy">複製</button></div><pre>【硬規則】畫面裡唯一的人物就是這位單板滑雪者，任何時刻都不出現第二個人、纜車或無人機。攝影機是隱形視點，不是場景中的物件，絕不入鏡。滑雪者從第一格就在畫面內，絕不用空雪坡開場。**每一格都必須有人騎在雪板上**，絕不出現沒有人的空雪板。
+
+【主體】@Image1、@Image2 是同一位滑雪者的不同角度——整支片都是這個人：同橘色外套、同炭灰雪褲、同黑色全罩安全帽、同鏡面雪鏡（全程戴著蓋住眼睛）、同黑色頸套、同雪板，不改任何細節。全片看不到他的臉。
+
+【動作】四肢與身體細節**由你自己編排**成真實單板滑雪該有的技術動作：
+連續刻滑換刃——換刃時上半身先轉、下半身跟上，雙臂自然張開平衡，板緣切進雪裡刮起一道雪牆；
+深刻滑時身體壓低、內側手掠過雪面（hand drag）；重心在腳上，膝蓋持續吸震。
+整體要**流暢、放鬆、有重量感**——不要僵硬、不要機械式對稱、不要一格一格頓住。雪板明顯彎曲。
+這一段**沒有跳躍、沒有花式轉體**，就是漂亮的刻滑。
+
+【參考】@Video1 是灰模動態分鏡，**畫面裡只有一塊雪板，沒有人**。那塊板子就是滑雪者腳下的板——把 @Image1 的滑雪者**站上那塊板**，身體隨板子的姿態自然運動。
+要逐格對齊的只有六件事：攝影機的路徑、旋轉、速度與時間節奏；板子在畫面中的位置與大小；板子的傾斜方向與角度（換刃）；板子的轉向方向與圈數；前進方向（板頭中灰、板尾全黑）。
+**身體怎麼擺、手怎麼動、膝蓋怎麼吸震，完全由你決定**——灰模刻意不給任何姿勢資訊，因為那該是真實滑雪者自己的動作。灰白色的方塊、圓錐與地面不是內容。
+
+【運鏡】貼地機位跑在他前方三公尺回頭拍：鏡頭幾乎貼在雪面上（離雪不到半公尺），廣角仰視，機身隨他換刃左右擺盪、同時上下起伏（俯仰）；每次刻滑板緣切進雪裡，雪粉直接噴向鏡頭、糊住一部分畫面。極低、極貼、極快。
+
+【環境】地形與路線完全照 @Video1（十六度雪坡、三個 S 彎、兩側針葉林）；材質、光線與色調照 @Image3。滑過的雪面留下清晰板痕、揚起雪粉，真實攝影質感、動態模糊自然。
+
+【聲音】只要環境音：風聲、板刃切進雪裡的沙沙刮聲、雪粉噴起聲、起跳離地的空白與落地的悶響。不要配樂、不要人聲、不要旁白。</pre></div>
+  <div class="prompt"><div class="ph"><span>E · 長焦刷樹林<small>同一套結構，【動作】與【運鏡】不同</small></span><button class="copy">複製</button></div><pre>【硬規則】畫面裡唯一的人物就是這位單板滑雪者，任何時刻都不出現第二個人、纜車或無人機。攝影機是隱形視點，不是場景中的物件，絕不入鏡。滑雪者從第一格就在畫面內，絕不用空雪坡開場。**每一格都必須有人騎在雪板上**，絕不出現沒有人的空雪板。
+
+【主體】@Image1、@Image2 是同一位滑雪者的不同角度——整支片都是這個人：同橘色外套、同炭灰雪褲、同黑色全罩安全帽、同鏡面雪鏡（全程戴著蓋住眼睛）、同黑色頸套、同雪板，不改任何細節。全片看不到他的臉。
+
+【動作】四肢與身體細節**由你自己編排**成真實單板滑雪該有的技術動作：
+連續刻滑換刃——換刃時上半身先轉、下半身跟上，雙臂自然張開平衡，板緣切進雪裡刮起一道雪牆；
+深刻滑時身體壓低、內側手掠過雪面（hand drag）；重心在腳上，膝蓋持續吸震。
+整體要**流暢、放鬆、有重量感**——不要僵硬、不要機械式對稱、不要一格一格頓住。雪板明顯彎曲。
+這一段**沒有跳躍、沒有花式轉體**，就是漂亮的刻滑。
+
+【參考】@Video1 是灰模動態分鏡，**畫面裡只有一塊雪板，沒有人**。那塊板子就是滑雪者腳下的板——把 @Image1 的滑雪者**站上那塊板**，身體隨板子的姿態自然運動。
+要逐格對齊的只有六件事：攝影機的路徑、旋轉、速度與時間節奏；板子在畫面中的位置與大小；板子的傾斜方向與角度（換刃）；板子的轉向方向與圈數；前進方向（板頭中灰、板尾全黑）。
+**身體怎麼擺、手怎麼動、膝蓋怎麼吸震，完全由你決定**——灰模刻意不給任何姿勢資訊，因為那該是真實滑雪者自己的動作。灰白色的方塊、圓錐與地面不是內容。
+
+【運鏡】長焦定點：165mm 長焦把背景整個壓扁，前景一整排針葉樹幹以高速由左往右刷過鏡頭（大面積暗色直條掃過畫面、幾乎貼在鏡頭上），滑雪者在樹幹之間的縫隙裡連續刻滑通過。鏡頭幾乎不動，只有極輕微手持與非常緩慢的推焦。前景樹幹要有明顯運動模糊。
+
+【環境】地形與路線完全照 @Video1（十六度雪坡、三個 S 彎、兩側針葉林）；材質、光線與色調照 @Image3。滑過的雪面留下清晰板痕、揚起雪粉，真實攝影質感、動態模糊自然。
+
+【聲音】只要環境音：風聲、板刃切進雪裡的沙沙刮聲、雪粉噴起聲、起跳離地的空白與落地的悶響。不要配樂、不要人聲、不要旁白。</pre></div>
+
+  <div class="src">工具：Claude Code（Blender 程式與提示詞）、Blender（灰模）、fal 上的 Seedance 2.5（圖中都是 fal API 算的）。同一組在即夢上動作會更帥，原因不明，圖中沒有。</div>
+  <a class="back" href="../#research">← 回到研究列表</a>
+</article>
+</main>
+<footer>高偉鳴 Armin Kao ／ <a href="https://arminkao.com">arminkao.com</a> ／ <a href="https://www.instagram.com/17187kao/">Instagram</a></footer>
+<script src="carousel.js"></script>
+</body>
+</html>
