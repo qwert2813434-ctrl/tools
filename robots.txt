@@ -1,19 +1,9 @@
 # 小高工具間
 # credits.html 是兩萬多位真人的姓名與作品紀錄，資料取自各家公開發佈的名單。
-# 先不開放搜尋引擎收錄，頁面本身也帶 noindex。
+# 不開放任何爬蟲（搜尋引擎與 AI 都一樣），頁面本身也帶 noindex。
+# 其他工具與研究頁全部開放，包含 AI 爬蟲（2026-10-02 小高定：要曝光）。
 User-agent: *
 Disallow: /credits.html
 
-# AI 訓練爬蟲一律不收
-User-agent: GPTBot
-Disallow: /
-User-agent: ClaudeBot
-Disallow: /
-User-agent: CCBot
-Disallow: /
-User-agent: Google-Extended
-Disallow: /
-User-agent: Applebot-Extended
-Disallow: /
-User-agent: PerplexityBot
-Disallow: /
+Sitemap: https://tools.arminkao.com/sitemap.xml
+Sitemap: https://tools.arminkao.com/aligned-templates/sitemap.xml
