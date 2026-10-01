@@ -1,6 +1,6 @@
 {
-  "version": "1.3.8",
+  "version": "1.3.9",
   "url": "https://github.com/qwert2813434-ctrl/ALIGNED/releases/latest/download/ALIGNED-macOS-arm64.dmg",
   "urlWin": "https://github.com/qwert2813434-ctrl/ALIGNED/releases/latest/download/ALIGNED-windows-x64-setup.exe",
-  "notes": "Mac 新增文字庫：直接讀寫 iCloud 雲碟裡的 ALIGNED › TextLibrary，與手機同一批文字。文字框貼著文字寬度，標題與長文框左右都有把手；直排拉欄寬會換欄，並新增上下齊平。轉過角度的物件拉角也會吸附參考線，圖形可設為正圓，旋轉到 ±90° 會輕微吸附。Mac 與 Windows 同步 1.3.8。"
+  "notes": "新增散字：文字庫選一篇，字直接散到當頁，可重新落字、釘住喜歡的詞，順序、吸格線、錯開、間距都能調。拷貝一張照片再點著另一個框按 ⌘V（Windows 按 Ctrl+V），畫面會貼進那個框，大小與邊框照原本的；雙擊照片後可用滾輪或捏合縮放框裡的畫面。點下方縮圖卡一定跳到那頁，目前頁會標出來。直排的標點、斜線、半形空格與英文排得更順。修正：專案開著過夜後存檔，可能少掉影片或圖片——現在存檔會自動補回。Mac 與 Windows 同步 1.3.9。"
 }
