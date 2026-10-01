@@ -113,3 +113,7 @@ footer { max-width:860px; margin:40px auto 60px; padding:0 var(--side); text-ali
 .topr { display:flex; align-items:center; gap:10px; }
 .topbar a.home { font-size:12px; font-weight:600; letter-spacing:.12em; padding:10px 16px; border-radius:999px; background:var(--card); box-shadow:var(--e1); white-space:nowrap; }
 .topbar > a { white-space:nowrap; min-width:0; overflow:hidden; text-overflow:ellipsis; }
+/* 單張圖（R-07 起）：不用輪播時 */
+.fig { margin:26px 0; }
+.fig img { display:block; width:100%; height:auto; border-radius:var(--r-md); box-shadow:var(--e1); }
+.fig figcaption { margin-top:10px; font-size:13px; color:var(--ink2); }
