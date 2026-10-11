@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="soft">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mac 語音輸入繁體中文：Typeless 準不準、自己用 Whisper 架一個差在哪 — 小高工具間 研究</title>
+<meta name="description" content="在 Mac 上用說的打繁體中文：Typeless 和自己用 Whisper 在本機架的語音輸入，同一段話三種輸出、轉文字與清稿速度實測；AI 回話要台灣腔該選哪個語音，以及開源聲音複製為什麼還做不出台灣腔。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="../assets/theme.js"></script>
+<link rel="stylesheet" href="research.css">
+<link rel="canonical" href="https://tools.arminkao.com/research/voice-input-typeless.html">
+<script src="https://tools.arminkao.com/assets/hit.js" data-site="tools" defer></script>
+<style>
+.yt { margin:26px 0 8px; border-radius:var(--r-md); overflow:hidden; box-shadow:var(--e1); background:#000; aspect-ratio:4096/3112; }
+.yt iframe { display:block; width:100%; height:100%; border:0; }
+.pick { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:18px 0 6px; }
+.pick > div { padding:18px 20px; border-radius:var(--r-md); background:var(--card); box-shadow:var(--e1); }
+.pick h3 { margin:0 0 6px; font-size:15px; }
+.pick ul { margin:0; }
+.pick li { font-size:14.5px; color:var(--ink2); }
+@media (max-width:620px){ .pick { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="sky"></div><div class="grain"></div>
+<div class="topbar">
+  <a href="../">TOOL.AI · 小高工具間</a>
+  <div class="topr"><a class="home" href="https://arminkao.com/">作品集 ↗</a><button class="orb" onclick="toggleTheme()" title="明暗切換">◐</button></div>
+</div>
+
+<main class="shell">
+<article>
+  <div class="rid">R-09 · 語音輸入 · 實測</div>
+  <h1>用說的跟 AI 工作：Typeless 真的強，<span style="white-space:nowrap">自己蓋的差在清稿</span></h1>
+  <div class="facts"><span>讀 <b>7 分鐘</b></span><span>最後驗證 <b>2026.10.12</b></span><span>Mac（M4 Max）本機實測</span></div>
+
+  <div class="get"><strong>你會知道：</strong>在 Mac 上用說的打繁體中文，Typeless 和自己用 Whisper 在本機架的語音輸入差在哪；同一段話三種輸出長什麼樣；轉文字、清稿各花幾秒；反過來讓 AI 開口回話，台灣腔的語音怎麼選；以及到現在還沒解的兩題。</div>
+
+  <h2>先講結論</h2>
+  <p>語音輸入分兩段：<b>先把聲音轉成文字，再把口語「清稿」成好讀的文字</b>。轉文字這段，免費的 Whisper 在 Mac 本機就跑得又快又準；真正拉開差距的是清稿。</p>
+  <p><b>2026-10 實測</b>：我自己架的那套，現在轉文字只要 0.6 秒；放開按鍵到貼上，短句 2.8 秒、長段 11.6 秒，Typeless 是 1.4／4.1 秒，它仍快 2–2.8 倍。差距全在清稿。</p>
+  <p class="muted">影片拍攝時（2026-08）長錄音是 30.6 秒對 4.1 秒，差 7.5 倍；這兩個月我這邊快了約 2.6 倍，Typeless 幾乎沒變。</p>
+
+  <div class="pick">
+    <div>
+      <h3>直接用 Typeless</h3>
+      <ul>
+        <li>想今天就開始用說的打字，不想動手架</li>
+        <li>在意「放開就出字」的速度</li>
+        <li>喜歡它替你分段、列點、補成完整句子</li>
+      </ul>
+    </div>
+    <div>
+      <h3>自己架一個</h3>
+      <ul>
+        <li>錄音不想離開自己的電腦（轉文字在本機跑）</li>
+        <li>要它只去贅詞、不替你加字</li>
+        <li>常講專有名詞，想自己養一本辭典</li>
+        <li>願意花時間調，接受清稿這段還比較慢</li>
+      </ul>
+    </div>
+  </div>
+  <p class="muted">想找 Typeless 的免費替代：轉文字可以完全免費在本機跑；清稿要嘛用你已經有的 AI 訂閱，要嘛用本機小模型——後者到現在品質還不夠用，數字在下面。</p>
+
+  <h2>為什麼要用說的</h2>
+  <p>我天天跟 AI 一起開發，兩個月下來發現，累的不是想，是<b>打字和讀字</b>。每一輪對話都要打一長段、再讀一長段，決策的力氣被這兩件事吃掉。換成用說的，同一段想法講出來比打出來快很多，跟 AI 溝通的效率差非常多。</p>
+  <p>網路上被最多人推薦的語音輸入是 Typeless。它的做法可以理解成兩步：</p>
+  <ol>
+    <li><b>語音模型</b>把你說的話轉成文字。</li>
+    <li><b>大語言模型</b>把這串口語整理成乾淨的文字：去掉贅詞、改口，補標點、分段。</li>
+  </ol>
+  <p class="muted">這是我們從使用行為整理出來的理解，不是 Typeless 官方說明。</p>
+  <p>它方便的地方是可以一直開著講，像會議紀錄一樣替你統整，出來的東西易讀易懂。</p>
+
+  <h2>同一段話，三種輸出</h2>
+  <p>拿一段 148 秒的口述（在講 HDR 影片的取捨）當題目，看三種輸出：</p>
+  <div class="bars">
+    <div>原始逐字稿（沒清稿）· 455 字<i style="--w:81%"></i></div>
+    <div>Typeless · 559 字（＋23%）<i style="--w:100%"></i></div>
+    <div>自己架的（Whisper large-v3 轉文字＋清稿）· 425 字（−7%）<i style="--w:76%"></i></div>
+  </div>
+  <div class="orig"><span class="who">原始逐字稿・開頭</span>我在研究一個HDR的影片然後最近把Xlog3的素材全部拿來做剪輯那這當中我目前感受度就是HDR的影片好像是一種取捨……</div>
+  <div class="orig"><span class="who">Typeless・開頭</span>我在研究一個 HDR 的影片，最近把 S-Log3 的素材全部拿來做剪輯。這當中我目前的感受是，HDR 的影片好像是一種取捨。</div>
+  <div class="orig"><span class="who">自己架的・開頭</span>我在研究一支 HDR 的影片，最近把 S-Log3 的素材全部拿來做剪輯。</div>
+  <p>原稿沒有標點、沒有斷句，連「S-Log3」都聽成「Xlog3」。兩種清稿都把它修好了，差別在<b>態度</b>：Typeless 會替你補寫，把中間一大段拆成 1、2、3 編號列點，字數多了兩成；自己架的這套規則是只去贅詞、不加字，字數反而少一點。哪種好看用途——要直接貼給別人讀，Typeless 那種比較像整理好的文件；要貼給 AI、希望它讀到的就是你講的話，不加字的比較安心。</p>
+
+  <h2>自己架一個：轉文字這段不是瓶頸</h2>
+  <p>我試著自己蓋一個類似的工具：按一下鍵盤的 Fn 開始講，再按一下，字就貼進游標。第一步先挑語音模型，三個能在 Mac 本機跑的開源模型，轉同一批共 68 秒的錄音：</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>本機語音模型</th><th>轉 68 秒音檔</th><th>實測問題</th></tr></thead>
+    <tbody>
+      <tr><td>Whisper large-v3-turbo</td><td class="num">3.6 秒</td><td>有標點，不會編句子；錯的多是同音字</td></tr>
+      <tr><td>Breeze-ASR-25</td><td class="num">6.8 秒</td><td>整篇沒有標點，同音字也會錯</td></tr>
+      <tr><td>Qwen3-ASR-1.7B</td><td class="num">7.3 秒</td><td>內容最準，但會自己補一句沒講過的話</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">Qwen3-ASR 補出來的那句，原話只到「測試看看」，它多寫了「原因是這個工具本來就強制。」</p>
+  <p>三家都夠快，所以<b>卡住的不是轉文字</b>。後來我又從 turbo 換成完整版 Whisper large-v3，並關掉「參考前文」：turbo 會把「操作」聽成「插座」，帶前文時還會掉進重複同一句的迴圈；換過之後一段 108 秒的錄音轉完約 6–7 秒。</p>
+
+  <h2>清稿：本機模型快，但還不能用</h2>
+  <p>第二步是清稿。拿六篇自己的口播錄音（1.5 到 5.5 分鐘），比雲端和兩個本機模型（2026-08 影片當時的數字，Claude 現在已經快很多，見下面「還沒解的第一題」）：</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>清稿模型</th><th>一篇耗時（中位）</th><th>實測問題</th></tr></thead>
+    <tbody>
+      <tr><td>Claude（雲端）</td><td class="num">30.6 秒</td><td>品質基準，但要連網</td></tr>
+      <tr><td>Apple Foundation Model（本機）</td><td class="num">7.0 秒</td><td>自作主張改成編號列點</td></tr>
+      <tr><td>Qwen3-8B（本機）</td><td class="num">11.8 秒</td><td>會吃掉開頭語氣詞，有時吞掉整句</td></tr>
+    </tbody>
+  </table></div>
+  <p>本機兩家都比雲端快，但品質都還沒到可以每天用。所以我定的原則是<b>準確優先</b>：清稿走雲端，本機小模型只當斷網時的備胎。錯一個字，整句意思就差很多。</p>
+
+  <h2>換 AI 開口：讓它好了自己講給你聽</h2>
+  <p>語音輸入解決了「我怎麼講給 AI」。另一半是「AI 怎麼回我」。讓 AI 自己開口的好處是，你真的可以離開一段時間去打掃、去健身，它做完會自己唸給你聽。你只要跟它講好怎麼回：不要唸程式碼，把重點抽出來講。</p>
+  <p>我做了一個叫「導讀器」的小工具：AI 的回覆一推過來就開始唸。把這個做法寫成一份 Claude 的技能檔（skill），喊一句「用導讀器回我」，它之後每則回覆就固定這樣唸給你聽。</p>
+  <h3>台灣腔的語音怎麼選</h3>
+  <p>中文語音最大的坑是口音。我讓幾個候選唸同一句，先請 AI 判斷是台灣口音還是大陸口音，過關的才給耳朵決定：</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>語音</th><th>來源與成本</th><th>口音判別</th></tr></thead>
+    <tbody>
+      <tr><td>曉臻／雲哲</td><td>edge-tts zh-TW，免費、不用金鑰</td><td>台灣腔，現在在用</td></tr>
+      <tr><td>Kore／Leda</td><td>Gemini TTS，要下「用台灣口音」的指示</td><td>台灣腔</td></tr>
+      <tr><td>Charon</td><td>Gemini TTS，同上</td><td>大陸腔</td></tr>
+      <tr><td>MiniMax speech-2.8-hd</td><td>付費，中文質感最好</td><td>大陸腔，怎麼調都一樣</td></tr>
+    </tbody>
+  </table></div>
+  <p>Gemini 的台灣腔也不是每句都穩，同一個聲音同一句指示，偶爾會抽到大陸腔，所以每句生完要再判一次口音。以每天讓 AI 唸個不停的用量，我選免費的 edge-tts：付費的好一點，但用量一大就會爆，自用免費層比較實在。</p>
+
+  <h2>還沒解的第一題：清稿速度</h2>
+  <p>用了幾個月，一直沒找到比 Typeless 更好的清稿方式。比的是<b>放開按鍵之後要等多久</b>才拿到字（2026-10 實測）：</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>放開按鍵後等多久（中位）</th><th>Typeless</th><th>自己架的（Claude 清稿）</th></tr></thead>
+    <tbody>
+      <tr><td>短句（不到 60 字）</td><td class="num">1.4 秒</td><td class="num">2.8 秒<span class="est">轉文字 0.6＋清稿 2.2</span></td></tr>
+      <tr><td>長段（200 字以上）</td><td class="num">4.1 秒</td><td class="num">11.6 秒<span class="est">範圍 4.9–16.6</span></td></tr>
+      <tr><td>全部錄音</td><td class="num">1.6–3.2 秒<span class="est">7–9 月各月中位</span></td><td class="num">4.2 秒<span class="est">轉文字 0.6＋清稿 3.5</span></td></tr>
+    </tbody>
+  </table></div>
+  <div class="bars">
+    <div>Typeless · 長段 · 4.1 秒<i style="--w:13%"></i></div>
+    <div>自己架的 · 長段 · 11.6 秒（2026-10）<i style="--w:38%"></i></div>
+    <div>自己架的 · 長段 · 30.6 秒（2026-08 影片當時）<i style="--w:100%"></i></div>
+  </div>
+  <p class="muted">橫條滿刻度＝30.6 秒。</p>
+  <h3>怎麼量的</h3>
+  <ul>
+    <li><b>Typeless</b>：用它在本機留下的歷史紀錄時間戳推算，「寫回結果的時間 − 開始錄音的時間 − 錄音長度」＝放開按鍵後的處理時間。資料從 2026-08-01 到 09-23（之後我就沒再用 Typeless）：短句 332 筆中位 1.42 秒、長段 107 筆中位 4.13 秒；全部錄音的各月中位數 7 月 1.72、8 月 1.59、9 月 3.15 秒，兩個月下來速度沒什麼變。</li>
+    <li><b>自己架的</b>：用自己工具的執行紀錄，取最近 55 筆「放開按鍵到貼上」的秒數，短句 17 筆、長段 11 筆（清稿成品字數分組）。</li>
+    <li>兩邊都量放開按鍵之後的等待時間，也都用成品字數分組（不到 60 字＝短句、200 字以上＝長段）；但不是同一句話逐筆配對。</li>
+  </ul>
+  <h3>這兩個月改了什麼</h3>
+  <p>影片當時，同一批六篇長錄音逐筆配對，是 Typeless 4.1 秒對我的 30.6 秒。之後做過的改動有：一開始錄音就先叫醒清稿模型、閒置時定時「心跳」，避免冷啟動（閒置一整天後第一句冷啟動曾要 19.2 秒）；短句同時送兩份搶答；給清稿模型的辭典只留正確寫法，從 2,002 字減到 590 字。9 月也試過換成 OpenAI 的 GPT-5.6 Luna 清稿（11 題抽測純清稿平均 2.10 秒），現在選單可以切換，上面這批 55 筆用的是 Claude。哪一項改動貢獻多少沒有拆開量。</p>
+  <p>Typeless 放開按鍵後很快就出字，看起來是邊錄邊轉，加上它可能有大量資料專門訓練清稿這件事。我把邊錄邊轉學過來了，所以轉文字只剩 0.6 秒；剩下的差距在清稿。拿我累積的六百多題錄音、以 Typeless 的成品當標準來比（2026-08 考卷），還輸它的有三處：清稿速度、用引號標出專有名詞、用括號收插入語。</p>
+
+  <h2>還沒解的第二題：用自己的聲音、台灣腔回話</h2>
+  <p>免費層裡，我沒找到比現在這個更好的台灣腔語音。下一步自然會想：拿開源模型在本機跑，用自己的聲音、或複製一個台灣腔的聲音。實測兩個最常被推薦的開源聲音複製模型：</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>開源模型</th><th>授權與本機速度</th><th>餵台灣人聲的結果</th></tr></thead>
+    <tbody>
+      <tr><td>CosyVoice 2</td><td>Apache-2.0；Apple 晶片 GPU 約 1 倍即時</td><td>混血怪腔</td></tr>
+      <tr><td>IndexTTS 2</td><td>權重限非商用；Apple 晶片 GPU 跑不起來，只能用 CPU（約 9.5 倍時長）</td><td>混血怪腔</td></tr>
+    </tbody>
+  </table></div>
+  <p>餵合成的台灣腔、餵我自己 9 秒的真人錄音，結果都一樣：出來是混血怪腔，我自己聽完的判斷是「都不能聽」。改餵大陸腔的樣本反而可以聽，但還是有聽不懂的腔調。結論是：<b>台灣腔的開源中文模型太少，目前做不出來</b>；硬要做到好，效率又差，不適合天天用，比較適合拿去做影視作品這種一次性的配音。</p>
+
+  <h2>拿去用</h2>
+  <p>這兩支工具我都開源了，給的是<b>施工圖</b>（規格書）不是程式碼：整包丟給你的 AI，說「照著蓋」，它會蓋出你自己的那一版。</p>
+  <ul>
+    <li><a href="https://github.com/qwert2813434-ctrl/whisperbar"><b>WhisperBar · 語音輸入</b></a>：按一下 Fn 開始講，再按一下，文字就貼進游標；轉文字全程在自己電腦上跑，錄音不上傳。需要 Apple Silicon 的 Mac。</li>
+    <li><a href="https://github.com/qwert2813434-ctrl/aloud"><b>Aloud · 讓 Agent 講話</b></a>：AI 的回覆一推過來就開始唸，唸到哪句亮哪句；任何 App 選字按右鍵也能唸。</li>
+  </ul>
+  <p class="muted">兩支都在 <a href="../">小高工具間</a> 首頁的「讓 Agent 講話＋語音輸入」那張卡。</p>
+
+  <h2>影片版</h2>
+  <p>這篇是從我的 YouTube 影片改寫的，2 分 14 秒，裡面有每張實測表出現的畫面。</p>
+  <div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/K9VjPpAN0aA" title="用說的跟 AI 工作 — Typeless 真的強" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+  <p class="muted">章節：打字跟 AI 對話累的不是想／Typeless 概念與原理／同一段話三種輸出的差別／自己蓋一個跟它差在哪／換 AI 開口回答：導讀器／台灣腔語音怎麼選／還沒解的第一題：清稿／第二題：語音回覆／開源聲音複製本機實測。</p>
+
+  <div class="src">
+    資料來源
+    <ul>
+      <li>語音模型三家：同一批三段錄音（共 68.4 秒），M4 Max 本機實跑（2026.08.22）</li>
+      <li>清稿模型三家：六篇自己的口播錄音（92–332 秒），取中位數（2026.08）</li>
+      <li>Typeless 處理秒數：Typeless 在本機的歷史紀錄（879 筆，到 2026.09.23），用「寫回時間 − 開始錄音時間 − 錄音長度」推算；8 月對照與上一項同一批錄音逐筆配對</li>
+      <li>Typeless 分組：2026.08.01 起，依成品字數分短句／長段</li>
+      <li>自己架的現況：語音輸入執行紀錄最近 55 筆，放開按鍵到貼上的秒數（2026.10.12 查）</li>
+      <li>台灣腔語音：候選唸同一句，AI 判別口音後再人耳試聽（2026.08）</li>
+      <li>開源聲音複製：CosyVoice 2、IndexTTS 2，M4 Max 本機實跑（2026.08.22）</li>
+      <li>GPT 清稿試用：11 題考卷抽測（2026.09.13）</li>
+    </ul>
+    以上都是一個人、一台電腦、自己的口音與用詞實測，換人換機器數字會不同。Typeless 持續在更新，以它目前的版本為準。
+  </div>
+  <a class="back" href="../#research">← 回到研究列表</a>
+</article>
+</main>
+<footer>高偉鳴 Armin Kao ／ <a href="https://arminkao.com">arminkao.com</a> ／ <a href="https://www.instagram.com/17187kao/">Instagram</a></footer>
+</body>
+</html>
