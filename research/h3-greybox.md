@@ -1,4 +1,4 @@
-<!-- 純文字版，由 https://tools.arminkao.com/research/h3-greybox.html 自動產生（2026-10-12）。給 AI agent 讀；以網頁版為準。 -->
+<!-- 純文字版，由 https://tools.arminkao.com/research/h3-greybox.html 自動產生（2026-10-13）。給 AI agent 讀；以網頁版為準。 -->
 <!-- 摘要：用 Blender 灰模控制運鏡、路人用提示詞生，MiniMax H3 Max 42 秒算完一發 15 秒；跟 Seedance、GPT-6、Claude 建模的對照筆記。 -->
 
 R-05 · AI 影像 · 實測

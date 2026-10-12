@@ -1,4 +1,4 @@
-<!-- 純文字版，由 https://tools.arminkao.com/research/obsidian-pinterest.html 自動產生（2026-10-12）。給 AI agent 讀；以網頁版為準。 -->
+<!-- 純文字版，由 https://tools.arminkao.com/research/obsidian-pinterest.html 自動產生（2026-10-13）。給 AI agent 讀；以網頁版為準。 -->
 <!-- 摘要：Chrome 右鍵把網頁收進 Obsidian、排成瀑布流。macOS 為什麼不讓瀏覽器直接寫進保管庫、最後繞哪條路，以及開了本機的門之後我們自己查出的兩個安全漏洞。 -->
 
 R-07 · Obsidian · 自己做的工具
@@ -85,11 +85,11 @@ macOS 對「沒有自己身分的程式」——Chrome 叫起來的小程式、�
 
 把這頁網址丟給你的 Claude、Codex 或其他 agent，跟它說「照 collection-wall repo 蓋收藏牆」。作者只在 macOS 上跑過。標「repo 的 README 寫」的句子出自該 repo 的 README，不是本頁實測。
 
-****這段能幫你做到什麼**：**蓋出自己的版本：Chrome 右鍵「收藏這頁」，把網頁存成 Obsidian 筆記加本機封面，並排成瀑布流牆。
+**這段能幫你做到什麼：**蓋出自己的版本：Chrome 右鍵「收藏這頁」，把網頁存成 Obsidian 筆記加本機封面，並排成瀑布流牆。
 
 **要先準備**
 
-- Repo：[https://github.com/qwert2813434-ctrl/collection-wall（repo](https://github.com/qwert2813434-ctrl/collection-wall（repo) 授權 MIT；README 寫：沒有程式碼，只有規格書）。
+- Repo：[https://github.com/qwert2813434-ctrl/collection-wall](https://github.com/qwert2813434-ctrl/collection-wall)（repo 授權 MIT；README 寫：沒有程式碼，只有規格書）。
 - repo 的 README 寫需要：Obsidian 桌面版、Python 3.9+、Chrome 或 Chromium 系瀏覽器、openssl；選配 ffmpeg、能看圖的 LLM CLI。
 - README 寫作者只在 macOS 上跑過；Windows／Linux 請自行驗證路徑與權限。
 

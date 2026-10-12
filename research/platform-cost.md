@@ -1,4 +1,4 @@
-<!-- 純文字版，由 https://tools.arminkao.com/research/platform-cost.html 自動產生（2026-10-12）。給 AI agent 讀；以網頁版為準。 -->
+<!-- 純文字版，由 https://tools.arminkao.com/research/platform-cost.html 自動產生（2026-10-13）。給 AI agent 讀；以網頁版為準。 -->
 <!-- 摘要：同一組灰模與提示詞，丟給 fal、Higgsfield、ComfyUI、CapCut，各花多少、各等多久、差在哪。2026 年 9 月實測。 -->
 
 R-06 · AI 影像 · 實測

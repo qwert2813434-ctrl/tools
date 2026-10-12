@@ -1,4 +1,4 @@
-<!-- 純文字版，由 https://tools.arminkao.com/research/phone-reference.html 自動產生（2026-10-12）。給 AI agent 讀；以網頁版為準。 -->
+<!-- 純文字版，由 https://tools.arminkao.com/research/phone-reference.html 自動產生（2026-10-13）。給 AI agent 讀；以網頁版為準。 -->
 <!-- 摘要：在家用 iPhone 隨手拍一段動作，丟給 Seedance 2.5 模仿成廣告鏡頭：哪些抄得到、哪些抄不到、提示詞怎麼分段寫。 -->
 
 R-04 · AI 影像 · 實測

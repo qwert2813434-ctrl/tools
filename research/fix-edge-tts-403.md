@@ -1,4 +1,4 @@
-<!-- 純文字版，由 https://tools.arminkao.com/research/fix-edge-tts-403.html 自動產生（2026-10-12）。給 AI agent 讀；以網頁版為準。 -->
+<!-- 純文字版，由 https://tools.arminkao.com/research/fix-edge-tts-403.html 自動產生（2026-10-13）。給 AI agent 讀；以網頁版為準。 -->
 <!-- 摘要：2026-10-12 起微軟舊的 Edge 配音主機開始回 403，用 edge-tts 的工具會突然不出聲。Aloud（讓 Agent 講話）與唸書機怎麼更新，自己蓋的版本貼哪一段（換主機＋429 自動重試）；Edge 配音整條掛掉時的其他台灣腔解法。給人看也給 AI agent 照做。 -->
 
 修正公告 · Aloud／唸書機

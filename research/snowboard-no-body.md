@@ -1,4 +1,4 @@
-<!-- 純文字版，由 https://tools.arminkao.com/research/snowboard-no-body.html 自動產生（2026-10-12）。給 AI agent 讀；以網頁版為準。 -->
+<!-- 純文字版，由 https://tools.arminkao.com/research/snowboard-no-body.html 自動產生（2026-10-13）。給 AI agent 讀；以網頁版為準。 -->
 <!-- 摘要：單板滑雪灰模測了四輪：給手臂、拿掉四肢、正確比例都僵硬，最後把人整個拿掉、灰模只留一塊板才成功。 -->
 
 R-02 · AI 影像 · 實測

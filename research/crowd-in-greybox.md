@@ -1,4 +1,4 @@
-<!-- 純文字版，由 https://tools.arminkao.com/research/crowd-in-greybox.html 自動產生（2026-10-12）。給 AI agent 讀；以網頁版為準。 -->
+<!-- 純文字版，由 https://tools.arminkao.com/research/crowd-in-greybox.html 自動產生（2026-10-13）。給 AI agent 讀；以網頁版為準。 -->
 <!-- 摘要：中央車站 800 人灰模：運鏡已經沒問題，人還會飄、會變假人。一顆 4 秒試片測三種人形給法，加一句硬規則就不飄了；高空盲區還沒解。 -->
 
 R-03 · AI 影像 · 實測

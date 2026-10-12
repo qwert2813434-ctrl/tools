@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="soft">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>讓 AI 自己學：一條迴圈的頭和尾（觸發與誰看）— 小高工具間 研究</title>
+<meta name="description" content="AI 被糾正過的事要怎麼不再犯：一條學習迴圈要有觸發、做、對答案、誰看四件。主案例是語音輸入辭典的自動升級（七輪回歸、未發現誤傷），也照實講角色分工的迴圈卡在審核；附給 AI agent 照做的建置步驟與驗收。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="../assets/theme.js"></script>
+<link rel="stylesheet" href="research.css">
+<link rel="canonical" href="https://tools.arminkao.com/research/ai-learning-loop.html">
+<link rel="alternate" type="text/markdown" href="https://tools.arminkao.com/research/ai-learning-loop.md" title="純文字版">
+<script src="https://tools.arminkao.com/assets/hit.js" data-site="tools" defer></script>
+<style>
+.film { margin:22px 0 6px; border-radius:var(--r-md); overflow:hidden; box-shadow:var(--e1); background:#000; aspect-ratio:16/9; }
+.film iframe { display:block; width:100%; height:100%; border:0; }
+.four { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:16px 0 8px; }
+.four > div { padding:14px 14px 12px; border-radius:var(--r-md); background:var(--card); box-shadow:var(--e1); }
+.four b { display:block; font-size:17px; margin-bottom:4px; }
+.four span { font-size:13.5px; color:var(--ink2); }
+@media (max-width:720px){ .four { grid-template-columns:1fr 1fr; } }
+</style>
+</head>
+<body>
+<div class="sky"></div><div class="grain"></div>
+<div class="topbar">
+  <a href="../">TOOL.AI · 小高工具間</a>
+  <div class="topr"><a class="home" href="https://arminkao.com/">作品集 ↗</a><button class="orb" onclick="toggleTheme()" title="明暗切換">◐</button></div>
+</div>
+
+<main class="shell">
+<article>
+  <div class="rid">R-10 · AI 工作流 · 實測</div>
+  <h1>讓 AI 自己學：<span style="white-space:nowrap">一條迴圈的頭和尾</span></h1>
+  <div class="facts"><span>讀 <b>6 分鐘</b>＋影片 <b>1 分 45 秒</b></span><span>最後驗證 <b>2026.10.13</b></span><span>作者自己的工作流實測</span></div>
+
+  <div class="film"><iframe src="https://www.youtube-nocookie.com/embed/DwB97GTd8gE" title="讓 AI 自己學：一條迴圈的頭和尾（說明動畫）" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+  <p class="muted">說明動畫 1 分 45 秒（<a href="https://youtu.be/DwB97GTd8gE">在 YouTube 開</a>）。旁白是我聲音的 AI 克隆（MiniMax），音效是 AI 產的（ElevenLabs）。</p>
+
+  <div class="get"><strong>你會知道：</strong>在我的流程裡，AI 昨天被糾正過的事，如果沒有保存、下次也沒有載入，它就可能再犯一次。能讓它越做越好的，是一條閉合的迴圈：<b>什麼時候叫它起來（觸發）</b>，和<b>做完誰看、用什麼標準看（收尾）</b>。我做得最好的一條是語音輸入的辭典；其他幾條還卡在審核，過不過關還是要人自己看。這篇照實講。</div>
+
+  <h2>一條迴圈要有四件</h2>
+  <div class="four">
+    <div><b>觸發</b><span>什麼時候、被什麼叫起來</span></div>
+    <div><b>做</b><span>誰做、做什麼</span></div>
+    <div><b>對答案</b><span>怎樣算做對（考卷）</span></div>
+    <div><b>誰看</b><span>做完交給誰、誰說過關</span></div>
+  </div>
+  <p>觸發是開頭，誰看是結尾。我目前遇到的斷點，主要就在這兩頭：沒人叫它，或做完沒有標準、只能等人看。拿我的語音輸入辭典當例子，四件是這樣做的：</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>件</th><th>語音辭典怎麼做</th></tr></thead>
+    <tbody>
+      <tr><td>觸發</td><td>排程每天 05:00 檢查資料量：上次升級後新說的話 ≥50 句，或滿 7 天且 ≥20 句，才開工；量不夠就直接結束</td></tr>
+      <tr><td>做</td><td>agent 從新句子裡撈出聽錯的詞（例：「文理」→「紋理」、「GPD」→「GPT」），要有足夠的語境（通常是兩句以上同樣意思）或正式來源可以查證，才寫進辭典</td></tr>
+      <tr><td>對答案</td><td>程式用新、舊辭典把<b>全部</b>歷史句子各套一次，列出新辭典多改的句子；agent 逐句判讀有沒有改錯（誤傷）。有誤傷先修正重測，仍不通過就整批還原</td></tr>
+      <tr><td>誰看</td><td>通過就自動套用（手機版也重裝；手機沒連上就記「待重裝」）；拿不準的詞不猜，寫進待確認清單，等我早上開工時自己看</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>主案例：語音辭典（實測數字）</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>日期</th><th>重跑的歷史句子</th><th>發現誤傷</th><th>怎麼觸發</th></tr></thead>
+    <tbody>
+      <tr><td>09-22</td><td class="num">312 句</td><td class="num">0</td><td>手動</td></tr>
+      <tr><td>09-23</td><td class="num">353 句</td><td class="num">0</td><td>手動</td></tr>
+      <tr><td>10-01</td><td class="num">384 句</td><td class="num">0</td><td>手動</td></tr>
+      <tr><td>10-04</td><td class="num">453 句</td><td class="num">0</td><td>手動</td></tr>
+      <tr><td>10-06</td><td class="num">500 句</td><td class="num">0</td><td>手動</td></tr>
+      <tr><td>10-08</td><td class="num">585 句</td><td class="num">0</td><td>自動（05:00）</td></tr>
+      <tr><td>10-12</td><td class="num">657 句</td><td class="num">0</td><td>自動（05:00）</td></tr>
+    </tbody>
+  </table></div>
+  <p>表列七輪，另有 10-06 當天第二輪補詞。辭典檔現在 420 行（含註解與提示詞，不等於 420 條規則）。10-12 那輪撈了 72 句，加 3 條硬替換＋2 個提示詞；另外 21 個候選詞，因為只出現一次、或清稿已經改對，先不加。<b>寧可少加一條，不能加錯一條</b>。</p>
+  <p>它會成功，是因為「誰看」有一個不用等我的標準：舊句子不能被改錯。答案卷就是我以前說過、也清稿過的句子；這些句子本身也可能有錯，所以判讀仍可能出錯，只是到目前的紀錄裡沒有發現誤傷。</p>
+
+  <h2>照實講：其他迴圈卡在審核</h2>
+  <p>我其他的學習迴圈是用「角色」分工：調查員去找新東西、專家整理成規則、驗收員檢查。目前我看到的主要瓶頸，在最後一步：<b>過不過關要人自己看、自己審</b>。</p>
+  <ul>
+    <li><b>動態招式</b>：很多招經過多輪審核，還是因為紋理、選字這類問題被打回；寫進筆記的規則，同一種錯還是會再犯。目前的自動量測指標，不足以判斷紋理與選字是否符合要求，代替不了人看。</li>
+    <li><b>IG 輪播排版</b>：10-12 開始回算歷史交付，共 17 份計分。用我在 App 裡改完的版本當答案，算改動率（刪除＋新增＋修改的元件數，除以交付版元件數，可能超過 100%）：前 8 份平均約 73%，後 9 份約 44%。這是不同作品的比較、份數也少，不能單憑它證明 AI 已經學會我的偏好。</li>
+  </ul>
+  <p>所以這兩條現在還不算「自己學」，比較像「我教、它記」。會不會持續進步，要看後續分數。</p>
+  <p>我們正在試的做法：先把我每次的判定記成一本帳，讓 AI 在我判之前先猜「會不會過、會因為什麼被打回」，猜的內容在看到答案前就存下來。門檻暫以 20 筆、一致率至少 85%、它說過但我打回不超過一次為例；達標後要不要把一部分審核交給它，仍由我決定。</p>
+
+  <h2>考卷：讓「誰看」有標準</h2>
+  <p>一張考卷四件，缺一件就不算：</p>
+  <ol>
+    <li><b>答案卷</b>：人真正的定稿或判定（改完的版、說過／不過、實際送出的字）。不用人多做事就拿得到的優先。</li>
+    <li><b>作答</b>：AI 在看到答案<b>之前</b>先交、而且存下來的東西。</li>
+    <li><b>分數</b>：一個能看趨勢的數字（誤傷數、改動率、一致率、過關輪數）。</li>
+    <li><b>發卷時機</b>：掛在人本來就會做的步驟上，不另開排程。</li>
+  </ol>
+  <p>我們的觀察：把檢查做成會擋人的工具、再追蹤分數，比只把教訓寫進筆記，更容易發現和攔下重犯。</p>
+  <p class="muted">語音輸入本身怎麼做、跟 Typeless 差在哪，在 <a href="voice-input-typeless.html">R-09</a>；施工圖在 <a href="https://github.com/qwert2813434-ctrl/whisperbar">whisperbar</a>。</p>
+
+  <section id="agent">
+  <h2>給 AI Agent：照這段做</h2>
+  <p class="muted">把這頁網址丟給你的 Claude、Codex 或其他 agent，跟它說「照這頁的『給 AI Agent』段做」。純文字版：<a href="https://tools.arminkao.com/research/ai-learning-loop.md">ai-learning-loop.md</a>。</p>
+  <p>把這頁網址丟給你的 Claude、Codex 或其他 agent，跟它說「照這頁幫我建一條學習迴圈」。下面的 50／20 筆、兩句證據，都是作者這個案例的設定，請依使用者的工作調整。</p>
+  <p><b>這段能幫你做到什麼：</b>替一件「AI 產出、人再修改」的重複工作，建一條會自己觸發、自己對答案、拿不準才問人的學習迴圈。</p>
+  <p><b>要先準備</b></p>
+  <ul>
+    <li>使用者指定一件「AI 產出、人再修改」的重複工作。例：語音轉文字的錯字、AI 擬稿後人改過的回覆、AI 初排後人調過的版面。</li>
+    <li>一份累積中的歷史：AI 當時的產出＋人最後的版本（或人的判定）。沒有就先開始記，記滿約 20 筆再建標準。</li>
+  </ul>
+  <p><b>步驟</b></p>
+  <ol>
+    <li>問使用者：這件事最常錯在哪？人改完的版本存在哪裡？哪些資料可以拿來比、哪些不行？寫成一行「答案卷＝……；範圍＝……」。人還沒確認過的答案要標記出來，不拿來計分。</li>
+    <li>定分數：寫清楚公式（例：誤傷數＝新規則把原本正確的句子改錯的數量）。能做成「回歸」最好：每次改規則，都把全部歷史重跑，原本對的不能變錯。</li>
+    <li>定觸發：用「量到了才跑」，不要「時間到就跑」。例：上次之後新資料 ≥50 筆，或滿 7 天且 ≥20 筆。量不夠就不改規則，只留一行「略過」紀錄。</li>
+    <li>改規則前先備份：把目前規則存成有日期的副本（例：<code>rules_2026-10-13_before.txt</code>），同一天第二次加上序號，不覆蓋舊備份；在副本上改、在副本上測。</li>
+    <li>寫做法：從新資料找錯，證據足夠（例：兩筆以上同樣情況，或有正式來源）才改；只有一筆、或會撞到常用詞的，不改，列進待確認清單。</li>
+    <li>定收尾（誰看）——通過：套用新規則，再跑一次確認新規則真的生效；不通過：先修正重測；仍不通過就還原備份，並確認目前規則和備份一模一樣，寫下原因；拿不準：列進待確認清單，放在使用者本來每天會看的地方；會對外發布、或動到別人資料的，不自動套用，先問使用者。</li>
+    <li>每次都留一行紀錄：日期、規則版本、資料筆數、改了哪幾條、分數、結果（通過／還原／略過）、失敗原因、待確認問題。</li>
+  </ol>
+  <p><b>怎樣算完成</b>（三種情境都要跑過）</p>
+  <ul>
+    <li>通過：新資料量夠、改了規則，回歸沒有誤傷，新規則生效，紀錄寫「通過」。</li>
+    <li>略過：資料量不夠，規則沒動，紀錄寫「略過」。</li>
+    <li>拒絕並還原：故意放進一條會誤傷的規則，回歸抓到、規則還原成備份（逐字比對一致），紀錄寫「還原」和原因。</li>
+    <li>另外：使用者在他平常看的地方，看得到待確認清單（沒有問題時，用一題測試項目確認清單送得到）。</li>
+  </ul>
+  <p><b>不要做的事</b></p>
+  <ul>
+    <li>不要只把教訓寫進筆記就當作學會；沒有標準和觸發，同一種錯容易再犯。</li>
+    <li>不要用「AI 自己覺得好」當標準；答案卷要來自使用者。</li>
+    <li>標準是主觀品味（好不好看）時，不要讓 AI 自己判過關。先讓它在使用者判之前預測、存下來、記一致率；夠準了，再由使用者決定要不要放權。</li>
+    <li>不要覆蓋備份；還原後要確認真的還原了。</li>
+  </ul>
+  </section>
+
+  <div class="src">
+    資料來源
+    <ul>
+      <li>語音辭典升級：作者語音輸入工具的升級紀錄（2026.09.22–10.12，七輪＋10.06 第二輪），回歸句數與誤傷數取自各輪紀錄</li>
+      <li>觸發門檻：辭典升級腳本「該跑嗎」的判斷（≥50 句，或滿 7 天且 ≥20 句）；05:00 為排程設定</li>
+      <li>IG 輪播改動率：小編考卷（2026.10.12 回算，17 份計分）</li>
+      <li>考卷四件與放權門檻：作者的迴圈管理規則（2026.10.12 版）</li>
+      <li>影片：HTML 逐格算圖（雙色印刷紙本風格）；旁白 MiniMax speech-2.8-hd 克隆作者聲音、1.2 倍速；音效 ElevenLabs（2026.10.13）</li>
+    </ul>
+    以上都是一個人、自己的工作流實測，換人換工作數字會不同。
+  </div>
+  <a class="back" href="../#research">← 回到研究列表</a>
+</article>
+</main>
+<footer>高偉鳴 Armin Kao ／ <a href="https://arminkao.com">arminkao.com</a> ／ <a href="https://www.instagram.com/17187kao/">Instagram</a></footer>
+</body>
+</html>

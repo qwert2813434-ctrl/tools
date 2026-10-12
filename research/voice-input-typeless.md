@@ -1,4 +1,4 @@
-<!-- 純文字版，由 https://tools.arminkao.com/research/voice-input-typeless.html 自動產生（2026-10-12）。給 AI agent 讀；以網頁版為準。 -->
+<!-- 純文字版，由 https://tools.arminkao.com/research/voice-input-typeless.html 自動產生（2026-10-13）。給 AI agent 讀；以網頁版為準。 -->
 <!-- 摘要：在 Mac 上用說的打繁體中文：Typeless 和自己用 Whisper 在本機架的語音輸入，同一段話三種輸出、轉文字與清稿速度實測；AI 回話要台灣腔該選哪個語音，以及開源聲音複製為什麼還做不出台灣腔。 -->
 
 R-09 · 語音輸入 · 實測
@@ -170,13 +170,13 @@ Typeless 放開按鍵後很快就出字，看起來是邊錄邊轉，加上它�
 
 把這頁網址丟給你的 Claude、Codex 或其他 agent，跟它說「照這頁選語音輸入方案，或自己蓋」。以下數字是作者一個人、一台 Mac（M4 Max）、自己的口音與用詞的實測，換人換機器會不同。
 
-****這段能幫你做到什麼**：**選出 Mac 上繁體中文語音輸入的方案（Typeless 或自己蓋），並用頁面的量測方法驗證速度。
+**這段能幫你做到什麼：**選出 Mac 上繁體中文語音輸入的方案（Typeless 或自己蓋），並用頁面的量測方法驗證速度。
 
 **要先準備**
 
 - Apple Silicon 的 Mac（WhisperBar 需要）。
 - 自己的口述錄音，頁面方法用的是你自己的歷史紀錄或執行紀錄。
-- 選自己蓋：[https://github.com/qwert2813434-ctrl/whisperbar（本機語音輸入；repo](https://github.com/qwert2813434-ctrl/whisperbar（本機語音輸入；repo) 授權 MIT，README 寫沒有程式碼、是規格書）。
+- 選自己蓋：[https://github.com/qwert2813434-ctrl/whisperbar](https://github.com/qwert2813434-ctrl/whisperbar)（本機語音輸入；repo 授權 MIT，README 寫沒有程式碼、是規格書）。
 - 想讓 AI 回話時唸出來：[https://github.com/qwert2813434-ctrl/aloud](https://github.com/qwert2813434-ctrl/aloud)。aloud README 另寫有現成 Mac 版的一行安裝指令，見其 README。
 
 **步驟**

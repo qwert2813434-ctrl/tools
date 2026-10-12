@@ -1,4 +1,4 @@
-<!-- 純文字版，由 https://tools.arminkao.com/research/blender-lineart.html 自動產生（2026-10-12）。給 AI agent 讀；以網頁版為準。 -->
+<!-- 純文字版，由 https://tools.arminkao.com/research/blender-lineart.html 自動產生（2026-10-13）。給 AI agent 讀；以網頁版為準。 -->
 <!-- 摘要：用 Claude 在 Blender 蓋一顆灰模、攝影機約束跟拍，把灰模片當 @Video1 餵給 Seedance 2.5——運鏡照灰模走，不用抽卡。 -->
 
 R-01 · AI 影像 · 方法
