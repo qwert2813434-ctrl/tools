@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="soft">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>edge-tts 403 修正 — 小高工具間</title>
+<meta name="description" content="2026-10-12 起微軟舊的 Edge 配音主機一律回 403，edge-tts 全面失效。Aloud（讓 Agent 講話）與唸書機怎麼更新，自己蓋的版本加哪三行；給人看也給 AI agent 照做。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="../assets/theme.js"></script>
+<link rel="stylesheet" href="research.css">
+<link rel="canonical" href="https://tools.arminkao.com/research/fix-edge-tts-403.html">
+<script src="https://tools.arminkao.com/assets/hit.js" data-site="tools" defer></script>
+<style>
+.code { margin:14px 0 8px; padding:16px 20px; border-radius:var(--r-md); background:var(--card); box-shadow:var(--e1);
+  font-family:var(--mono); font-size:13px; line-height:1.6; white-space:pre; overflow-x:auto; }
+article ol li { margin:6px 0; }
+</style>
+</head>
+<body>
+<div class="sky"></div><div class="grain"></div>
+<div class="topbar">
+  <a href="../">TOOL.AI · 小高工具間</a>
+  <div class="topr"><a class="home" href="https://arminkao.com/">作品集 ↗</a><button class="orb" onclick="toggleTheme()" title="明暗切換">◐</button></div>
+</div>
+
+<main class="shell">
+<article>
+  <div class="rid">修正公告 · Aloud／唸書機</div>
+  <h1>朗讀突然沒聲音：微軟換了配音主機</h1>
+  <div class="facts"><span>發生 <b>2026.10.12</b></span><span>影響 <b>所有用 edge-tts 的工具</b></span><span>最後驗證 <b>2026.10.12</b></span></div>
+
+  <div class="get"><strong>一句話：</strong>微軟關掉了舊的 Edge 配音主機，所以 Aloud 和唸書機會突然不唸、不出音檔。程式本身沒壞。換到微軟的新主機就好：裝現成版的人貼一行指令更新，自己蓋的版本加三行程式。</div>
+
+  <h2>症狀</h2>
+  <ul>
+    <li>Aloud：文字推得進去、畫面也有，就是不唸；或一直停在「合成中」。</li>
+    <li>唸書機：配音或建置跟讀器時中斷，沒有產生音檔。</li>
+    <li>錯誤訊息是 <code>403, message='Invalid response status'</code>（網址含 <code>speech.platform.bing.com</code>），或只看到 <code>RuntimeError: Session is closed</code>。</li>
+  </ul>
+  <p class="muted">不是時鐘問題，也不是 edge-tts 版本太舊：7.2.8 是目前最新版，一樣 403。</p>
+
+  <h2>你是哪一種，照哪一段做</h2>
+
+  <h3>A. 裝了 Aloud 現成版（貼一行指令裝的）</h3>
+  <p>打開「終端機」，貼上當初安裝的同一行指令。會更新到 2.3 版，你的破音字表會保留。更新完重開導讀窗。</p>
+  <div class="code">curl -fsSL https://raw.githubusercontent.com/qwert2813434-ctrl/aloud/main/install.sh | bash</div>
+
+  <h3>B. 用唸書機（從 GitHub 下載的）</h3>
+  <p>到唸書機資料夾，拉最新版就好。已修好的兩個檔是 <code>跟讀器建置.py</code> 和 <code>對照建置.py</code>。</p>
+  <div class="code">git pull</div>
+  <p class="muted">沒有用 git、是下載 zip 的：照下面 C 段，在這兩個檔的 <code>import edge_tts</code> 後面加三行。</p>
+
+  <h3>C. 照 Aloud 規格書自己蓋的，或任何用 edge-tts 的程式</h3>
+  <p>在 <code>import edge_tts</code> 的下一行加這段，把連線改到新主機。不用改套件本體。</p>
+  <div class="code">import edge_tts.communicate
+edge_tts.communicate.WSS_URL = ("wss://api.msedgeservices.com/tts/cognitiveservices/websocket/v1"
+                                "?Ocp-Apim-Subscription-Key=" + edge_tts.constants.TRUSTED_CLIENT_TOKEN)</div>
+  <p>如果 <code>import edge_tts</code> 寫在函式裡面，這三行也放在函式裡面，縮排要對齊。改完要重開伺服器，舊的程序還在跑，就不會用到新程式。</p>
+
+  <h2>給 AI Agent：照這個步驟修</h2>
+  <p class="muted">把這頁網址丟給你的 Claude、Codex 或其他 agent，跟它說「照這頁修」。</p>
+  <ol>
+    <li>先判斷是哪一種安裝（上面 A／B／C）。A 只要執行那行安裝指令，然後重開 App，就跳到第 5 步。</li>
+    <li>在專案裡搜尋 <code>import edge_tts</code>，列出所有命中的 <code>.py</code> 檔（不含 site-packages）。</li>
+    <li>每個命中處的下一行，加上 C 段那三行，縮排跟 <code>import edge_tts</code> 同一層。已經有 <code>msedgeservices</code> 的檔案跳過。</li>
+    <li>每個改過的檔跑 <code>python3 -m py_compile 檔名</code>，確認沒有語法錯誤。</li>
+    <li>驗證：用同一個 Python 合成一句中文，要拿到大於 0 位元組的音檔。
+      <div class="code">python3 -c "
+import asyncio, edge_tts, edge_tts.communicate
+edge_tts.communicate.WSS_URL = ('wss://api.msedgeservices.com/tts/cognitiveservices/websocket/v1?Ocp-Apim-Subscription-Key=' + edge_tts.constants.TRUSTED_CLIENT_TOKEN)
+async def t():
+    n = 0
+    async for c in edge_tts.Communicate('測試', 'zh-TW-HsiaoChenNeural').stream():
+        if c['type'] == 'audio': n += len(c['data'])
+    print('OK', n)
+asyncio.run(t())"</div>
+    </li>
+    <li>重開有在跑的伺服器（Aloud 的導讀窗要整個 App 結束再開），推一句文字，確認真的有聲音。</li>
+    <li>不要刪除或降級 edge-tts 套件；不要改 site-packages 裡的檔案。</li>
+  </ol>
+
+  <h2>之後</h2>
+  <p>edge-tts 官方已有人送出同樣的修正（GitHub PR #491）。官方出新版之後，這三行可以留著，不會衝突。</p>
+  <p class="muted">Edge 配音本來就是非官方端點，微軟隨時可能再改。Aloud 規格書的「地雷第 10 條」有完整紀錄。</p>
+
+  <div class="src">
+    資料來源
+    <ul>
+      <li>edge-tts GitHub issue #490（2026.10.12 回報 403）、PR #491（改走 api.msedgeservices.com）</li>
+      <li>本機實測：edge-tts 7.2.8，舊主機 403；新主機中文、英文、逐句與逐字時間戳都正常（2026.10.12）</li>
+      <li>Aloud 2.3 打包版、唸書機兩支建置程式，修正後各實際合成一句通過（2026.10.12）</li>
+    </ul>
+  </div>
+  <a class="back" href="../">← 回到小高工具間</a>
+</article>
+</main>
+<footer>高偉鳴 Armin Kao ／ <a href="https://arminkao.com">arminkao.com</a> ／ <a href="https://www.instagram.com/17187kao/">Instagram</a></footer>
+</body>
+</html>
