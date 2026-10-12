@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>edge-tts 403 修正 — 小高工具間</title>
-<meta name="description" content="2026-10-12 起微軟舊的 Edge 配音主機一律回 403，edge-tts 全面失效。Aloud（讓 Agent 講話）與唸書機怎麼更新，自己蓋的版本加哪三行；給人看也給 AI agent 照做。">
+<meta name="description" content="2026-10-12 起微軟舊的 Edge 配音主機一律回 403，edge-tts 全面失效。Aloud（讓 Agent 講話）與唸書機怎麼更新，自己蓋的版本貼哪一段（換主機＋429 自動重試）；Edge 配音整條掛掉時的其他台灣腔解法。給人看也給 AI agent 照做。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -31,8 +31,8 @@ article ol li { margin:6px 0; }
   <h1>朗讀突然沒聲音：微軟換了配音主機</h1>
   <div class="facts"><span>發生 <b>2026.10.12</b></span><span>影響 <b>所有用 edge-tts 的工具</b></span><span>最後驗證 <b>2026.10.12</b></span></div>
 
-  <div class="get"><strong>一句話：</strong>微軟關掉了舊的 Edge 配音主機，所以 Aloud 和唸書機會突然不唸、不出音檔。程式本身沒壞。換到微軟的新主機就好：裝現成版的人貼一行指令更新，自己蓋的版本加三行程式。</div>
-  <p class="muted"><b>更新 2026.10.12 晚上：</b>換到新主機後，偶爾還是會有一句不唸（錯誤 429）。原因與解法還在驗證，見最下面「還在觀察」。</p>
+  <div class="get"><strong>一句話：</strong>微軟關掉了舊的 Edge 配音主機，所以 Aloud 和唸書機會突然不唸、不出音檔。程式本身沒壞。換到微軟的新主機就好；新主機偶爾會拒絕一次（429），所以再加上自動重試。自己蓋的版本貼 C 段那一段程式，現成版照 A、B 段更新。</div>
+  <p class="muted"><b>更新 2026.10.12 晚上：</b>換到新主機後，偶爾還是會有一句不唸（錯誤 429）。C 段已改成「換主機＋自動重試」；Aloud 現成版的重試還在測。整條 Edge 配音都不能用時，看最下面「其他解法」。</p>
 
   <h2>症狀</h2>
   <ul>
@@ -46,36 +46,64 @@ article ol li { margin:6px 0; }
 
   <h3>A. 裝了 Aloud 現成版（貼一行指令裝的）</h3>
   <p>打開「終端機」，貼上當初安裝的同一行指令。會更新到 2.3 版，你的破音字表會保留。更新完重開導讀窗。</p>
+  <p class="muted">2.3 版已換主機，但還沒有自動重試：偶爾某一句不唸時，重推那一句就好。含重試的新版測好後會更新這裡。</p>
   <div class="code">curl -fsSL https://raw.githubusercontent.com/qwert2813434-ctrl/aloud/main/install.sh | bash</div>
 
   <h3>B. 用唸書機（從 GitHub 下載的）</h3>
-  <p>到唸書機資料夾，拉最新版就好。已修好的兩個檔是 <code>跟讀器建置.py</code> 和 <code>對照建置.py</code>。</p>
+  <p>repo：<a href="https://github.com/qwert2813434-ctrl/shuji">github.com/qwert2813434-ctrl/shuji</a>。到唸書機資料夾，拉最新版就好（已換主機，重試還沒加）。已修好的兩個檔是 <code>跟讀器建置.py</code> 和 <code>對照建置.py</code>。</p>
   <div class="code">git pull</div>
-  <p class="muted">沒有用 git、是下載 zip 的：照下面 C 段，在這兩個檔的 <code>import edge_tts</code> 後面加三行。</p>
+  <p class="muted">沒有用 git、是下載 zip 的：照下面 C 段，在這兩個檔的 <code>import edge_tts</code> 後面貼上那一段。</p>
 
   <h3>C. 照 Aloud 規格書自己蓋的，或任何用 edge-tts 的程式</h3>
-  <p>在 <code>import edge_tts</code> 的下一行加這段，把連線改到新主機。不用改套件本體。</p>
-  <div class="code">import edge_tts.communicate
+  <p>在檔案最上面 <code>import edge_tts</code> 的下一行，貼上這一段（不用改套件本體）。第 1 部分換主機，第 2 部分在新主機偶爾拒絕時自動重送。</p>
+  <div class="code">import asyncio, edge_tts, edge_tts.communicate
+
+# 1. 改走微軟新主機（舊主機 2026-10-12 起一律 403）
 edge_tts.communicate.WSS_URL = ("wss://api.msedgeservices.com/tts/cognitiveservices/websocket/v1"
-                                "?Ocp-Apim-Subscription-Key=" + edge_tts.constants.TRUSTED_CLIENT_TOKEN)</div>
-  <p>如果 <code>import edge_tts</code> 寫在函式裡面，這三行也放在函式裡面，縮排要對齊。改完要重開伺服器，舊的程序還在跑，就不會用到新程式。</p>
+                                "?Ocp-Apim-Subscription-Key=" + edge_tts.constants.TRUSTED_CLIENT_TOKEN)
+
+# 2. 新主機偶爾回 429／503：等 1、2、4 秒重送，最多 4 次（只在還沒收到聲音時重送，不會重複）
+if not getattr(edge_tts.Communicate, "_retry_patched", False):
+    _edge_stream = edge_tts.Communicate._Communicate__stream
+
+    async def _edge_stream_retry(self):
+        for wait in (1, 2, 4, None):
+            sent = False
+            try:
+                async for message in _edge_stream(self):
+                    sent = True
+                    yield message
+                return
+            except Exception as error:
+                if sent or wait is None or getattr(error, "status", None) not in (429, 503):
+                    raise
+                self.state["chunk_audio_bytes"] = 0
+                await asyncio.sleep(wait)
+
+    edge_tts.Communicate._Communicate__stream = _edge_stream_retry
+    edge_tts.Communicate._retry_patched = True</div>
+  <p>這段要放在檔案最上層（不要縮排進函式裡），每個程序跑一次就生效；不小心貼兩次也不會疊加。用 <code>from edge_tts import Communicate</code> 的寫法一樣有效。改完要重開伺服器，舊的程序還在跑，就不會用到新程式。</p>
+  <p class="muted">第 2 部分用到 edge-tts 的內部函式，在 7.2.x（目前最新 7.2.8）實測可用。官方新版若改了內部名稱，會在載入時直接報 AttributeError，不會默默失效；到時只留第 1 部分即可。</p>
 
   <h2>給 AI Agent：照這個步驟修</h2>
   <p class="muted">把這頁網址丟給你的 Claude、Codex 或其他 agent，跟它說「照這頁修」。</p>
   <ol>
     <li>先判斷是哪一種安裝（上面 A／B／C）。A 只要執行那行安裝指令，然後重開 App，就跳到第 5 步。</li>
-    <li>在專案裡搜尋 <code>import edge_tts</code>，列出所有命中的 <code>.py</code> 檔（不含 site-packages）。</li>
-    <li>每個命中處的下一行，加上 C 段那三行，縮排跟 <code>import edge_tts</code> 同一層。已經有 <code>msedgeservices</code> 的檔案跳過。</li>
+    <li>在專案裡搜尋 <code>import edge_tts</code> 和 <code>from edge_tts</code>，列出所有命中的 <code>.py</code> 檔（不含 site-packages）。</li>
+    <li>每個檔案在最上層 import 區的後面，貼上 C 段整段（不縮排）。已經有 <code>msedgeservices</code> 但沒有 <code>_retry_patched</code> 的檔案（舊版三行修正），把原本三行換成 C 段整段。兩個都有的跳過。</li>
     <li>每個改過的檔跑 <code>python3 -m py_compile 檔名</code>，確認沒有語法錯誤。</li>
-    <li>驗證：用同一個 Python 合成一句中文，要拿到大於 0 位元組的音檔。
+    <li>驗證：用同一個 Python 連續合成 10 句中文，10 句都要拿到大於 0 位元組的音檔（只測 1 句，碰不到偶發的 429）。
+      <p class="muted">把 C 段存成 <code>edge_fix.py</code>，在同一個資料夾跑：</p>
       <div class="code">python3 -c "
-import asyncio, edge_tts, edge_tts.communicate
-edge_tts.communicate.WSS_URL = ('wss://api.msedgeservices.com/tts/cognitiveservices/websocket/v1?Ocp-Apim-Subscription-Key=' + edge_tts.constants.TRUSTED_CLIENT_TOKEN)
+import asyncio, edge_fix, edge_tts
 async def t():
-    n = 0
-    async for c in edge_tts.Communicate('測試', 'zh-TW-HsiaoChenNeural').stream():
-        if c['type'] == 'audio': n += len(c['data'])
-    print('OK', n)
+    ok = 0
+    for i in range(10):
+        n = 0
+        async for c in edge_tts.Communicate(f'第 {i} 句測試', 'zh-TW-HsiaoChenNeural').stream():
+            if c['type'] == 'audio': n += len(c['data'])
+        ok += n > 0
+    print('OK', ok, '/ 10')
 asyncio.run(t())"</div>
     </li>
     <li>重開有在跑的伺服器（Aloud 的導讀窗要整個 App 結束再開），推一句文字，確認真的有聲音。</li>
@@ -84,19 +112,35 @@ asyncio.run(t())"</div>
 
   <h2>還在觀察：偶爾還是有一句不唸（429）</h2>
   <p>2026.10.12 晚上實測，新主機偶爾會拒絕一次請求，錯誤訊息是 <code>429, message='Invalid response status'</code>。間隔幾秒、一次只送一句也會發生，所以不是你送太多：每 3 秒送一句，20 次有 2 次被拒（稍早是 4 次有 1 次）。比較像是微軟對新主機加了限制。</p>
-  <p>暫時的做法：遇到 429 等 1、2、4 秒再送，最多試 4 次。我們自己的工具這樣改後，連測 8 次全部成功。Aloud 與唸書機的正式修正版還在測，測好會更新這一頁。</p>
-  <p class="muted">這一段還在等更多驗證，結論可能會變。</p>
+  <p>C 段的自動重試就是針對這個：加上之後連測 20 次、20 次成功；模擬連續被拒 2 次，第 3 次自動成功。</p>
+  <p class="muted">這一段還在等更多驗證，結論可能會變。我們用的是「新主機＋舊版通行碼」的組合，微軟自己的 Edge 已經換新版通行碼；哪天舊通行碼被關掉，Edge 配音會整條不能用，那時看下一段。</p>
+
+  <h2>其他解法：Edge 配音整條不能用時</h2>
+  <p>Edge 配音本來就是非官方的免費通道。要長期穩定，或它整條掛掉時，可以換這些（都有台灣腔）：</p>
+  <ol>
+    <li><b>Mac 內建「美佳」</b>：離線、免費、沒有次數上限，台灣腔但機器感較重。我們自己的工具已經設成「Edge 失敗就自動改用美佳」。
+      <div class="code">say -v Meijia -o out.aiff "要唸的文字"
+ffmpeg -i out.aiff -b:a 64k out.mp3   # 要 mp3 再轉</div>
+      <p class="muted">系統設定裡音質較好的 Siri 聲音（例如「聲音 2」），程式叫不到：蘋果規定 Siri 聲音不開放給其他 App，會自動換成美佳（WWDC 2020 Session 10022）。「捷徑」App 有機會叫得到，但電腦鎖著時捷徑不執行，我們還在測。</p>
+    </li>
+    <li><b>微軟官方 Azure 語音服務</b>：同一個曉臻，聲音完全一樣，走正式管道不會被擋。免費等級（F0）每月 50 萬字、每分鐘 20 次，用完就停、不會自動扣款；要微軟帳號，註冊時要綁卡驗證身分。（我們還沒實際接上，數字來自官方頁面。）</li>
+    <li><b>Google Cloud 文字轉語音</b>：有台灣中文聲音，每月有免費額度，要開 Google Cloud 計費帳號。聲音比曉臻平淡一點。（未實測。）</li>
+  </ol>
+  <p class="muted">試過但不建議：開源中文語音模型（CosyVoice 2、IndexTTS 2）就算用台灣口音的聲音當樣本，出來仍是混雜的怪腔（2026.08 實測）；Gemini TTS 可以下指令講台灣腔，但偶爾會抽到大陸腔、短句會被安全過濾誤擋。</p>
+  <p class="muted">給 agent：要做自動備援，建議順序是「Edge（含 C 段重試）→ 失敗就改用 Mac 的 <code>say -v Meijia</code>」；有 Azure 金鑰的話，把 Azure 放在 Edge 前面。</p>
 
   <h2>之後</h2>
-  <p>edge-tts 官方已有人送出同樣的修正（GitHub PR #491）。官方出新版之後，這三行可以留著，不會衝突。</p>
-  <p class="muted">Edge 配音本來就是非官方端點，微軟隨時可能再改。Aloud 規格書的「地雷第 10 條」有完整紀錄。</p>
+  <p>edge-tts 官方已有人送出換主機的修正（GitHub PR #491），還沒合併、沒有發新版。官方出新版之後，C 段可以留著，不會衝突。</p>
+  <p class="muted">Aloud 規格書的「地雷第 10 條」有完整紀錄。</p>
 
   <div class="src">
     資料來源
     <ul>
       <li>edge-tts GitHub issue #490（2026.10.12 回報 403）、PR #491（改走 api.msedgeservices.com）</li>
       <li>本機實測：edge-tts 7.2.8，舊主機 403；新主機中文、英文、逐句與逐字時間戳都正常（2026.10.12）</li>
-      <li>新主機 429：每 3 秒送一句連送 20 次，被拒 2 次；加重試後 8/8 通過（2026.10.12 晚上）</li>
+      <li>新主機 429：每 3 秒送一句連送 20 次，被拒 2 次；加上 C 段重試後 20/20 通過，模擬連續被拒 2 次第 3 次成功（edge-tts 7.2.8，2026.10.12 晚上）</li>
+      <li>Siri 聲音不開放給第三方程式：Apple WWDC 2020 Session 10022；本機實測 AVSpeechSynthesizer 與 say 都退回美佳</li>
+      <li>Azure 語音免費等級額度與次數上限：Azure 官方價格與配額頁（2026.10 查詢）</li>
       <li>Aloud 2.3 打包版、唸書機兩支建置程式，修正後各實際合成一句通過（2026.10.12）</li>
     </ul>
   </div>
