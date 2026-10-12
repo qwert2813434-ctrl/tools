@@ -11,6 +11,7 @@
 <script src="../assets/theme.js"></script>
 <link rel="stylesheet" href="research.css">
 <link rel="canonical" href="https://tools.arminkao.com/research/fix-edge-tts-403.html">
+<link rel="alternate" type="text/markdown" href="https://tools.arminkao.com/research/fix-edge-tts-403.md" title="純文字版">
 <script src="https://tools.arminkao.com/assets/hit.js" data-site="tools" defer></script>
 <style>
 .code { margin:14px 0 8px; padding:16px 20px; border-radius:var(--r-md); background:var(--card); box-shadow:var(--e1);
@@ -88,11 +89,11 @@ if not getattr(edge_tts.Communicate, "_retry_patched", False):
   <h2>給 AI Agent：照這個步驟修</h2>
   <p class="muted">把這頁網址丟給你的 Claude、Codex 或其他 agent，跟它說「照這頁修」。</p>
   <ol>
-    <li>先判斷是哪一種安裝（上面 A／B／C）。A 只要執行那行安裝指令，然後重開 App，就跳到第 5 步。</li>
+    <li>先判斷是哪一種安裝（上面 A／B／C），三種的驗證方法不同：<b>A</b> 執行那行安裝指令、整個 App 結束再開，從 App 推三到五句文字，句句都有聲音就完成（不用做第 2–5 步）。<b>B</b> 在唸書機資料夾 <code>git pull</code>，再用它實際配一小段（例如示範書的一章），有產出音檔就完成。<b>C</b> 照第 2–6 步做。</li>
     <li>在專案裡搜尋 <code>import edge_tts</code> 和 <code>from edge_tts</code>，列出所有命中的 <code>.py</code> 檔（不含 site-packages）。先分出哪些是真正會跑到的程式（伺服器、主程式、建置腳本），測試、範例、備份檔不用改。</li>
     <li>每個檔案在最上層 import 區的後面，貼上 C 段整段（不縮排）。已經有 <code>msedgeservices</code> 但沒有 <code>_retry_patched</code> 的檔案（舊版三行修正），把原本三行換成 C 段整段。兩個都有的跳過。</li>
     <li>每個改過的檔跑 <code>python3 -m py_compile 檔名</code>，確認沒有語法錯誤。</li>
-    <li>驗證：用同一個 Python 連續合成 10 句中文，10 句都要拿到大於 0 位元組的音檔（只測 1 句，碰不到偶發的 429）。要用 App 實際用的那個 Python（例如虛擬環境裡的），不然測的是別的環境。
+    <li>（只適用 C）驗證補丁本身：用同一個 Python 連續合成 10 句中文，10 句都要拿到大於 0 位元組的音檔（只測 1 句，碰不到偶發的 429）。要用 App 實際用的那個 Python（例如虛擬環境裡的），不然測的是別的環境。
       <p class="muted">把 C 段存成 <code>edge_fix.py</code>，在同一個資料夾跑：</p>
       <div class="code">python3 -c "
 import asyncio, edge_fix, edge_tts
@@ -106,7 +107,7 @@ async def t():
     print('OK', ok, '/ 10')
 asyncio.run(t())"</div>
     </li>
-    <li>重開有在跑的伺服器（Aloud 的導讀窗要整個 App 結束再開），從 App 本身推幾句文字，確認真的有聲音。上一步只證明補丁本身能用，這一步才證明 App 有載入它。</li>
+    <li>（只適用 C）重開有在跑的伺服器，從 App 本身推幾句文字，確認真的有聲音。上一步只證明補丁本身能用，這一步才證明 App 有載入它。</li>
     <li>不要刪除或降級 edge-tts 套件；不要改 site-packages 裡的檔案。</li>
   </ol>
 
@@ -142,7 +143,7 @@ ffmpeg -i out.aiff -b:a 64k out.mp3   # 要 mp3 再轉</div>
   <p class="muted">給 agent：要做自動備援，建議順序是「Azure 官方（有金鑰才走）→ Edge（含 C 段重試）→ Mac 的 <code>say -v Meijia</code>」，每一層遇到 429／503 先重試再換下一層。兩個實作注意：<code>WSS_URL</code> 是整個程序共用的設定，同時有多個合成任務時不要用它切換服務（各服務分開程序跑）；換到下一層時會整段重新合成，存檔請先寫暫存檔、整段成功才取代正式檔。</p>
 
   <h2>之後</h2>
-  <p>edge-tts 官方已有人送出換主機的修正（GitHub PR #491），還沒合併、沒有發新版。官方出新版之後，C 段可以留著，不會衝突。</p>
+  <p>edge-tts 官方已有人送出換主機的修正（GitHub PR #491），還沒合併、沒有發新版。官方出新版後，升級並重新驗證一次；新版已經換主機，就拿掉 C 段第 1 部分；新版自己會處理 429，就拿掉第 2 部分。</p>
   <p class="muted">Aloud 規格書的「地雷第 10 條」有完整紀錄。</p>
 
   <div class="src">

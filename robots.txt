@@ -7,3 +7,5 @@ Disallow: /credits.html
 
 Sitemap: https://tools.arminkao.com/sitemap.xml
 Sitemap: https://tools.arminkao.com/aligned-templates/sitemap.xml
+
+# 給 AI agent 的全站目錄（llms.txt 慣例）：https://tools.arminkao.com/llms.txt

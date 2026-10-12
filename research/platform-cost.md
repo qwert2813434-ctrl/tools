@@ -1,0 +1,80 @@
+<!-- 純文字版，由 https://tools.arminkao.com/research/platform-cost.html 自動產生（2026-10-12）。給 AI agent 讀；以網頁版為準。 -->
+<!-- 摘要：同一組灰模與提示詞，丟給 fal、Higgsfield、ComfyUI、CapCut，各花多少、各等多久、差在哪。2026 年 9 月實測。 -->
+
+R-06 · AI 影像 · 實測
+
+# 同一發 15 秒影片，換平台差 2.3 倍
+
+讀 **6 分鐘**｜最後驗證 **2026.09.23**｜價格會變，看日期
+
+> **你會知道：**同一組輸入（一段 Blender 灰模運鏡＋同一段提示詞）在四個平台各花多少錢、各等多久、畫面差在哪，以及我們最後怎麼分工。
+
+## 先講結論
+
+同一個模型（MiniMax H3 Max、480P、15 秒），在 fal 一發 **US$1.50**，在 Higgsfield 報價 **US$0.65**——差 2.3 倍。貴的那家快、便宜的那家要等，實付最貴的 CapCut 畫面反而最好。沒有哪家全贏，要看你這一發是在**迭代**還是在**出成品**。
+
+Higgsfield · H3 Max 480P · US$0.65（報價）
+
+ComfyUI Partner Node · H3 Max 480P · 約 US$1.07＋參考素材費（照官方價目估）
+
+fal · H3 Max 480P · US$1.50（實付）
+
+CapCut · Seedance 2.5 · 約 US$3.3（實付）
+
+橫條越長越貴。滿刻度＝US$3.9（fal 跑 Seedance 2.5 的估價）。
+
+## 怎麼測的
+
+輸入固定：一支 15 秒的 Blender 灰模（主角在大廳裡走、攝影機一路跟），一張寫實大廳的錨點圖，一段同樣的提示詞。能實跑的就實跑，用帳戶餘額前後差算真實花費；沒跑的標清楚是「報價」或「估算」。
+
+| 平台 · 模型 | 15 秒 480P | 等多久 | 怎麼知道的 |
+|---|---|---|---|
+| Higgsfield · H3 Max | US$0.65 | 未測 | 官方 CLI 報價（不開工、只回點數） |
+| ComfyUI Partner Node · H3 Max | ≈ US$1.07估 | 官方說不到 1 分鐘 | 官方價目：15.09 點/秒 × 15 秒 ÷ 211 點/美元 |
+| fal · H3 Max | US$1.50 | 42 秒 | 跑三發，用餘額差量 |
+| Higgsfield · Seedance 2.5 | US$1.31 | 約 7 分鐘 | 報價＋更早一次實跑 |
+| CapCut · Seedance 2.5 | ≈ US$3.3 | 約 7 分鐘 | 實跑：一發扣 510 點（方案 NT$250／1,200 點） |
+| fal · Seedance 2.5 | ≈ US$3.9估 | 未跑 | 照官方計價公式 |
+
+## 三個會改變決定的細節
+
+### 1. 參考影片的秒數算不算錢，各家不同
+
+同一發在 fal 貴一倍，主因是 fal **連你丟進去的參考影片秒數也計費**。我們拿一支 15 秒空白影片去 Higgsfield 估價，點數完全沒變——它不算參考秒數。用灰模帶運鏡的人，參考影片一定很長，這一條差最多。
+
+ComfyUI 是另一種算法：參考素材超過 4,096 tokens 後，每 1K 另收 6.03 點。一支灰模影片會被算成多少 tokens 要實跑才知道，所以上面那格標了「＋參考素材費」。
+
+### 2. 只有一家能在花錢前問價
+
+Higgsfield 有「問價不開工」的指令，連參考影片都能一起丟進去估。fal 做不到：API 回來的費用欄位在計費完成前一直是空的，只能跑完從帳單或餘額反推。要自動化控預算的話，這個差很實際。
+
+### 3. 解析度檔位不同，高一階反而可能更便宜
+
+Higgsfield 的 H3 Max 只有 480p 與 768p 兩檔。**它的 768p（US$1.09）比 fal 的 480p（US$1.50）還便宜。**另外，Higgsfield 的 Seedance 2.5 480p 在兩週內從每秒 2.5 點漲到 3 點——價格真的會動，所以每一格都標了日期。
+
+## 畫面差在哪
+
+同一組輸入，CapCut 內建的 Seedance 2.5 比 H3 Max 好：路人密度明顯高、國旗和時刻表看板和吊燈都自己長出來、光束更強，而且**自己配了聲音**（H3 那發沒有）。H3 Max 的優點是全程跟住灰模的運鏡、場景乾淨，但比較空。主角兩邊都一致。
+
+另外我們試過把 317 個路人直接放進灰模給 H3 Max 跟：高空的路人偏白、動作偏僵，因為它照抄了人偶的步態。路人還是寫在提示詞裡比較好——這是另一篇研究的題目。
+
+## 我們現在怎麼分工
+
+- **迭代**（要 API、要快、要接進自己的畫布）：fal 的 H3 Max。貴，但 42 秒就回來，一晚可以試很多輪。
+- **一天只跑幾發、不趕**：Higgsfield 的 H3 Max，便宜一半以上；點數月結，用完就得等下個月。
+- **出成品、又不想寫程式**：CapCut。每月的點數只夠兩發 15 秒，當「偶爾出一支好的」用，不進迭代。
+- **ComfyUI**：價格落在中間，還沒實跑。它的好處是節點式流程可以存成範本，等實測過參考素材費再決定。
+
+資料來源
+
+- fal、CapCut：實際付款，用帳戶餘額前後差計算（2026.09.22–23）
+- Higgsfield：官方 CLI 的 generate cost 報價（2026.09.23）
+- ComfyUI：[Partner Node Pricing](https://docs.comfy.org/tutorials/partner-nodes/pricing)、[Comfy Cloud Pricing](https://comfy.org/pricing)（2026.09.24 查）
+
+價格以美金計，台幣以 1 : 32 換算。平台隨時會調價，以各家官網為準。
+
+[← 回到研究列表](https://tools.arminkao.com/#research)
+
+---
+網頁版：https://tools.arminkao.com/research/platform-cost.html｜小高工具間：https://tools.arminkao.com/｜全站目錄：https://tools.arminkao.com/llms.txt
+作者：高偉鳴 Armin Kao｜Instagram：https://www.instagram.com/17187kao/｜作品集：https://arminkao.com/

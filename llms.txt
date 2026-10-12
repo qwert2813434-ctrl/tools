@@ -1,0 +1,55 @@
+# 小高工具間 TOOL.AI
+
+> 台灣廣告導演高偉鳴（Armin Kao）自用的免費工具與實測研究。研究頁記錄 AI 影像、語音、agent 工作流的實測過程與數字；工具多數開源。給 AI agent：每篇研究都有同名 .md 純文字版（網址把 .html 換成 .md），保留正文、程式碼、提示詞與媒體網址，沒有排版；有「給 AI Agent」段落的頁面，照那一段做即可。數字都是作者當次實測，附日期與版本，不保證在你的環境相同。
+
+使用方式：
+- 想照著建工具：先看下方「開源規格書」，整個 repo 交給你的 agent，從 README 的閱讀順序開始，做到 ACCEPTANCE 全部通過才算完成。
+- 想重現研究：讀該篇 .md 版；提示詞裡的 @Video／@Image 輸入檔沒有附，要自備。
+- 有疑問或錯誤：每篇純文字版最後一行有作者的 Instagram。
+
+## 修正公告
+
+- [朗讀突然沒聲音：微軟換了配音主機（edge-tts 403／429）](https://tools.arminkao.com/research/fix-edge-tts-403.html)：edge-tts 改連新主機＋429 自動重試的整段程式、agent 修復步驟與驗證、Edge 不能用時的台灣腔替代方案（Azure 官方 F0、Mac 美佳、Siri 聲音 2 經捷徑）。純文字版：https://tools.arminkao.com/research/fix-edge-tts-403.md （有「給 AI Agent」段）
+
+## 研究
+
+- [R-09 用說的跟 AI 工作：Typeless 真的強，自己蓋的差在清稿](https://tools.arminkao.com/research/voice-input-typeless.html)：Mac 語音輸入繁中，Typeless 與自架 Whisper 的轉文字、清稿秒數對照。純文字版：https://tools.arminkao.com/research/voice-input-typeless.md
+- [R-08 同一張工作單，Astra 與 Sol 綁同一隻變色龍](https://tools.arminkao.com/research/gpt6-chameleon-rig.html)：兩個模型替 3D 角色綁骨架的對照，附公平比較模型的八條做法與工作單。純文字版：https://tools.arminkao.com/research/gpt6-chameleon-rig.md
+- [R-07 讓 Obsidian 也能是 Pinterest，收藏間](https://tools.arminkao.com/research/obsidian-pinterest.html)：Chrome 右鍵收進 Obsidian 的做法與安全漏洞；施工圖在 collection-wall repo。純文字版：https://tools.arminkao.com/research/obsidian-pinterest.md
+- [R-06 同一發 15 秒影片，換平台差 2.3 倍](https://tools.arminkao.com/research/platform-cost.html)：同一組輸入在 fal、Higgsfield、ComfyUI、CapCut 的價格與等待時間。純文字版：https://tools.arminkao.com/research/platform-cost.md
+- [R-05 MiniMax H3 Max：灰模管運鏡，人交給模型](https://tools.arminkao.com/research/h3-greybox.html)：Blender 灰模控制運鏡、路人用提示詞生成，附完整提示詞。純文字版：https://tools.arminkao.com/research/h3-greybox.md
+- [R-04 用手機拍參考，讓 AI 模仿成廣告鏡頭](https://tools.arminkao.com/research/phone-reference.html)：iPhone 參考片轉電影攝影機質感，八段式提示詞。純文字版：https://tools.arminkao.com/research/phone-reference.md
+- [R-03 人形問題：灰模裡的人要怎麼給](https://tools.arminkao.com/research/crowd-in-greybox.html)：一顆 4 秒試片測三種人群給法。純文字版：https://tools.arminkao.com/research/crowd-in-greybox.md
+- [R-02 人形會影響算圖：四輪之後只留一塊板](https://tools.arminkao.com/research/snowboard-no-body.html)：灰模放人偶會讓動作僵硬的四輪測試。純文字版：https://tools.arminkao.com/research/snowboard-no-body.md
+- [R-01 拿 Blender 當線稿：運鏡不用抽卡](https://tools.arminkao.com/research/blender-lineart.html)：一支灰模片＋定妝照讓 Seedance 照排好的運鏡走，四步做法與提示詞。純文字版：https://tools.arminkao.com/research/blender-lineart.md
+
+## 開源規格書（不放程式碼，放讓 AI 照著蓋的施工圖）
+
+- [aloud：讓 Agent 講話的選單列朗讀窗](https://github.com/qwert2813434-ctrl/aloud)：macOS；SPEC／BUILD／ACCEPTANCE／PITFALLS；另有現成版安裝指令。
+- [whisperbar：本機語音輸入](https://github.com/qwert2813434-ctrl/whisperbar)：macOS 按住說話、字打進游標；SPEC／BUILD／ACCEPTANCE／PITFALLS。
+- [collection-wall：收藏牆](https://github.com/qwert2813434-ctrl/collection-wall)：Chrome 右鍵把網頁收進 Obsidian、排成瀑布流牆；SPEC／BUILD／ACCEPTANCE／PITFALLS。
+
+## 開源工具與 App
+
+- [唸書機 shuji](https://github.com/qwert2813434-ctrl/shuji)：英文書翻成台灣口語中文有聲書＋手機跟讀器（PWA），翻譯交給你的 agent，語音走 edge-tts。
+- [ALIGNED](https://github.com/qwert2813434-ctrl/ALIGNED)：IG 跨頁排版工作檯（Mac／Windows 開源、iOS 上架）；專案檔是文件化 JSON，AI 讀規格即可產生可編輯專案。官網：https://aligned-app.github.io/zh-Hant/
+- [STB](https://github.com/qwert2813434-ctrl/STB)：廣告前製（PPM）腳本、分鏡、通告、Rundown 一條龍，匯出 PDF／PPTX。官網：https://stb-app.github.io/zh-Hant/
+- [RHEO](https://github.com/qwert2813434-ctrl/RHEO)：流動扭曲編輯器，照片或影片用筆刷抹出流動效果（macOS）。
+
+## 網頁工具（免安裝，在瀏覽器裡用）
+
+- [濾鏡工坊](https://tools.arminkao.com/filter-lab.html)：照片轉孔版印刷（Risograph）質感，分色、過網、疊印。
+- [幾何 icon 工坊](https://tools.arminkao.com/geo-icon.html)：在格點上做對齊像素的幾何 icon，支援旋轉複製。
+- [隱形 QR 產生器](https://tools.arminkao.com/invisible-qr.html)：人眼找不到、相機掃得到的動態 QR 視覺。
+- [Text Bead Curtain 串珠門簾](https://tools.arminkao.com/bead-curtain.html)：直排文字做成可撥動的門簾，軟繩物理＋合成音，單一 HTML 檔。
+- [排版分享](https://tools.arminkao.com/aligned-templates/)：ALIGNED 排版範本，可下載專案檔。
+- [Credits 片尾名單規格](https://tools.arminkao.com/credits-spec.html)：廣告片尾名單資料庫的做法說明。
+
+## 本機工具（要下載安裝）
+
+- [參考片下載工具 v1.3](https://tools.arminkao.com/video-downloader.zip)：Mac；貼網址、選畫質下載參考影片，可轉 GIF。安裝說明在 zip 內。
+
+## Optional
+
+- [AE 工具包 KEYS 使用說明](https://tools.arminkao.com/KEYS使用說明.html)：After Effects 關鍵影格工具箱與素材庫。
+- [作者作品集](https://arminkao.com/)
