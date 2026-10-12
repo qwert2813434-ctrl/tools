@@ -32,7 +32,7 @@ article ol li { margin:6px 0; }
   <div class="facts"><span>發生 <b>2026.10.12</b></span><span>影響 <b>所有用 edge-tts 的工具</b></span><span>最後驗證 <b>2026.10.12</b></span></div>
 
   <div class="get"><strong>一句話：</strong>微軟關掉了舊的 Edge 配音主機，所以 Aloud 和唸書機會突然不唸、不出音檔。程式本身沒壞。換到微軟的新主機就好；新主機偶爾會拒絕一次（429），所以再加上自動重試。自己蓋的版本貼 C 段那一段程式，現成版照 A、B 段更新。</div>
-  <p class="muted"><b>更新 2026.10.12 晚上：</b>換到新主機後，偶爾還是會有一句不唸（錯誤 429）。C 段已改成「換主機＋自動重試」；Aloud 現成版的重試還在測。整條 Edge 配音都不能用時，看最下面「其他解法」。</p>
+  <p class="muted"><b>更新 2026.10.12 晚上：</b>換到新主機後，偶爾還是會有一句不唸（錯誤 429）。C 段已改成「換主機＋自動重試」；Aloud 現成版的重試還在測。不想折騰、要長期穩定：看最下面「其他解法」第 1 個，微軟官方免費等級。</p>
 
   <h2>症狀</h2>
   <ul>
@@ -116,18 +116,29 @@ asyncio.run(t())"</div>
   <p class="muted">這一段還在等更多驗證，結論可能會變。我們用的是「新主機＋舊版通行碼」的組合，微軟自己的 Edge 已經換新版通行碼；哪天舊通行碼被關掉，Edge 配音會整條不能用，那時看下一段。</p>
 
   <h2>其他解法：Edge 配音整條不能用時</h2>
-  <p>Edge 配音本來就是非官方的免費通道。要長期穩定，或它整條掛掉時，可以換這些（都有台灣腔）：</p>
+  <p>Edge 配音本來就是非官方的免費通道。要長期穩定，或它整條掛掉時，可以換這些（都有台灣腔）。不想折騰的人，直接看第 1 個。</p>
   <ol>
-    <li><b>Mac 內建「美佳」</b>：離線、免費、沒有次數上限，台灣腔但機器感較重。我們自己的工具已經設成「Edge 失敗就自動改用美佳」。
+    <li><b>微軟官方 Azure 語音服務（推薦，已實測）</b>：同一個曉臻，聲音完全一樣，走正式管道不會被擋，逐句時間戳也照樣拿得到。免費等級（F0）每月 50 萬字、每分鐘 20 次，用完就停到下個月、不會自動扣款。
+      <p>申請：用個人微軟帳號登入 Azure（要綁卡驗證身分）→ 建立「語音服務」，定價層選 <b>Free F0</b>、區域例如 East Asia → 在資源的「金鑰與端點」複製金鑰 1。註冊時若跳「不具免費試用資格」，照提示改開「隨用隨付」帳號即可，F0 一樣免費。</p>
+      <p>接法：edge-tts 不用換，把 C 段第 1 部分的網址換成官方網址就好（<code>eastasia</code> 換成你的區域，金鑰別寫死在程式裡，放鑰匙圈或環境變數）：</p>
+      <div class="code">import os, edge_tts, edge_tts.communicate
+edge_tts.communicate.WSS_URL = ("wss://eastasia.tts.speech.microsoft.com/cognitiveservices/websocket/v1"
+                                "?Ocp-Apim-Subscription-Key=" + os.environ["AZURE_SPEECH_KEY"])</div>
+      <p class="muted">C 段第 2 部分的重試可以照留。2026.10.12 實測：同一支 edge-tts 7.2.8 連官方端點，中文逐句時間戳正常；金鑰錯會回 401。</p>
+    </li>
+    <li><b>Mac 內建「美佳」</b>：離線、免費、沒有次數上限，台灣腔但機器感較重。適合當最後一道保底，我們自己的工具已經設成「前面都失敗就改用美佳」。
       <div class="code">say -v Meijia -o out.aiff "要唸的文字"
 ffmpeg -i out.aiff -b:a 64k out.mp3   # 要 mp3 再轉</div>
-      <p class="muted">系統設定裡音質較好的 Siri 聲音（例如「聲音 2」），程式叫不到：蘋果規定 Siri 聲音不開放給其他 App，會自動換成美佳（WWDC 2020 Session 10022）。「捷徑」App 有機會叫得到，但電腦鎖著時捷徑不執行，我們還在測。</p>
     </li>
-    <li><b>微軟官方 Azure 語音服務</b>：同一個曉臻，聲音完全一樣，走正式管道不會被擋。免費等級（F0）每月 50 萬字、每分鐘 20 次，用完就停、不會自動扣款；要微軟帳號，註冊時要綁卡驗證身分。（我們還沒實際接上，數字來自官方頁面。）</li>
-    <li><b>Google Cloud 文字轉語音</b>：有台灣中文聲音，每月有免費額度，要開 Google Cloud 計費帳號。聲音比曉臻平淡一點。（未實測。）</li>
+    <li><b>Mac 的 Siri「聲音 2」（音質比美佳好，要電腦解鎖）</b>：一般程式叫不到 Siri 聲音（<code>say</code>、AVSpeechSynthesizer 都會被系統換成美佳，WWDC 2020 Session 10022），但蘋果自己的「捷徑」App 叫得到。在捷徑 App 做一個「把輸入的文字做成語音、聲音選聲音 2、輸出音檔」的捷徑，再用命令列呼叫：
+      <div class="code">shortcuts run "你的捷徑名稱" -i 文字.txt -o 輸出音檔</div>
+      <p class="muted">2026.10.12 實測：電腦解鎖時輸出 48 kHz 的聲音 2（不是美佳）；螢幕鎖著時一律回「此捷徑需要解鎖你的 Mac」。所以人坐在電腦前用的導讀工具可以用它，人不在電腦前、要遠端推播的（例如推到手機）不行。我們鎖著時沒找到辦法，有成功方法的歡迎回報。</p>
+    </li>
+    <li><b>Google Cloud 文字轉語音</b>：有台灣中文聲音，每月有免費額度，要開 Google Cloud 計費帳號。（未實測。）</li>
   </ol>
+  <p class="muted">iPhone 上也有 Siri 聲音 2（設定 → 輔助使用 → 朗讀內容），一般 App 一樣叫不到，但系統內建的「朗讀螢幕」（兩指從螢幕頂端下滑）可以用它唸任何畫面，適合當手動備案。</p>
   <p class="muted">試過但不建議：開源中文語音模型（CosyVoice 2、IndexTTS 2）就算用台灣口音的聲音當樣本，出來仍是混雜的怪腔（2026.08 實測）；Gemini TTS 可以下指令講台灣腔，但偶爾會抽到大陸腔、短句會被安全過濾誤擋。</p>
-  <p class="muted">給 agent：要做自動備援，建議順序是「Edge（含 C 段重試）→ 失敗就改用 Mac 的 <code>say -v Meijia</code>」；有 Azure 金鑰的話，把 Azure 放在 Edge 前面。</p>
+  <p class="muted">給 agent：要做自動備援，建議順序是「Azure 官方（有金鑰才走）→ Edge（含 C 段重試）→ Mac 的 <code>say -v Meijia</code>」，每一層遇到 429／503 先重試再換下一層。</p>
 
   <h2>之後</h2>
   <p>edge-tts 官方已有人送出換主機的修正（GitHub PR #491），還沒合併、沒有發新版。官方出新版之後，C 段可以留著，不會衝突。</p>
@@ -140,7 +151,8 @@ ffmpeg -i out.aiff -b:a 64k out.mp3   # 要 mp3 再轉</div>
       <li>本機實測：edge-tts 7.2.8，舊主機 403；新主機中文、英文、逐句與逐字時間戳都正常（2026.10.12）</li>
       <li>新主機 429：每 3 秒送一句連送 20 次，被拒 2 次；加上 C 段重試後 20/20 通過，模擬連續被拒 2 次第 3 次成功（edge-tts 7.2.8，2026.10.12 晚上）</li>
       <li>Siri 聲音不開放給第三方程式：Apple WWDC 2020 Session 10022；本機實測 AVSpeechSynthesizer 與 say 都退回美佳</li>
-      <li>Azure 語音免費等級額度與次數上限：Azure 官方價格與配額頁（2026.10 查詢）</li>
+      <li>Azure 語音免費等級額度與次數上限：Azure 官方價格與配額頁（2026.10 查詢）；實際申請 F0（East Asia）並用 edge-tts 7.2.8 連官方端點合成通過（2026.10.12）</li>
+      <li>Siri 聲音 2 經「捷徑」：解鎖時輸出 48 kHz 非美佳音檔；鎖屏 30 秒後執行回「此捷徑需要解鎖你的 Mac」（macOS，2026.10.12）</li>
       <li>Aloud 2.3 打包版、唸書機兩支建置程式，修正後各實際合成一句通過（2026.10.12）</li>
     </ul>
   </div>
