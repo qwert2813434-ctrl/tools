@@ -10,16 +10,16 @@ R-04 · AI 影像 · 實測
 > **你會知道：**在家用 iPhone 隨手拍一段動作，丟給 Seedance 2.5 模仿成 FX3 質感的耳機廣告鏡頭——哪些抄得到、哪些抄不到，以及提示詞怎麼分段寫。
 
 輪播（10 張；每一張在講什麼另見「每一頁在講什麼」）：
-1. 影片 https://tools.arminkao.com/research/media/Dc5WFZxk4SN/01.mp4
-2. 影片 https://tools.arminkao.com/research/media/Dc5WFZxk4SN/02.mp4
-3. 影片 https://tools.arminkao.com/research/media/Dc5WFZxk4SN/03.mp4
-4. 影片 https://tools.arminkao.com/research/media/Dc5WFZxk4SN/04.mp4
-5. 影片 https://tools.arminkao.com/research/media/Dc5WFZxk4SN/05.mp4
-6. 影片 https://tools.arminkao.com/research/media/Dc5WFZxk4SN/06.mp4
-7. 圖 https://tools.arminkao.com/research/media/Dc5WFZxk4SN/07.jpg
-8. 圖 https://tools.arminkao.com/research/media/Dc5WFZxk4SN/08.jpg
-9. 圖 https://tools.arminkao.com/research/media/Dc5WFZxk4SN/09.jpg
-10. 圖 https://tools.arminkao.com/research/media/Dc5WFZxk4SN/10.jpg
+1. 影片 https://tools.arminkao.com/research/media/Dc5WFZxk4SN/01.mp4｜成品、iPhone 原片、側拍三格：戴耳機側臉特寫
+2. 影片 https://tools.arminkao.com/research/media/Dc5WFZxk4SN/02.mp4｜三版算圖並排，旁寫各版修改，皆為耳機側臉特寫
+3. 影片 https://tools.arminkao.com/research/media/Dc5WFZxk4SN/03.mp4｜上為耳機浮空的成品，下為掛在麥克風架上的原片
+4. 影片 https://tools.arminkao.com/research/media/Dc5WFZxk4SN/04.mp4｜上為成品耳罩特寫，下為 Blender 白色灰模耳機
+5. 影片 https://tools.arminkao.com/research/media/Dc5WFZxk4SN/05.mp4｜上為男子與浮空耳機，下為手機自拍原片
+6. 影片 https://tools.arminkao.com/research/media/Dc5WFZxk4SN/06.mp4｜Gemini 產八面圖：亂拍耳機的人與八張耳機視圖
+7. 圖 https://tools.arminkao.com/research/media/Dc5WFZxk4SN/07.jpg｜純文字頁：提示詞八段結構與三條學到的規則
+8. 圖 https://tools.arminkao.com/research/media/Dc5WFZxk4SN/08.jpg｜完整提示詞全文，黑底小字（中文）
+9. 圖 https://tools.arminkao.com/research/media/Dc5WFZxk4SN/09.jpg｜黑底文字：提示詞是 AI 寫的，讓 Claude 去 Higgsfield 算
+10. 圖 https://tools.arminkao.com/research/media/Dc5WFZxk4SN/10.jpg｜黑底一排工具圖示：DaVinci Resolve、Blender、Gemini 等
 
 > IG 原文 · 2026.09.05：我即夢點數用完了 換 Higgsfield，一樣用 2.5 試試看手機拍參考。 然後叫 Claude 幫我寫 但我發現，參考根本拍給 Claude 看的 它提示詞把表述寫完了 我自己好奇提示詞那麼長有用嗎 但試了幾輪，勉強可以。 如果我不要拍的那麼粗糙的話，搞不好用不著寫那麼多。 灰模還是最穩的
 
@@ -92,6 +92,40 @@ R-04 · AI 影像 · 實測
 
 【負面】音樂、配樂、旋律、鼓點；任何文字、字卡、字幕、logo；自拍感、手臂伸向鏡頭、手機、點頭、大幅手持晃動、在耳邊點兩下；街道、戶外、建築外觀、天空、樹、行人、車；畫面裡出現第二個人；硬光、鏡頭耀光、星芒、粒子、速度變化、剪接、固定機位；換人、臉部變形、多出手臂或手指、手指數量錯誤；多支耳機、耳機變形、顏色改變、別的款式、別的品牌 logo、耳機穿模；卡通、3D 渲染感。
 ```
+
+## 給 AI Agent：照這段做
+
+把這頁網址丟給你的 Claude、Codex 或其他 agent，跟它說「照這頁的『給 AI Agent』段做」。純文字版：[phone-reference.md](https://tools.arminkao.com/research/phone-reference.md)。
+
+**這段能幫你做到什麼：**用 iPhone 隨手拍的一段動作當參考，叫 Seedance 2.5 重拍成第三人稱的廣告鏡頭（頁面範例是 FX3 質感的耳機廣告）。
+
+**要先準備：**以下是作者當次實測（最後驗證 2026.09.05）。
+
+- 手機原片（@Video1）。頁面沒附，請自備。
+- 產品外觀參考：八面圖（@Image1）與實拍照（@Image2）。八面圖作者用 Google Gemini 從隨手拍的片段產出。
+- 場景與光線參考圖（@Image3）。請自備。
+- 平台與模型：Higgsfield 上的 Seedance 2.5 reference-to-video，480p、5 秒。
+- 預估花費：頁面未說明。作者的提示詞由 Claude 寫，也讓 Claude 自己去 Higgsfield 送算。
+
+**步驟**
+
+1. 先二選一：「全程不看鏡頭」或「回頭看鏡頭一眼」。頁面的完整提示詞兩句互相矛盾（【必須改掉的】對【逐秒】0.4–0.9 秒），照抄前要刪掉其中一句，否則每次結果不同。
+2. 準備好 @Video1、@Image1–3，編號對上。
+3. 照頁面「提示詞的八段結構」寫：宣告參考角色、鎖死清單、必須改掉的、身份與產品鎖定、濾鏡與光、逐秒、聲音、負面。
+4. 逐秒段每一段只寫參考影片裡真的有的東西。寫「什麼在動」，不要寫「不動」。
+5. 作者這次迭代觀察到：一段字越多，模型給那段越多秒，所以改內容時字數不要變多（不是通用定律）。
+6. 在 Higgsfield 送 Seedance 2.5，480p、5 秒。
+7. 看結果。
+
+**怎樣算完成：**頁面未說明明確判準。可觀察項目：兩次甩鏡落在提示詞寫的時間點（0.4 秒、1.8 秒）；2.4 秒推近到耳罩滿框；2.8 秒點觸時出現一圈空氣震動；人物與產品全程同一個；只有音效、沒有音樂、畫面沒有文字。
+
+**常見失敗與下一步（作者算了 11 次）**
+
+- 寫了「不動」：畫面被凍住。改寫成「什麼在動」。
+- 手持慢推這種連續運動抄不到：改用 Blender 灰模帶運鏡，模型幾乎照抄鏡頭路徑（見 R-01）。
+- 作者這次甩鏡有抄到，手持慢推未跟上。
+
+**不要做的事：**不要照抄頁面提示詞而不先解決看鏡頭的矛盾；不要假設頁面附了素材檔；不要期待手持慢推被複製；作者說提示詞偏長，拍得乾淨的話可能不用寫那麼多（作者未驗證）。
 
 工具：iPhone 原片、Google Gemini（八面圖）、Claude Code（寫提示詞並直接送算）、Higgsfield 上的 Seedance 2.5（reference-to-video、480P、5 秒）、Blender（灰模那版）。
 

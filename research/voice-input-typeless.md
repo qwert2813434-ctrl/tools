@@ -164,6 +164,51 @@ Typeless 放開按鍵後很快就出字，看起來是邊錄邊轉，加上它�
 
 章節：打字跟 AI 對話累的不是想／Typeless 概念與原理／同一段話三種輸出的差別／自己蓋一個跟它差在哪／換 AI 開口回答：導讀器／台灣腔語音怎麼選／還沒解的第一題：清稿／第二題：語音回覆／開源聲音複製本機實測。
 
+## 給 AI Agent：照這段做
+
+把這頁網址丟給你的 Claude、Codex 或其他 agent，跟它說「照這頁的『給 AI Agent』段做」。純文字版：[voice-input-typeless.md](https://tools.arminkao.com/research/voice-input-typeless.md)。
+
+把這頁網址丟給你的 Claude、Codex 或其他 agent，跟它說「照這頁選語音輸入方案，或自己蓋」。以下數字是作者一個人、一台 Mac（M4 Max）、自己的口音與用詞的實測，換人換機器會不同。
+
+****這段能幫你做到什麼**：**選出 Mac 上繁體中文語音輸入的方案（Typeless 或自己蓋），並用頁面的量測方法驗證速度。
+
+**要先準備**
+
+- Apple Silicon 的 Mac（WhisperBar 需要）。
+- 自己的口述錄音，頁面方法用的是你自己的歷史紀錄或執行紀錄。
+- 選自己蓋：[https://github.com/qwert2813434-ctrl/whisperbar（本機語音輸入；repo](https://github.com/qwert2813434-ctrl/whisperbar（本機語音輸入；repo) 授權 MIT，README 寫沒有程式碼、是規格書）。
+- 想讓 AI 回話時唸出來：[https://github.com/qwert2813434-ctrl/aloud](https://github.com/qwert2813434-ctrl/aloud)。aloud README 另寫有現成 Mac 版的一行安裝指令，見其 README。
+
+**步驟**
+
+1. 先決定：要今天就用、在意放開就出字，選 Typeless。要錄音留在本機、只去贅詞不加字、自己養辭典，選自己蓋。
+2. 選自己蓋：把 whisperbar repo 放進空專案。whisperbar README 寫：CLAUDE.md 是 agent 一進 repo 先讀的檔，BUILD.md 是施工順序主文件。
+3. whisperbar README 寫：照 BUILD.md 第 0 到第 8 階段依序蓋；階段 1–4 先蓋完已能用（命令列版）。
+4. README 寫：每階段先跑 ACCEPTANCE.md 對應那節，過了才做下一階段；ACCEPTANCE.md 教你用自己的錄音建考卷。
+5. README 寫：遇到症狀先查 PITFALLS.md。
+6. 量速度：記下放開按鍵到字貼上的秒數，按成品字數分組（不到 60 字為短句，200 字以上為長段），取中位數。
+7. 如果量 Typeless：用它在本機的歷史紀錄，算「寫回時間 − 開始錄音時間 − 錄音長度」。
+8. 要讓 AI 開口：aloud README 寫照 BUILD.md 第 0 到第 7 階段蓋。
+
+**怎樣算完成**
+
+- 按一下 Fn 開始講、再按一下，文字貼進游標。
+- 依 whisperbar README，ACCEPTANCE.md 各階段通過。
+- 你有自己的短句與長段中位秒數，可以跟頁面數字（作者當次：自己架短句 2.8 秒、長段 11.6 秒；Typeless 1.4／4.1 秒）對照。
+
+**常見失敗與下一步**
+
+- 轉文字錯同音字或掉進重複同一句：作者改用完整 Whisper large-v3 並關掉「參考前文」。
+- 本機小模型清稿會改成列點或吞句：作者當次結論是清稿走雲端，本機只當斷網備胎；清稿速度仍慢，頁面列為還沒解的題目。
+- 台灣腔語音：作者選免費的 edge-tts（曉臻／雲哲）。Gemini 的 Kore／Leda 偶爾抽到大陸腔，每句要再判一次口音。
+
+**不要做的事**
+
+- whisperbar README 寫：錄音、轉譯稿、辭典內容不放進 repo。
+- whisperbar README 寫：請勿用任何商業 App 的資料庫、錄音或輸出當測試集或訓練材料，改用自己的錄音。
+- 作者測的 CosyVoice 2、IndexTTS 2 未產出可接受的台灣腔（混血怪腔）；不推及其他模型。
+- 不要把頁面數字當成一定如此；Typeless 持續更新，以目前版本為準。
+
 資料來源
 
 - 語音模型三家：同一批三段錄音（共 68.4 秒），M4 Max 本機實跑（2026.08.22）

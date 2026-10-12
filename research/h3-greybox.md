@@ -10,26 +10,26 @@ R-05 · AI 影像 · 實測
 > **你會知道：**原本只在 Seedance 上成立的「Blender 灰模帶運鏡」，換成 MiniMax H3 Max 也跑得動——一發 15 秒 480P、US$1.50、42 秒。路人要不要放進灰模、誰來建模比較划算、同一顆灰模怎麼換成插畫風。
 
 輪播（20 張；每一張在講什麼另見「每一頁在講什麼」）：
-1. 影片 https://tools.arminkao.com/research/media/DdmztkYE2jB/01.mp4
-2. 影片 https://tools.arminkao.com/research/media/DdmztkYE2jB/02.mp4
-3. 影片 https://tools.arminkao.com/research/media/DdmztkYE2jB/03.mp4
-4. 圖 https://tools.arminkao.com/research/media/DdmztkYE2jB/04.jpg
-5. 圖 https://tools.arminkao.com/research/media/DdmztkYE2jB/05.jpg
-6. 圖 https://tools.arminkao.com/research/media/DdmztkYE2jB/06.jpg
-7. 圖 https://tools.arminkao.com/research/media/DdmztkYE2jB/07.jpg
-8. 影片 https://tools.arminkao.com/research/media/DdmztkYE2jB/08.mp4
-9. 影片 https://tools.arminkao.com/research/media/DdmztkYE2jB/09.mp4
-10. 影片 https://tools.arminkao.com/research/media/DdmztkYE2jB/10.mp4
-11. 影片 https://tools.arminkao.com/research/media/DdmztkYE2jB/11.mp4
-12. 影片 https://tools.arminkao.com/research/media/DdmztkYE2jB/12.mp4
-13. 圖 https://tools.arminkao.com/research/media/DdmztkYE2jB/13.jpg
-14. 影片 https://tools.arminkao.com/research/media/DdmztkYE2jB/14.mp4
-15. 圖 https://tools.arminkao.com/research/media/DdmztkYE2jB/15.jpg
-16. 圖 https://tools.arminkao.com/research/media/DdmztkYE2jB/16.jpg
-17. 圖 https://tools.arminkao.com/research/media/DdmztkYE2jB/17.jpg
-18. 圖 https://tools.arminkao.com/research/media/DdmztkYE2jB/18.jpg
-19. 圖 https://tools.arminkao.com/research/media/DdmztkYE2jB/19.jpg
-20. 圖 https://tools.arminkao.com/research/media/DdmztkYE2jB/20.jpg
+1. 影片 https://tools.arminkao.com/research/media/DdmztkYE2jB/01.mp4｜封面：左 Blender 灰模、右 H3 Max 成品，中央車站外牆
+2. 影片 https://tools.arminkao.com/research/media/DdmztkYE2jB/02.mp4｜無人灰模輸入對照 H3 Max 輸出，車站外牆寫實
+3. 影片 https://tools.arminkao.com/research/media/DdmztkYE2jB/03.mp4｜Fable 5 與 GPT-6 建的灰模上下對照，上黑下白外牆
+4. 圖 https://tools.arminkao.com/research/media/DdmztkYE2jB/04.jpg｜資訊亭灰模：上 Fable 5 無細節，下 GPT-6 有四面鐘
+5. 圖 https://tools.arminkao.com/research/media/DdmztkYE2jB/05.jpg｜純文字頁：Token 便宜還是模型便宜，談建模成本
+6. 圖 https://tools.arminkao.com/research/media/DdmztkYE2jB/06.jpg｜標題「GPT-6 自己找參考來源」，右側大括號，中間空白
+7. 圖 https://tools.arminkao.com/research/media/DdmztkYE2jB/07.jpg｜Grand Central Terminal 資訊亭鐘特寫與資訊亭照片截圖，附來源網址與 CC BY 2.0 標示
+8. 影片 https://tools.arminkao.com/research/media/DdmztkYE2jB/08.mp4｜標題「沒有人偶還是可以算出人」；上：灰模輸入（車站外牆），下：Seedance 2.5 輸出（石灰岩車站外牆）
+9. 影片 https://tools.arminkao.com/research/media/DdmztkYE2jB/09.mp4｜標題「太多人偶模型得出來」；上：車站外牆成片，下：大廳黑衣人群，附註人流用人偶模擬、有些穿幫
+10. 影片 https://tools.arminkao.com/research/media/DdmztkYE2jB/10.mp4｜標題「人偶模型越精緻沒有比較好」；大廳滿是人，下方左：GPT-6 精緻人偶灰模，右：Seedance 2.5 輸出（同一格，4 秒 480p 單發）
+11. 影片 https://tools.arminkao.com/research/media/DdmztkYE2jB/11.mp4｜H3 輸出對照：人偶版路人密但僵硬，文字版較自然
+12. 影片 https://tools.arminkao.com/research/media/DdmztkYE2jB/12.mp4｜H3 Max 與 CapCut Seedance 2.5 輸出上下對照
+13. 圖 https://tools.arminkao.com/research/media/DdmztkYE2jB/13.jpg｜微微角色表與插畫風大廳錨點圖（金黃色調）
+14. 影片 https://tools.arminkao.com/research/media/DdmztkYE2jB/14.mp4｜無人灰模輸入對照插畫風 H3 輸出，米黃色外牆
+15. 圖 https://tools.arminkao.com/research/media/DdmztkYE2jB/15.jpg｜成本與速度長條圖：價差 6 倍、等待差 10 倍
+16. 圖 https://tools.arminkao.com/research/media/DdmztkYE2jB/16.jpg｜寫實版提示詞全文（上半，英文）
+17. 圖 https://tools.arminkao.com/research/media/DdmztkYE2jB/17.jpg｜時間軸與路人段提示詞全文（英文）
+18. 圖 https://tools.arminkao.com/research/media/DdmztkYE2jB/18.jpg｜插畫風（魔法石）提示詞全文（英文）
+19. 圖 https://tools.arminkao.com/research/media/DdmztkYE2jB/19.jpg｜兩張錨點圖的提示詞全文（英文）
+20. 圖 https://tools.arminkao.com/research/media/DdmztkYE2jB/20.jpg｜深色底一排工具圖示：Blender、Claude Code、OpenAI、fal 等
 
 > IG 原文 · 2026.09.23：H3 我也可以跟著灰模跑了， 做小屁影片，會更省錢一點
 
@@ -123,6 +123,41 @@ Turn this gray 3D previs render into a photoreal photograph of the main concours
 ```
 Repaint the first image (a gray 3D render of a grand train-station concourse) in the exact art style of the second image: a hand-drawn Japanese animated film background with thin brown line art, flat gouache color, visible paper grain, a low-saturation warm palette and soft morning haze. Keep the first image's exact camera angle, composition and architecture: the tall arched windows, balcony railings, the round information booth with its four-faced clock, the floor tiles and the sunbeams in the same places. Take only the style from the second image, not its buildings, people or market. The concourse is empty, no people. No text.
 ```
+
+## 給 AI Agent：照這段做
+
+把這頁網址丟給你的 Claude、Codex 或其他 agent，跟它說「照這頁的『給 AI Agent』段做」。純文字版：[h3-greybox.md](https://tools.arminkao.com/research/h3-greybox.md)。
+
+**這段能幫你做到什麼：**用一顆 Blender 無人灰模定住運鏡，叫 MiniMax H3 Max 重畫成寫實或插畫風的 15 秒影片，路人用提示詞生。
+
+**要先準備：**以下數字都是作者當次實測（2026.09.23）。
+
+- 灰模影片（無人灰模＋主角一個人形，範例 14.96 秒）。頁面沒附檔，請自備；做法見 R-01「拿 Blender 當線稿」。
+- 一張從灰模截出的畫面（頁面只說使用灰模截圖），用來產錨點圖。
+- 插畫版另需：角色表（Image 1）和一張畫風參考（錨點用）。頁面沒附，請自備。
+- 平台與模型：fal 上的 MiniMax H3 Max reference-to-video，480P、15 秒。GPT Image 2 edit 產錨點，一張約 US$0.014。
+- 預估花費：影片一發 US$1.50、42 秒算完（作者實付）。
+
+**步驟**
+
+1. 做無人灰模，只放主角一個灰色人形，鏡頭路徑定好。路人不要做成人偶。
+2. 把灰模截一格，並備好畫風參考；插畫版的錨點須同時輸入灰模截圖與畫風參考，不能只送截圖。丟 GPT Image 2 edit，用頁面「錨點圖：寫實大廳」或「錨點圖：插畫大廳」的提示詞，得到 Image 1（寫實版）或 Image 2（插畫版）。
+3. 複製頁面「寫實版」或「插畫版（魔法石）」提示詞。選一個，不要混用。
+4. 把提示詞裡的 Video 1、Image 1、Image 2 對到你自己的檔案，編號要一致。
+5. 路人數量、動作留在提示詞文字裡改（寫實版約 300 人，插畫版約 40 人）。
+6. 在 fal 送 MiniMax H3 Max，480P、15 秒。
+7. 看結果。
+
+**怎樣算完成：**影片 15 秒；鏡頭路徑、高度、速度、結尾構圖跟灰模一致；主角臉、髮、衣服全程不變；路人有真的位移、步態不僵；畫面沒有文字、沒有灰色人偶。
+
+**常見失敗與下一步**
+
+- 灰模放很多人偶（作者試過 317 個）：路人照抄人偶的僵硬步態。拿掉人偶，改用文字寫路人。
+- 人偶做得更精細：算出來反而更像人偶。不要往精細做。
+- 要更多路人、更像真的、要聲音：作者改用 CapCut 內建 Seedance 2.5（一發 510 點）效果較好，花費較高。細節見 R-06。
+- 其他失敗處理：頁面未說明，請自行決定。
+
+**不要做的事：**不要把大量人偶放進灰模；作者這次比較認為，讓語言模型只寫提示詞比叫它建 3D 人偶划算；不要假設 @Video／@Image 的檔案在這頁，要自備；不要把作者的價格與時間當保證，平台會調價。
 
 工具：Blender（灰模）、Claude Code 與 GPT-6（寫建模程式與提示詞）、GPT Image 2（錨點圖）、fal 上的 MiniMax H3 Max（480P、15 秒）、CapCut 與 Higgsfield 上的 Seedance 2.5。
 

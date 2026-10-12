@@ -31,14 +31,14 @@
 
   <div class="cara">
     <div class="track">
-      <div class="slide"><video src="media/Dcyu_b6khyB/01.mp4" poster="media/Dcyu_b6khyB/01_poster.jpg" muted loop playsinline preload="none"></video></div>
-      <div class="slide"><video src="media/Dcyu_b6khyB/02.mp4" poster="media/Dcyu_b6khyB/02_poster.jpg" muted loop playsinline preload="none"></video></div>
-      <div class="slide"><video src="media/Dcyu_b6khyB/03.mp4" poster="media/Dcyu_b6khyB/03_poster.jpg" muted loop playsinline preload="none"></video></div>
-      <div class="slide"><video src="media/Dcyu_b6khyB/04.mp4" poster="media/Dcyu_b6khyB/04_poster.jpg" muted loop playsinline preload="none"></video></div>
-      <div class="slide"><video src="media/Dcyu_b6khyB/05.mp4" poster="media/Dcyu_b6khyB/05_poster.jpg" muted loop playsinline preload="none"></video></div>
-      <div class="slide"><img src="media/Dcyu_b6khyB/06.jpg" loading="lazy" alt=""></div>
-      <div class="slide"><img src="media/Dcyu_b6khyB/07.jpg" loading="lazy" alt=""></div>
-      <div class="slide"><img src="media/Dcyu_b6khyB/08.jpg" loading="lazy" alt=""></div>
+      <div class="slide"><video src="media/Dcyu_b6khyB/01.mp4" aria-label="上：灰模，車站建築量體與一群小黑點人；下：成片，米色石灰岩車站外觀" poster="media/Dcyu_b6khyB/01_poster.jpg" muted loop playsinline preload="none"></video></div>
+      <div class="slide"><video src="media/Dcyu_b6khyB/02.mp4" aria-label="上：灰模，同建築、人較少；下：成片，偏冷色調的車站外觀，無參考圖" poster="media/Dcyu_b6khyB/02_poster.jpg" muted loop playsinline preload="none"></video></div>
+      <div class="slide"><video src="media/Dcyu_b6khyB/03.mp4" aria-label="上：灰模，三排深色人形與綠色人形；下：成片，路人行走，有人飄著走" poster="media/Dcyu_b6khyB/03_poster.jpg" muted loop playsinline preload="none"></video></div>
+      <div class="slide"><video src="media/Dcyu_b6khyB/04.mp4" aria-label="上：同一灰模三排人形；下：成片，大廳光柱中路人拖行李行走，看起來正常" poster="media/Dcyu_b6khyB/04_poster.jpg" muted loop playsinline preload="none"></video></div>
+      <div class="slide"><video src="media/Dcyu_b6khyB/05.mp4" aria-label="上：灰模，高空俯視大廳與小人群；下：成片，穹頂大廳，遠處人群像假人柱" poster="media/Dcyu_b6khyB/05_poster.jpg" muted loop playsinline preload="none"></video></div>
+      <div class="slide"><img src="media/Dcyu_b6khyB/06.jpg" loading="lazy" alt="提示詞現行版全文（硬規則、主體、參考、環境、聲音），黑底白字"></div>
+      <div class="slide"><img src="media/Dcyu_b6khyB/07.jpg" loading="lazy" alt="四張中央車站參考照：一張有人站在欄杆旁，其餘為大廳全景與光柱"></div>
+      <div class="slide"><img src="media/Dcyu_b6khyB/08.jpg" loading="lazy" alt="黑底白字：參考圖是自己拍的照片，後來發現中央車站根本不用參考圖"></div>
     </div>
     <button class="nav prev" aria-label="上一張">‹</button><button class="nav next" aria-label="下一張">›</button>
     <div class="count"></div><div class="dots"></div>
@@ -93,6 +93,48 @@
 【環境】紐約中央車站主大廳：米白色石灰岩、大理石地板、天青色星座穹頂，背景中央偏右是圓形詢問處（矮大理石檯面＋開放的銅框玻璃亭）。清晨低角度陽光從東南斜射，地板長條光斑，薄霧讓光柱看得見。真實攝影質感、自然動態模糊。兩端大拱窗是透明玻璃，窗外是天空與陽光；天青色的星座圖案只在穹頂上，絕不出現在窗玻璃上。
 
 【聲音】只要現場環境音：月台廣播回音、腳步、行李輪、人聲。不要配樂、不要旁白。</pre></div>
+
+
+  <section id="agent">
+  <h2>給 AI Agent：照這段做</h2>
+  <p class="muted">把這頁網址丟給你的 Claude、Codex 或其他 agent，跟它說「照這頁的『給 AI Agent』段做」。純文字版：<a href="https://tools.arminkao.com/research/crowd-in-greybox.md">crowd-in-greybox.md</a>。</p>
+  <p><b>這段能幫你做到什麼：</b>用一顆 4 秒灰模試片，測灰模裡的人要怎麼給，作者加上硬規則後，這次複測路人不再飄著走。作者當次實測（2026.09.02，Seedance 2.5，480P）。</p>
+  <p><b>要先準備</b></p>
+  <ul>
+    <li>灰模試片：Blender 做，4 秒固定機位，三排人形放不同深度，再加一個綠色主角人形。頁面沒附檔，自備。</li>
+    <li>平台與模型：Seedance 2.5 reference-to-video（頁面提到即夢與 fal），480P。</li>
+    <li>預估花費：頁面寫一顆 4 秒試片約 US$1（作者當次）。</li>
+  </ul>
+  <p><b>步驟</b></p>
+  <ol>
+    <li>前排人形只給位移、零步態（滑行）。</li>
+    <li>中排人形給位移加起伏加微擺。</li>
+    <li>後排人形完全靜止（全靜）。</li>
+    <li>主角人形塗綠色，提示詞指定她是主角、絕對不穿綠色衣服。</li>
+    <li>複製頁面「提示詞」區塊（現行版），@Video1 換成你的灰模片。</li>
+    <li>確認硬規則含兩句：「腳步與位移同步、不滑行；站定的人不漂移」與「不管距離多遠，不出現雕像、假人、人偶」。</li>
+    <li>送出 4 秒試片，逐排看結果。</li>
+  </ol>
+  <p><b>怎樣算完成</b></p>
+  <ul>
+    <li>前排與中排的路人是自然步行。</li>
+    <li>沒有人站著飄移。</li>
+    <li>綠色主角被認出來，而且沒穿綠衣。</li>
+    <li>頁面記錄：這次測試的後排全靜的人變成深色人偶剪影。</li>
+  </ul>
+  <p><b>常見失敗與下一步</b></p>
+  <ul>
+    <li>有人站著飄移：在硬規則加「腳步必須與位移同步、不滑行；站定的人不漂移」，重送。</li>
+    <li>起伏微擺不能省，它是「這個人在走路」的訊號。</li>
+    <li>鏡頭拉到高空時，中遠景凍成假人柱：頁面未解決。AI 猜是 480P 像素不夠，作者認為不是；720P 未測，請自行決定要不要測。</li>
+  </ul>
+  <p><b>不要做的事</b></p>
+  <ul>
+    <li>不要讓全靜的人當成走路的人。</li>
+    <li>不要把「綠色」寫成衣服顏色；綠色只是灰模標記。</li>
+    <li>不要把高空盲區的原因當成定論。</li>
+  </ul>
+  </section>
 
   <div class="src">工具：Claude Code（Blender 程式與提示詞）、Blender（灰模與人形）、即夢與 fal 上的 Seedance 2.5。</div>
   <a class="back" href="../#research">← 回到研究列表</a>

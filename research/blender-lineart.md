@@ -10,11 +10,11 @@ R-01 · AI 影像 · 方法
 > **你會知道：**一支灰模片＋三張定妝照＋一張場景圖，怎麼讓 Seedance 2.5 照著你排好的運鏡走。這是後面幾篇（單板、中央車站、H3）的起點。
 
 輪播（5 張；每一張在講什麼另見「每一頁在講什麼」）：
-1. 圖 https://tools.arminkao.com/research/media/DctZbVHE7IQ/01.jpg
-2. 影片 https://tools.arminkao.com/research/media/DctZbVHE7IQ/02.mp4
-3. 影片 https://tools.arminkao.com/research/media/DctZbVHE7IQ/03.mp4
-4. 影片 https://tools.arminkao.com/research/media/DctZbVHE7IQ/04.mp4
-5. 圖 https://tools.arminkao.com/research/media/DctZbVHE7IQ/05.jpg
+1. 圖 https://tools.arminkao.com/research/media/DctZbVHE7IQ/01.jpg｜上：藍色跑車三角度定妝照；下：雨夜山道髮夾彎場景圖
+2. 影片 https://tools.arminkao.com/research/media/DctZbVHE7IQ/02.mp4｜上：Seedance 成片，雨夜霧中路燈與樹影；下：Blender 灰模俯視，路面與方塊
+3. 影片 https://tools.arminkao.com/research/media/DctZbVHE7IQ/03.mp4｜上：成片，藍色跑車尾部貼地跟拍；下：灰模，方塊車尾與尾翼
+4. 影片 https://tools.arminkao.com/research/media/DctZbVHE7IQ/04.mp4｜上：成片，濕路面低角度髮夾彎；下：灰模，灰色方塊與路面
+5. 圖 https://tools.arminkao.com/research/media/DctZbVHE7IQ/05.jpg｜方法四步驟、提示詞「參考」段，與畫布節點截圖（A、C、D 三機位）
 
 > IG 原文 · 2026.08.31：這樣呀 運鏡可以不抽卡 拿Blender當做線稿 我不是用Higgsfield做的 因為我還在嘗試看看差異，我是在開源畫布上做的走API接fal ，3D是Claude 做的。
 
@@ -82,6 +82,46 @@ D · 髮夾彎外側固定機位只旋轉不移動，目送甩尾
 
 【環境】地形與路線完全照 @Video1（山路＋髮夾彎）；材質、光線、天氣與色調照 @Image4：雨夜日本山道，橘黃路燈、細密雨絲、濕柏油強反光、空氣帶雨霧。真實攝影質感、動態模糊自然。
 ```
+
+## 給 AI Agent：照這段做
+
+把這頁網址丟給你的 Claude、Codex 或其他 agent，跟它說「照這頁的『給 AI Agent』段做」。純文字版：[blender-lineart.md](https://tools.arminkao.com/research/blender-lineart.md)。
+
+**這段能幫你做到什麼：**用一支 Blender 灰模片當運鏡參考，讓 Seedance 2.5 照你排好的運鏡出片。作者這次實測（2026.08.31），運鏡跟住灰模。
+
+**要先準備**
+
+- 灰模片（約 6 秒）：用 Blender 蓋灰模場景，攝影機用約束跟拍。頁面沒附檔，自備。
+- 主體的三個角度定妝照＋一張場景圖：頁面用 Nano Banana 生成，圖自備。
+- 平台與模型：Seedance 2.5 reference-to-video，作者走 fal 的 API。
+- 預估花費：頁面未說明，請自行決定。
+
+**步驟**
+
+1. 在 Blender 蓋灰模場景，攝影機用約束跟拍，輸出 6 秒灰模片。
+2. 用 Nano Banana 生同一個主體的三個角度，再生一張場景圖。
+3. 照頁面「三個機位的提示詞」寫五段：硬規則、主體、參考、運鏡、環境。
+4. 把「參考」段照抄：@Video1 只是攝影機運動參考，灰色方塊不是內容，只是佔位。
+5. 在「參考」段寫清楚灰模哪一端是車頭、哪一端是車尾。
+6. 把灰模片設為 @Video1，定妝照設為 @Image1–3，場景圖設為 @Image4。
+7. 送 Seedance 2.5 一發出片。三個機位只換【運鏡】一段，每個機位須搭配對應的灰模片（原頁要求逐格複製 @Video1 的攝影機路徑）。
+8. 要換車款，只改【主體】一段。
+
+**怎樣算完成**
+
+- 成片的運鏡路徑、轉彎、速度節奏和灰模一致。
+- 成片裡只有一台車，沒有第二台車、沒有無人機入鏡。
+- 車從第一格就在畫面內；材質、光線、天氣照場景圖。
+
+**常見失敗與下一步**
+
+- 頁面未寫失敗案例與排錯流程。
+
+**不要做的事**
+
+- 不要讓灰模裡的方塊、板子、地面變成成片內容；提示詞要明寫它們只是佔位。
+- 不要讓攝影機入鏡，也不要用空路開場。
+- 不要把這頁的數字當成一定如此；這是作者一次實測。
 
 工具：Claude Code（寫 Blender 程式與提示詞）、Blender（灰模）、Nano Banana（定妝照與場景圖）、fal 上的 Seedance 2.5。畫布是我們自己的節點畫布，走 API 接 fal。
 

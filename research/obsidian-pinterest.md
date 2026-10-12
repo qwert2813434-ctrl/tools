@@ -79,6 +79,47 @@ macOS 對「沒有自己身分的程式」——Chrome 叫起來的小程式、�
 
 [github.com/qwert2813434-ctrl/collection-wall](https://github.com/qwert2813434-ctrl/collection-wall)（MIT 授權）
 
+## 給 AI Agent：照這段做
+
+把這頁網址丟給你的 Claude、Codex 或其他 agent，跟它說「照這頁的『給 AI Agent』段做」。純文字版：[obsidian-pinterest.md](https://tools.arminkao.com/research/obsidian-pinterest.md)。
+
+把這頁網址丟給你的 Claude、Codex 或其他 agent，跟它說「照 collection-wall repo 蓋收藏牆」。作者只在 macOS 上跑過。標「repo 的 README 寫」的句子出自該 repo 的 README，不是本頁實測。
+
+****這段能幫你做到什麼**：**蓋出自己的版本：Chrome 右鍵「收藏這頁」，把網頁存成 Obsidian 筆記加本機封面，並排成瀑布流牆。
+
+**要先準備**
+
+- Repo：[https://github.com/qwert2813434-ctrl/collection-wall（repo](https://github.com/qwert2813434-ctrl/collection-wall（repo) 授權 MIT；README 寫：沒有程式碼，只有規格書）。
+- repo 的 README 寫需要：Obsidian 桌面版、Python 3.9+、Chrome 或 Chromium 系瀏覽器、openssl；選配 ffmpeg、能看圖的 LLM CLI。
+- README 寫作者只在 macOS 上跑過；Windows／Linux 請自行驗證路徑與權限。
+
+**步驟**
+
+1. 把 repo 放進一個空專案。
+2. repo 的 README 寫：CLAUDE.md 是 agent 一進 repo 先讀的檔，BUILD.md 是施工順序主文件。
+3. README 寫：SPEC.md 的「安全規則」一條都不准放寬。
+4. README 的叫 AI 蓋範例寫：照 BUILD.md 第 0 到第 6 階段依序蓋。階段 1–3 蓋完就能用；右鍵收藏是 4，影片封面是 5，AI 分類是 6（選配）。
+5. README 寫：每階段先跑 ACCEPTANCE.md 對應那節的驗收，過了才做下一階段。
+6. README 寫：遇到 PITFALLS.md 提到的症狀先查（共三十二條）。
+
+**怎樣算完成**
+
+- 依 README 的流程，每階段的 ACCEPTANCE.md 驗收都過（README 寫它含可直接複製的安全測試）。
+- 在 Chrome 按右鍵選「收藏這頁」，十幾秒後（作者實測）保管庫多一則筆記與一張本機封面，牆上多一張卡。
+
+**常見失敗與下一步**
+
+- 書籤小工具連本機失敗：網站的 CSP 會擋，改走擴充。
+- Chrome 叫起的原生程式讀不到下載資料夾或 iCloud 保管庫：macOS 不跳詢問直接拒絕，Chrome 端只顯示「Native host has exited」。改用 Obsidian 外掛開本機門當中繼；README 寫推理過程在 PITFALLS.md 第 1 條。
+- Instagram 封面抓到推薦區別人的貼文：改用 og:image 判斷。
+
+**不要做的事**
+
+- repo 的 README 寫，本機門的規格強制：只聽 127.0.0.1、只收自己那支擴充的 Origin、驗 Host、封面網址只收公開 http／https。不要放寬。
+- README 寫：收藏資料、封面檔、含你路徑的外掛設定檔不進 repo；擴充私鑰（.pem）放在擴充資料夾和 repo 外面。
+- README 寫：AI 分類預設關，開了會把封面、標題、描述送到你選的模型服務。
+- README 寫：只讀自己已登入、正在看的那一頁，不代登入、不批次爬；遵守各網站使用條款，收藏只供個人參考。
+
 資料來源
 
 - 右鍵收藏端到端實測：2026.09.04（Pinterest、YouTube）

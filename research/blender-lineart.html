@@ -31,11 +31,11 @@
 
   <div class="cara">
     <div class="track">
-      <div class="slide"><img src="media/DctZbVHE7IQ/01.jpg" loading="lazy" alt=""></div>
-      <div class="slide"><video src="media/DctZbVHE7IQ/02.mp4" poster="media/DctZbVHE7IQ/02_poster.jpg" muted loop playsinline preload="none"></video></div>
-      <div class="slide"><video src="media/DctZbVHE7IQ/03.mp4" poster="media/DctZbVHE7IQ/03_poster.jpg" muted loop playsinline preload="none"></video></div>
-      <div class="slide"><video src="media/DctZbVHE7IQ/04.mp4" poster="media/DctZbVHE7IQ/04_poster.jpg" muted loop playsinline preload="none"></video></div>
-      <div class="slide"><img src="media/DctZbVHE7IQ/05.jpg" loading="lazy" alt=""></div>
+      <div class="slide"><img src="media/DctZbVHE7IQ/01.jpg" loading="lazy" alt="上：藍色跑車三角度定妝照；下：雨夜山道髮夾彎場景圖"></div>
+      <div class="slide"><video src="media/DctZbVHE7IQ/02.mp4" aria-label="上：Seedance 成片，雨夜霧中路燈與樹影；下：Blender 灰模俯視，路面與方塊" poster="media/DctZbVHE7IQ/02_poster.jpg" muted loop playsinline preload="none"></video></div>
+      <div class="slide"><video src="media/DctZbVHE7IQ/03.mp4" aria-label="上：成片，藍色跑車尾部貼地跟拍；下：灰模，方塊車尾與尾翼" poster="media/DctZbVHE7IQ/03_poster.jpg" muted loop playsinline preload="none"></video></div>
+      <div class="slide"><video src="media/DctZbVHE7IQ/04.mp4" aria-label="上：成片，濕路面低角度髮夾彎；下：灰模，灰色方塊與路面" poster="media/DctZbVHE7IQ/04_poster.jpg" muted loop playsinline preload="none"></video></div>
+      <div class="slide"><img src="media/DctZbVHE7IQ/05.jpg" loading="lazy" alt="方法四步驟、提示詞「參考」段，與畫布節點截圖（A、C、D 三機位）"></div>
     </div>
     <button class="nav prev" aria-label="上一張">‹</button><button class="nav next" aria-label="下一張">›</button>
     <div class="count"></div><div class="dots"></div>
@@ -95,6 +95,47 @@
 【運鏡】機位固定在髮夾彎外側、輪胎高度，整段完全不動只旋轉：0–2.5 秒車從遠方逼近、鏡頭緩慢迎車；2.5–3.5 秒車貼身轟然掃過鏡頭前；3.5–6 秒鏡頭目送車甩尾遠去。
 
 【環境】地形與路線完全照 @Video1（山路＋髮夾彎）；材質、光線、天氣與色調照 @Image4：雨夜日本山道，橘黃路燈、細密雨絲、濕柏油強反光、空氣帶雨霧。真實攝影質感、動態模糊自然。</pre></div>
+
+
+  <section id="agent">
+  <h2>給 AI Agent：照這段做</h2>
+  <p class="muted">把這頁網址丟給你的 Claude、Codex 或其他 agent，跟它說「照這頁的『給 AI Agent』段做」。純文字版：<a href="https://tools.arminkao.com/research/blender-lineart.md">blender-lineart.md</a>。</p>
+  <p><b>這段能幫你做到什麼：</b>用一支 Blender 灰模片當運鏡參考，讓 Seedance 2.5 照你排好的運鏡出片。作者這次實測（2026.08.31），運鏡跟住灰模。</p>
+  <p><b>要先準備</b></p>
+  <ul>
+    <li>灰模片（約 6 秒）：用 Blender 蓋灰模場景，攝影機用約束跟拍。頁面沒附檔，自備。</li>
+    <li>主體的三個角度定妝照＋一張場景圖：頁面用 Nano Banana 生成，圖自備。</li>
+    <li>平台與模型：Seedance 2.5 reference-to-video，作者走 fal 的 API。</li>
+    <li>預估花費：頁面未說明，請自行決定。</li>
+  </ul>
+  <p><b>步驟</b></p>
+  <ol>
+    <li>在 Blender 蓋灰模場景，攝影機用約束跟拍，輸出 6 秒灰模片。</li>
+    <li>用 Nano Banana 生同一個主體的三個角度，再生一張場景圖。</li>
+    <li>照頁面「三個機位的提示詞」寫五段：硬規則、主體、參考、運鏡、環境。</li>
+    <li>把「參考」段照抄：@Video1 只是攝影機運動參考，灰色方塊不是內容，只是佔位。</li>
+    <li>在「參考」段寫清楚灰模哪一端是車頭、哪一端是車尾。</li>
+    <li>把灰模片設為 @Video1，定妝照設為 @Image1–3，場景圖設為 @Image4。</li>
+    <li>送 Seedance 2.5 一發出片。三個機位只換【運鏡】一段，每個機位須搭配對應的灰模片（原頁要求逐格複製 @Video1 的攝影機路徑）。</li>
+    <li>要換車款，只改【主體】一段。</li>
+  </ol>
+  <p><b>怎樣算完成</b></p>
+  <ul>
+    <li>成片的運鏡路徑、轉彎、速度節奏和灰模一致。</li>
+    <li>成片裡只有一台車，沒有第二台車、沒有無人機入鏡。</li>
+    <li>車從第一格就在畫面內；材質、光線、天氣照場景圖。</li>
+  </ul>
+  <p><b>常見失敗與下一步</b></p>
+  <ul>
+    <li>頁面未寫失敗案例與排錯流程。</li>
+  </ul>
+  <p><b>不要做的事</b></p>
+  <ul>
+    <li>不要讓灰模裡的方塊、板子、地面變成成片內容；提示詞要明寫它們只是佔位。</li>
+    <li>不要讓攝影機入鏡，也不要用空路開場。</li>
+    <li>不要把這頁的數字當成一定如此；這是作者一次實測。</li>
+  </ul>
+  </section>
 
   <div class="src">工具：Claude Code（寫 Blender 程式與提示詞）、Blender（灰模）、Nano Banana（定妝照與場景圖）、fal 上的 Seedance 2.5。畫布是我們自己的節點畫布，走 API 接 fal。</div>
   <a class="back" href="../#research">← 回到研究列表</a>

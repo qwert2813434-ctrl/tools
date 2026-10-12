@@ -31,15 +31,15 @@
 
   <div class="cara">
     <div class="track">
-      <div class="slide"><video src="media/DcvcoVDE45X/01.mp4" poster="media/DcvcoVDE45X/01_poster.jpg" muted loop playsinline preload="none"></video></div>
-      <div class="slide"><video src="media/DcvcoVDE45X/02.mp4" poster="media/DcvcoVDE45X/02_poster.jpg" muted loop playsinline preload="none"></video></div>
-      <div class="slide"><video src="media/DcvcoVDE45X/03.mp4" poster="media/DcvcoVDE45X/03_poster.jpg" muted loop playsinline preload="none"></video></div>
-      <div class="slide"><video src="media/DcvcoVDE45X/04.mp4" poster="media/DcvcoVDE45X/04_poster.jpg" muted loop playsinline preload="none"></video></div>
-      <div class="slide"><img src="media/DcvcoVDE45X/05.jpg" loading="lazy" alt=""></div>
-      <div class="slide"><img src="media/DcvcoVDE45X/06.jpg" loading="lazy" alt=""></div>
-      <div class="slide"><img src="media/DcvcoVDE45X/07.jpg" loading="lazy" alt=""></div>
-      <div class="slide"><img src="media/DcvcoVDE45X/08.jpg" loading="lazy" alt=""></div>
-      <div class="slide"><img src="media/DcvcoVDE45X/09.jpg" loading="lazy" alt=""></div>
+      <div class="slide"><video src="media/DcvcoVDE45X/01.mp4" aria-label="三組輸入：橘外套滑雪者定妝照、雪地場景、Blender 灰模縮圖" poster="media/DcvcoVDE45X/01_poster.jpg" muted loop playsinline preload="none"></video></div>
+      <div class="slide"><video src="media/DcvcoVDE45X/02.mp4" aria-label="上：灰模，雪坡上圓錐樹與小方塊；下：成片，穿越機視角俯衝雪坡，滑雪者很小" poster="media/DcvcoVDE45X/02_poster.jpg" muted loop playsinline preload="none"></video></div>
+      <div class="slide"><video src="media/DcvcoVDE45X/03.mp4" aria-label="上：灰模，低角度雪坡與一塊深色板；下：成片，橘外套滑雪者貼雪面仰拍" poster="media/DcvcoVDE45X/03_poster.jpg" muted loop playsinline preload="none"></video></div>
+      <div class="slide"><video src="media/DcvcoVDE45X/04.mp4" aria-label="上：灰模，大塊灰色柱形；下：成片，長焦樹林動態模糊中的橘衣滑雪者" poster="media/DcvcoVDE45X/04_poster.jpg" muted loop playsinline preload="none"></video></div>
+      <div class="slide"><img src="media/DcvcoVDE45X/05.jpg" loading="lazy" alt="提示詞七段結構表：硬規則、主體、動作、參考、運鏡、環境、聲音"></div>
+      <div class="slide"><img src="media/DcvcoVDE45X/06.jpg" loading="lazy" alt="C 穿越機追擊提示詞全文上半：硬規則、主體、動作"></div>
+      <div class="slide"><img src="media/DcvcoVDE45X/07.jpg" loading="lazy" alt="C 穿越機追擊提示詞全文下半：參考、運鏡、環境、聲音"></div>
+      <div class="slide"><img src="media/DcvcoVDE45X/08.jpg" loading="lazy" alt="四輪測試表 v2 至 v5：v5 只留一塊板，成功"></div>
+      <div class="slide"><img src="media/DcvcoVDE45X/09.jpg" loading="lazy" alt="上：Seedance 生成介面與提示詞；下：畫布節點，三個機位與成品集"></div>
     </div>
     <button class="nav prev" aria-label="上一張">‹</button><button class="nav next" aria-label="下一張">›</button>
     <div class="count"></div><div class="dots"></div>
@@ -145,6 +145,51 @@
 【環境】地形與路線完全照 @Video1（十六度雪坡、三個 S 彎、兩側針葉林）；材質、光線與色調照 @Image3。滑過的雪面留下清晰板痕、揚起雪粉，真實攝影質感、動態模糊自然。
 
 【聲音】只要環境音：風聲、板刃切進雪裡的沙沙刮聲、雪粉噴起聲、起跳離地的空白與落地的悶響。不要配樂、不要人聲、不要旁白。</pre></div>
+
+
+  <section id="agent">
+  <h2>給 AI Agent：照這段做</h2>
+  <p class="muted">把這頁網址丟給你的 Claude、Codex 或其他 agent，跟它說「照這頁的『給 AI Agent』段做」。純文字版：<a href="https://tools.arminkao.com/research/snowboard-no-body.md">snowboard-no-body.md</a>。</p>
+  <p><b>這段能幫你做到什麼：</b>做單板滑雪的灰模運鏡時，灰模只放一塊雪板，讓模型自己編出自然的滑雪動作。作者當次實測（2026.09.01，四輪測試，fal 上的 Seedance 2.5，6 秒）。</p>
+  <p><b>要先準備</b></p>
+  <ul>
+    <li>灰模片：Blender 做，畫面只有一塊雪板、沒有人。板頭中灰、板尾全黑。頁面沒附檔，自備。</li>
+    <li>滑雪者定妝照兩張（同一人兩個角度）：全罩安全帽、雪鏡、頸套，全片看不到臉。圖自備。</li>
+    <li>雪地場景圖一張（定材質、光線、色調）。圖自備。</li>
+    <li>平台與模型：Seedance 2.5 reference-to-video，作者走 fal。</li>
+    <li>預估花費：頁面未說明，請自行決定。</li>
+  </ul>
+  <p><b>步驟</b></p>
+  <ol>
+    <li>灰模只留一塊板，不放人、手、腳或軀幹。</li>
+    <li>灰模決定運鏡、時間節奏、板子位置、傾斜、轉向、起跳與落地時間點。</li>
+    <li>定妝照裡的滑雪者要遮住臉。</li>
+    <li>提示詞照頁面結構寫七段：硬規則、主體、動作、參考、運鏡、環境、聲音。</li>
+    <li>【動作】段寫「由你自己編排，不要照抄灰模的手腳」。</li>
+    <li>【參考】段寫明：@Video1 只有一塊板、沒有人；把滑雪者站上那塊板。</li>
+    <li>@Image1–2 設為滑雪者，@Image3 設為雪地，@Video1 設為灰模。</li>
+    <li>照頁面三個機位 C、F、E 的提示詞全文複製，只換【動作】與【運鏡】；F、E 還須修【參考】件數、刪【聲音】的起跳句（頁面已註明），並搭配相符的灰模片。</li>
+    <li>以上改完，再送出。</li>
+  </ol>
+  <p><b>怎樣算完成</b></p>
+  <ul>
+    <li>每一格都有人騎在雪板上，沒有空板；動作流暢，不僵硬、不逐格頓住。</li>
+    <li>運鏡、板子位置與轉向和灰模一致；全片看不到臉。</li>
+  </ul>
+  <p><b>常見失敗與下一步</b></p>
+  <ul>
+    <li>灰模給有關節的手臂（v2）：模型逐格照抄，人僵硬。拿掉人，只留板。</li>
+    <li>只留軀幹（v3）：動作自然但比例壞掉。</li>
+    <li>正確人體比例並寫「別照抄四肢」（v4）：還是僵硬。</li>
+    <li>作者當次使用照片級真人臉參考時，Seedance 回 422。改用全罩安全帽加雪鏡加頸套。</li>
+    <li>照抄拿掉跳躍的兩版時：把【參考】的「六件事」改成「五件事」，刪掉【聲音】的起跳那句（頁面已註明）。</li>
+  </ul>
+  <p><b>不要做的事</b></p>
+  <ul>
+    <li>不要在灰模放人形、手臂或四肢。</li>
+    <li>不要讓攝影機入鏡，不要出現第二個人、纜車或無人機；不要把四輪結果當成一定如此；作者只測了四次。</li>
+  </ul>
+  </section>
 
   <div class="src">工具：Claude Code（Blender 程式與提示詞）、Blender（灰模）、fal 上的 Seedance 2.5（圖中都是 fal API 算的）。同一組在即夢上動作會更帥，原因不明，圖中沒有。</div>
   <a class="back" href="../#research">← 回到研究列表</a>

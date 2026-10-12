@@ -10,14 +10,14 @@ R-03 · AI 影像 · 實測
 > **你會知道：**灰模帶運鏡已經穩了，剩下的難題是「人」。怎麼用一顆 4 秒、約 US$1 的試片一次測三種給法；哪一句話讓路人不再飄著走；以及還沒解決的高空盲區。
 
 輪播（8 張；每一張在講什麼另見「每一頁在講什麼」）：
-1. 影片 https://tools.arminkao.com/research/media/Dcyu_b6khyB/01.mp4
-2. 影片 https://tools.arminkao.com/research/media/Dcyu_b6khyB/02.mp4
-3. 影片 https://tools.arminkao.com/research/media/Dcyu_b6khyB/03.mp4
-4. 影片 https://tools.arminkao.com/research/media/Dcyu_b6khyB/04.mp4
-5. 影片 https://tools.arminkao.com/research/media/Dcyu_b6khyB/05.mp4
-6. 圖 https://tools.arminkao.com/research/media/Dcyu_b6khyB/06.jpg
-7. 圖 https://tools.arminkao.com/research/media/Dcyu_b6khyB/07.jpg
-8. 圖 https://tools.arminkao.com/research/media/Dcyu_b6khyB/08.jpg
+1. 影片 https://tools.arminkao.com/research/media/Dcyu_b6khyB/01.mp4｜上：灰模，車站建築量體與一群小黑點人；下：成片，米色石灰岩車站外觀
+2. 影片 https://tools.arminkao.com/research/media/Dcyu_b6khyB/02.mp4｜上：灰模，同建築、人較少；下：成片，偏冷色調的車站外觀，無參考圖
+3. 影片 https://tools.arminkao.com/research/media/Dcyu_b6khyB/03.mp4｜上：灰模，三排深色人形與綠色人形；下：成片，路人行走，有人飄著走
+4. 影片 https://tools.arminkao.com/research/media/Dcyu_b6khyB/04.mp4｜上：同一灰模三排人形；下：成片，大廳光柱中路人拖行李行走，看起來正常
+5. 影片 https://tools.arminkao.com/research/media/Dcyu_b6khyB/05.mp4｜上：灰模，高空俯視大廳與小人群；下：成片，穹頂大廳，遠處人群像假人柱
+6. 圖 https://tools.arminkao.com/research/media/Dcyu_b6khyB/06.jpg｜提示詞現行版全文（硬規則、主體、參考、環境、聲音），黑底白字
+7. 圖 https://tools.arminkao.com/research/media/Dcyu_b6khyB/07.jpg｜四張中央車站參考照：一張有人站在欄杆旁，其餘為大廳全景與光柱
+8. 圖 https://tools.arminkao.com/research/media/Dcyu_b6khyB/08.jpg｜黑底白字：參考圖是自己拍的照片，後來發現中央車站根本不用參考圖
 
 > IG 原文 · 2026.09.03：人形問題，我其實目前還找不到怎麼改善 灰模上面的人，但運鏡這點應該已經沒事難題 車子模還算簡單，真人材料到目前為止還是會檔。 （即夢有時候可以夾帶資料包） 莫名其妙就可以了 但確實可以透過3D做一個外觀到人物前一鏡
 
@@ -68,6 +68,47 @@ R-03 · AI 影像 · 實測
 
 【聲音】只要現場環境音：月台廣播回音、腳步、行李輪、人聲。不要配樂、不要旁白。
 ```
+
+## 給 AI Agent：照這段做
+
+把這頁網址丟給你的 Claude、Codex 或其他 agent，跟它說「照這頁的『給 AI Agent』段做」。純文字版：[crowd-in-greybox.md](https://tools.arminkao.com/research/crowd-in-greybox.md)。
+
+**這段能幫你做到什麼：**用一顆 4 秒灰模試片，測灰模裡的人要怎麼給，作者加上硬規則後，這次複測路人不再飄著走。作者當次實測（2026.09.02，Seedance 2.5，480P）。
+
+**要先準備**
+
+- 灰模試片：Blender 做，4 秒固定機位，三排人形放不同深度，再加一個綠色主角人形。頁面沒附檔，自備。
+- 平台與模型：Seedance 2.5 reference-to-video（頁面提到即夢與 fal），480P。
+- 預估花費：頁面寫一顆 4 秒試片約 US$1（作者當次）。
+
+**步驟**
+
+1. 前排人形只給位移、零步態（滑行）。
+2. 中排人形給位移加起伏加微擺。
+3. 後排人形完全靜止（全靜）。
+4. 主角人形塗綠色，提示詞指定她是主角、絕對不穿綠色衣服。
+5. 複製頁面「提示詞」區塊（現行版），@Video1 換成你的灰模片。
+6. 確認硬規則含兩句：「腳步與位移同步、不滑行；站定的人不漂移」與「不管距離多遠，不出現雕像、假人、人偶」。
+7. 送出 4 秒試片，逐排看結果。
+
+**怎樣算完成**
+
+- 前排與中排的路人是自然步行。
+- 沒有人站著飄移。
+- 綠色主角被認出來，而且沒穿綠衣。
+- 頁面記錄：這次測試的後排全靜的人變成深色人偶剪影。
+
+**常見失敗與下一步**
+
+- 有人站著飄移：在硬規則加「腳步必須與位移同步、不滑行；站定的人不漂移」，重送。
+- 起伏微擺不能省，它是「這個人在走路」的訊號。
+- 鏡頭拉到高空時，中遠景凍成假人柱：頁面未解決。AI 猜是 480P 像素不夠，作者認為不是；720P 未測，請自行決定要不要測。
+
+**不要做的事**
+
+- 不要讓全靜的人當成走路的人。
+- 不要把「綠色」寫成衣服顏色；綠色只是灰模標記。
+- 不要把高空盲區的原因當成定論。
 
 工具：Claude Code（Blender 程式與提示詞）、Blender（灰模與人形）、即夢與 fal 上的 Seedance 2.5。
 

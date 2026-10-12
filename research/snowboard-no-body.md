@@ -10,15 +10,15 @@ R-02 · AI 影像 · 實測
 > **你會知道：**灰模裡放人偶，模型會逐格照抄人偶的姿勢，人就僵了。四輪測下來，最好的做法是灰模只留一塊雪板，動作交給模型自己編。
 
 輪播（9 張；每一張在講什麼另見「每一頁在講什麼」）：
-1. 影片 https://tools.arminkao.com/research/media/DcvcoVDE45X/01.mp4
-2. 影片 https://tools.arminkao.com/research/media/DcvcoVDE45X/02.mp4
-3. 影片 https://tools.arminkao.com/research/media/DcvcoVDE45X/03.mp4
-4. 影片 https://tools.arminkao.com/research/media/DcvcoVDE45X/04.mp4
-5. 圖 https://tools.arminkao.com/research/media/DcvcoVDE45X/05.jpg
-6. 圖 https://tools.arminkao.com/research/media/DcvcoVDE45X/06.jpg
-7. 圖 https://tools.arminkao.com/research/media/DcvcoVDE45X/07.jpg
-8. 圖 https://tools.arminkao.com/research/media/DcvcoVDE45X/08.jpg
-9. 圖 https://tools.arminkao.com/research/media/DcvcoVDE45X/09.jpg
+1. 影片 https://tools.arminkao.com/research/media/DcvcoVDE45X/01.mp4｜三組輸入：橘外套滑雪者定妝照、雪地場景、Blender 灰模縮圖
+2. 影片 https://tools.arminkao.com/research/media/DcvcoVDE45X/02.mp4｜上：灰模，雪坡上圓錐樹與小方塊；下：成片，穿越機視角俯衝雪坡，滑雪者很小
+3. 影片 https://tools.arminkao.com/research/media/DcvcoVDE45X/03.mp4｜上：灰模，低角度雪坡與一塊深色板；下：成片，橘外套滑雪者貼雪面仰拍
+4. 影片 https://tools.arminkao.com/research/media/DcvcoVDE45X/04.mp4｜上：灰模，大塊灰色柱形；下：成片，長焦樹林動態模糊中的橘衣滑雪者
+5. 圖 https://tools.arminkao.com/research/media/DcvcoVDE45X/05.jpg｜提示詞七段結構表：硬規則、主體、動作、參考、運鏡、環境、聲音
+6. 圖 https://tools.arminkao.com/research/media/DcvcoVDE45X/06.jpg｜C 穿越機追擊提示詞全文上半：硬規則、主體、動作
+7. 圖 https://tools.arminkao.com/research/media/DcvcoVDE45X/07.jpg｜C 穿越機追擊提示詞全文下半：參考、運鏡、環境、聲音
+8. 圖 https://tools.arminkao.com/research/media/DcvcoVDE45X/08.jpg｜四輪測試表 v2 至 v5：v5 只留一塊板，成功
+9. 圖 https://tools.arminkao.com/research/media/DcvcoVDE45X/09.jpg｜上：Seedance 生成介面與提示詞；下：畫布節點，三個機位與成品集
 
 > IG 原文 · 2026.09.01：人形會影響算圖 做了四輪，只用板子最好！ 做了人物就變得很僵硬，但目前運鏡沒問題。 但我也只是測試四次，即夢可 即夢動作會更帥不知道為什麼（圖中沒有） 圖中都是fal APl來的，我即夢點數不夠玩
 
@@ -128,6 +128,50 @@ E · 長焦刷樹林同一套結構，【動作】與【運鏡】不同
 
 【聲音】只要環境音：風聲、板刃切進雪裡的沙沙刮聲、雪粉噴起聲、起跳離地的空白與落地的悶響。不要配樂、不要人聲、不要旁白。
 ```
+
+## 給 AI Agent：照這段做
+
+把這頁網址丟給你的 Claude、Codex 或其他 agent，跟它說「照這頁的『給 AI Agent』段做」。純文字版：[snowboard-no-body.md](https://tools.arminkao.com/research/snowboard-no-body.md)。
+
+**這段能幫你做到什麼：**做單板滑雪的灰模運鏡時，灰模只放一塊雪板，讓模型自己編出自然的滑雪動作。作者當次實測（2026.09.01，四輪測試，fal 上的 Seedance 2.5，6 秒）。
+
+**要先準備**
+
+- 灰模片：Blender 做，畫面只有一塊雪板、沒有人。板頭中灰、板尾全黑。頁面沒附檔，自備。
+- 滑雪者定妝照兩張（同一人兩個角度）：全罩安全帽、雪鏡、頸套，全片看不到臉。圖自備。
+- 雪地場景圖一張（定材質、光線、色調）。圖自備。
+- 平台與模型：Seedance 2.5 reference-to-video，作者走 fal。
+- 預估花費：頁面未說明，請自行決定。
+
+**步驟**
+
+1. 灰模只留一塊板，不放人、手、腳或軀幹。
+2. 灰模決定運鏡、時間節奏、板子位置、傾斜、轉向、起跳與落地時間點。
+3. 定妝照裡的滑雪者要遮住臉。
+4. 提示詞照頁面結構寫七段：硬規則、主體、動作、參考、運鏡、環境、聲音。
+5. 【動作】段寫「由你自己編排，不要照抄灰模的手腳」。
+6. 【參考】段寫明：@Video1 只有一塊板、沒有人；把滑雪者站上那塊板。
+7. @Image1–2 設為滑雪者，@Image3 設為雪地，@Video1 設為灰模。
+8. 照頁面三個機位 C、F、E 的提示詞全文複製，只換【動作】與【運鏡】；F、E 還須修【參考】件數、刪【聲音】的起跳句（頁面已註明），並搭配相符的灰模片。
+9. 以上改完，再送出。
+
+**怎樣算完成**
+
+- 每一格都有人騎在雪板上，沒有空板；動作流暢，不僵硬、不逐格頓住。
+- 運鏡、板子位置與轉向和灰模一致；全片看不到臉。
+
+**常見失敗與下一步**
+
+- 灰模給有關節的手臂（v2）：模型逐格照抄，人僵硬。拿掉人，只留板。
+- 只留軀幹（v3）：動作自然但比例壞掉。
+- 正確人體比例並寫「別照抄四肢」（v4）：還是僵硬。
+- 作者當次使用照片級真人臉參考時，Seedance 回 422。改用全罩安全帽加雪鏡加頸套。
+- 照抄拿掉跳躍的兩版時：把【參考】的「六件事」改成「五件事」，刪掉【聲音】的起跳那句（頁面已註明）。
+
+**不要做的事**
+
+- 不要在灰模放人形、手臂或四肢。
+- 不要讓攝影機入鏡，不要出現第二個人、纜車或無人機；不要把四輪結果當成一定如此；作者只測了四次。
 
 工具：Claude Code（Blender 程式與提示詞）、Blender（灰模）、fal 上的 Seedance 2.5（圖中都是 fal API 算的）。同一組在即夢上動作會更帥，原因不明，圖中沒有。
 

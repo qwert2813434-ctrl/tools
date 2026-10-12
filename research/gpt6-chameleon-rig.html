@@ -101,13 +101,13 @@
 
   <h2>燈光統一之後</h2>
   <p>當初讓人覺得「差很多」的，是兩邊各自算的預覽影片：Astra 選了淺色背景、柔光、近鏡頭；Sol 選了深灰背景，角色偏小偏暗。</p>
-  <figure class="fig"><video src="media/gpt6-chameleon-rig/own-render.mp4" poster="media/gpt6-chameleon-rig/own-render_poster.jpg" controls muted loop playsinline preload="none"></video>
+  <figure class="fig"><video src="media/gpt6-chameleon-rig/own-render.mp4" aria-label="兩模型各自算的搖杯影片並排：Astra 淺色背景、Sol 深灰背景" poster="media/gpt6-chameleon-rig/own-render_poster.jpg" controls muted loop playsinline preload="none"></video>
     <figcaption>重算前：兩個模型各自算的影片直接並排。燈光、背景、構圖、杯子都是它們自己選的。</figcaption></figure>
 
   <p>我們把兩邊交出的模型檔放進同一個場景重算：同燈光、同鏡頭、不放杯子，只播它們各自做的動作。</p>
-  <figure class="fig"><video src="media/gpt6-chameleon-rig/same-shake.mp4" poster="media/gpt6-chameleon-rig/same-shake_poster.jpg" controls muted loop playsinline preload="none"></video>
+  <figure class="fig"><video src="media/gpt6-chameleon-rig/same-shake.mp4" aria-label="同燈光重算的搖杯對照，左 Astra 右 Sol，身體相同" poster="media/gpt6-chameleon-rig/same-shake_poster.jpg" controls muted loop playsinline preload="none"></video>
     <figcaption>重算後的搖杯，左 Astra、右 Sol。身體是同一份 Tripo 網格和貼圖，燈光一統一就一模一樣；兩邊都把手肘彎到胸前。</figcaption></figure>
-  <figure class="fig"><video src="media/gpt6-chameleon-rig/same-look.mp4" poster="media/gpt6-chameleon-rig/same-look_poster.jpg" controls muted loop playsinline preload="none"></video>
+  <figure class="fig"><video src="media/gpt6-chameleon-rig/same-look.mp4" aria-label="同場景臉部特寫：Astra 眼嵌眼丘，Sol 眼為淺色圓盤" poster="media/gpt6-chameleon-rig/same-look_poster.jpg" controls muted loop playsinline preload="none"></video>
     <figcaption>重算後的張望＋眨眼。兩邊都做到兩眼各看一邊、會眨眼；差別在眼睛裝在哪裡、閉眼時蓋上什麼。</figcaption></figure>
 
   <h2>差在眼睛：不是顏色，是位置</h2>
@@ -205,6 +205,51 @@
 ## 紅線
 - **只准寫 &lt;OUT&gt;**，其他檔都不動（另一個模型同時在做同一隻，輸出在別的資料夾）；不要 git。
 - 不要呼叫 higgsfield、fal 或任何花錢的服務。</pre></div>
+
+
+  <section id="agent">
+  <h2>給 AI Agent：照這段做</h2>
+  <p class="muted">把這頁網址丟給你的 Claude、Codex 或其他 agent，跟它說「照這頁的『給 AI Agent』段做」。純文字版：<a href="https://tools.arminkao.com/research/gpt6-chameleon-rig.md">gpt6-chameleon-rig.md</a>。</p>
+  <p>把這頁網址丟給你的 Claude、Codex 或其他 agent，跟它說「照這頁公平比兩個模型」。數字是作者 2026.10.07 當次實測（每個模型只跑一次），不代表一定如此；事前評分、三次重跑與盲評是頁面的建議。</p>
+  <p><b><b>這段能幫你做到什麼</b>：</b>用同一張工作單、同樣條件讓兩個模型各做（建議每個至少三次），再用事先寫好的評分表比較結果。</p>
+  <p><b>要先準備</b></p>
+  <ul>
+    <li>要比的兩個模型，以及能讓它們有完整權限自己開 Blender、算圖、看圖、改程式的環境（作者用 Codex 命令列，推理強度 high）。</li>
+    <li>自備輸入檔：3D 模型（glb）、三視圖、美術原稿。頁面沒有附，換成你自己的檔案。</li>
+    <li>Blender（作者用 5.2）。頁末另列 Tripo H3.1、Meshy 7、GPT Image 2 等工具。</li>
+    <li>工作單與開跑提示：複製文末兩個程式碼區塊，把 &lt;id&gt;、&lt;OUT&gt; 換成你自己的，工作單中的角色名、轉正角度、高度與造型要求也須對應你的素材。</li>
+  </ul>
+  <p><b>步驟</b></p>
+  <ol>
+    <li>開跑前先寫評分表。能量測的就量：面數、顏色跟原稿差多少、零件的位置、手肘彎幾度。</li>
+    <li>準備同一張工作單、同一個原始模型、同樣的參考圖、一樣的推理強度；各給獨立輸出資料夾，彼此看不到對方。</li>
+    <li>兩個模型同一時間開跑，記下每邊的 token 與完成時間。</li>
+    <li>收回兩邊交出的模型檔，放進同一個場景重算，用同燈光、同鏡頭。不要比它們各自算的預覽影片。</li>
+    <li>姿勢測試不要套同一組旋轉值（不同骨架的軸向不同）。改量結果，例如尾巴實際捲了幾度。</li>
+    <li>覺得不對就拆開看：從檔案讀出顏色、座標，不要只看畫面下結論。</li>
+    <li>每個模型至少跑三次，看平均，也看最差的一次。</li>
+    <li>拿掉模型名稱，找不知道誰是誰的人盲評。</li>
+    <li>在結果裡寫明誰出題、誰量測，尤其當出題的一方跟受測模型是競爭關係。</li>
+  </ol>
+  <p><b>怎樣算完成</b></p>
+  <ul>
+    <li>開跑前就有寫好的評分表；每個模型都有至少三次的結果，附 token、時間與量測數字。</li>
+    <li>比較用的畫面來自同一場景、同一燈光與鏡頭。</li>
+    <li>報告有寫明限制：樣本數、誰出題誰量測、模型版本與日期。</li>
+  </ul>
+  <p><b>常見失敗與下一步</b></p>
+  <ul>
+    <li>兩邊各自算的影片看起來差很多：原頁說差異有一部分來自各自選的背景與燈光。改成同場景重算。</li>
+    <li>同一組旋轉值讓一邊的尾巴折出怪角度：這項測試無效。改量實際捲曲角度。</li>
+    <li>直接拿單張 2D 原稿叫模型建模，比例容易走樣（作者當次用 Sol 實測）。頁面做法是先補三視圖，形體再交給 Tripo 圖轉 3D；是否照做頁面未說明要求，請自行決定。</li>
+  </ul>
+  <p><b>不要做的事</b></p>
+  <ul>
+    <li>不要用單次結果宣稱哪個模型普遍比較強。</li>
+    <li>不要在開跑後才訂評分標準。</li>
+    <li>不要在工作單裡放會花錢的服務（頁面的工作單紅線：不呼叫 higgsfield、fal，不用 git）。</li>
+  </ul>
+  </section>
 
   <div class="src">
     工具：Tripo H3.1（形體）、GPT Image 2（三視圖）、OpenAI Codex 上的 GPT-6 Astra 與 GPT-6 Sol（綁骨架、眼睛、動作）、Blender 5.2（重算與拆解，Workbench 渲染）、Meshy 7（參考組）。本文由小高與 Claude 合寫。

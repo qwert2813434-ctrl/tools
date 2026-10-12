@@ -1,6 +1,6 @@
 # 小高工具間 TOOL.AI
 
-> 台灣廣告導演高偉鳴（Armin Kao）自用的免費工具與實測研究。研究頁記錄 AI 影像、語音、agent 工作流的實測過程與數字；工具多數開源。給 AI agent：每篇研究都有同名 .md 純文字版（網址把 .html 換成 .md），保留正文、程式碼、提示詞與媒體網址，沒有排版；有「給 AI Agent」段落的頁面，照那一段做即可。數字都是作者當次實測，附日期與版本，不保證在你的環境相同。
+> 台灣廣告導演高偉鳴（Armin Kao）自用的免費工具與實測研究。研究頁記錄 AI 影像、語音、agent 工作流的實測過程與數字；工具多數開源。給 AI agent：每篇研究都有同名 .md 純文字版（網址把 .html 換成 .md），保留正文、程式碼、提示詞與媒體網址，沒有排版；每篇研究最下方都有「給 AI Agent」段：要準備什麼、步驟、怎樣算完成，照那一段做即可。數字都是作者當次實測，附日期與版本，不保證在你的環境相同。
 
 使用方式：
 - 想照著建工具：先看下方「開源規格書」，整個 repo 交給你的 agent，從 README 的閱讀順序開始，做到 ACCEPTANCE 全部通過才算完成。
@@ -13,15 +13,15 @@
 
 ## 研究
 
-- [R-09 用說的跟 AI 工作：Typeless 真的強，自己蓋的差在清稿](https://tools.arminkao.com/research/voice-input-typeless.html)：Mac 語音輸入繁中，Typeless 與自架 Whisper 的轉文字、清稿秒數對照。純文字版：https://tools.arminkao.com/research/voice-input-typeless.md
-- [R-08 同一張工作單，Astra 與 Sol 綁同一隻變色龍](https://tools.arminkao.com/research/gpt6-chameleon-rig.html)：兩個模型替 3D 角色綁骨架的對照，附公平比較模型的八條做法與工作單。純文字版：https://tools.arminkao.com/research/gpt6-chameleon-rig.md
-- [R-07 讓 Obsidian 也能是 Pinterest，收藏間](https://tools.arminkao.com/research/obsidian-pinterest.html)：Chrome 右鍵收進 Obsidian 的做法與安全漏洞；施工圖在 collection-wall repo。純文字版：https://tools.arminkao.com/research/obsidian-pinterest.md
-- [R-06 同一發 15 秒影片，換平台差 2.3 倍](https://tools.arminkao.com/research/platform-cost.html)：同一組輸入在 fal、Higgsfield、ComfyUI、CapCut 的價格與等待時間。純文字版：https://tools.arminkao.com/research/platform-cost.md
-- [R-05 MiniMax H3 Max：灰模管運鏡，人交給模型](https://tools.arminkao.com/research/h3-greybox.html)：Blender 灰模控制運鏡、路人用提示詞生成，附完整提示詞。純文字版：https://tools.arminkao.com/research/h3-greybox.md
-- [R-04 用手機拍參考，讓 AI 模仿成廣告鏡頭](https://tools.arminkao.com/research/phone-reference.html)：iPhone 參考片轉電影攝影機質感，八段式提示詞。純文字版：https://tools.arminkao.com/research/phone-reference.md
-- [R-03 人形問題：灰模裡的人要怎麼給](https://tools.arminkao.com/research/crowd-in-greybox.html)：一顆 4 秒試片測三種人群給法。純文字版：https://tools.arminkao.com/research/crowd-in-greybox.md
-- [R-02 人形會影響算圖：四輪之後只留一塊板](https://tools.arminkao.com/research/snowboard-no-body.html)：灰模放人偶會讓動作僵硬的四輪測試。純文字版：https://tools.arminkao.com/research/snowboard-no-body.md
-- [R-01 拿 Blender 當線稿：運鏡不用抽卡](https://tools.arminkao.com/research/blender-lineart.html)：一支灰模片＋定妝照讓 Seedance 照排好的運鏡走，四步做法與提示詞。純文字版：https://tools.arminkao.com/research/blender-lineart.md
+- [R-09 用說的跟 AI 工作：Typeless 真的強，自己蓋的差在清稿](https://tools.arminkao.com/research/voice-input-typeless.html)：Mac 語音輸入繁中，Typeless 與自架 Whisper 的轉文字、清稿秒數對照。純文字版：https://tools.arminkao.com/research/voice-input-typeless.md （有「給 AI Agent」段）
+- [R-08 同一張工作單，Astra 與 Sol 綁同一隻變色龍](https://tools.arminkao.com/research/gpt6-chameleon-rig.html)：兩個模型替 3D 角色綁骨架的對照，附公平比較模型的八條做法與工作單。純文字版：https://tools.arminkao.com/research/gpt6-chameleon-rig.md （有「給 AI Agent」段）
+- [R-07 讓 Obsidian 也能是 Pinterest，收藏間](https://tools.arminkao.com/research/obsidian-pinterest.html)：Chrome 右鍵收進 Obsidian 的做法與安全漏洞；施工圖在 collection-wall repo。純文字版：https://tools.arminkao.com/research/obsidian-pinterest.md （有「給 AI Agent」段）
+- [R-06 同一發 15 秒影片，換平台差 2.3 倍](https://tools.arminkao.com/research/platform-cost.html)：同一組輸入在 fal、Higgsfield、ComfyUI、CapCut 的價格與等待時間。純文字版：https://tools.arminkao.com/research/platform-cost.md （有「給 AI Agent」段）
+- [R-05 MiniMax H3 Max：灰模管運鏡，人交給模型](https://tools.arminkao.com/research/h3-greybox.html)：Blender 灰模控制運鏡、路人用提示詞生成，附完整提示詞。純文字版：https://tools.arminkao.com/research/h3-greybox.md （有「給 AI Agent」段）
+- [R-04 用手機拍參考，讓 AI 模仿成廣告鏡頭](https://tools.arminkao.com/research/phone-reference.html)：iPhone 參考片轉電影攝影機質感，八段式提示詞。純文字版：https://tools.arminkao.com/research/phone-reference.md （有「給 AI Agent」段）
+- [R-03 人形問題：灰模裡的人要怎麼給](https://tools.arminkao.com/research/crowd-in-greybox.html)：一顆 4 秒試片測三種人群給法。純文字版：https://tools.arminkao.com/research/crowd-in-greybox.md （有「給 AI Agent」段）
+- [R-02 人形會影響算圖：四輪之後只留一塊板](https://tools.arminkao.com/research/snowboard-no-body.html)：灰模放人偶會讓動作僵硬的四輪測試。純文字版：https://tools.arminkao.com/research/snowboard-no-body.md （有「給 AI Agent」段）
+- [R-01 拿 Blender 當線稿：運鏡不用抽卡](https://tools.arminkao.com/research/blender-lineart.html)：一支灰模片＋定妝照讓 Seedance 照排好的運鏡走，四步做法與提示詞。純文字版：https://tools.arminkao.com/research/blender-lineart.md （有「給 AI Agent」段）
 
 ## 開源規格書（不放程式碼，放讓 AI 照著蓋的施工圖）
 
