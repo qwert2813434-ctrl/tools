@@ -22,3 +22,7 @@
 
 - 開源規格書（給 AI 照著蓋）：[aloud](https://github.com/qwert2813434-ctrl/aloud)、[whisperbar](https://github.com/qwert2813434-ctrl/whisperbar)、[collection-wall](https://github.com/qwert2813434-ctrl/collection-wall)
 - 開源工具與 App：[shuji 唸書機](https://github.com/qwert2813434-ctrl/shuji)、[ALIGNED](https://github.com/qwert2813434-ctrl/ALIGNED)、[STB](https://github.com/qwert2813434-ctrl/STB)、[RHEO](https://github.com/qwert2813434-ctrl/RHEO)
+
+## 授權
+
+網站的文字、圖片與影片版權歸作者高偉鳴（Armin Kao）所有，轉載或引用請註明出處並附原頁連結。標明開源的工具以各自的授權為準：各 GitHub repo 內的 LICENSE、串珠門簾 `bead-curtain.html` 檔內註明的 MIT。
