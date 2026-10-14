@@ -1,0 +1,55 @@
+/* 小高工具間 會員：頂列登入鈕＋登入框＋會員面板（member.js 自動載入；首頁與研究頁共用）
+   2026-10-15 從首頁 inline 抽出；.mdlg 內的 .btn／.eyebrow 自帶一份，研究頁沒有首頁的按鈕樣式也能用 */
+.mpill {
+  margin-left: auto; margin-right: 10px; height: 42px; padding: 0 20px; border: 0; cursor: pointer;
+  border-radius: 999px; background: var(--card); color: var(--ink2); box-shadow: var(--e1);
+  font-family: var(--sans); font-size: 13.5px; font-weight: 600; letter-spacing: .02em;
+  max-width: 52vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.mpill:hover { box-shadow: var(--e2, var(--e1)); color: var(--ink); }
+.mpill:empty { visibility: hidden; }
+.mdlg {
+  margin: auto; width: min(420px, calc(100vw - 32px)); border: 0; border-radius: var(--r-lg);
+  padding: 34px 30px 26px; background: var(--card); color: var(--ink); box-shadow: var(--e2, var(--e1));
+  font-family: var(--sans); line-height: 1.6;
+}
+.mdlg::backdrop { background: rgba(20,18,16,.32); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.mdlg .eyebrow { font-size: 11px; letter-spacing: .26em; text-transform: uppercase; color: var(--faint); font-weight: 500; margin-bottom: 10px; }
+.mdlg h2 { font-size: 24px; font-weight: 600; line-height: 1.3; margin: 0; }
+.mdlg .btn {
+  display: inline-block; font-size: 14px; font-weight: 600; padding: 11px 26px; border-radius: 999px; margin: 0;
+  background: var(--card-2); color: var(--ink); border: 0; cursor: pointer; font-family: var(--sans); text-align: center;
+}
+.mdlg .btn:hover { box-shadow: var(--e1); }
+.mdlg .mgoogle { width: 100%; background: var(--grad, var(--ink)); color: #fff; }
+.mdlg .mlead { color: var(--ink2); font-size: 14.5px; margin: 10px 0 22px; }
+.mor { font-size: 12px; color: var(--faint); letter-spacing: .06em; margin: 20px 0 10px; }
+.mmail { display: flex; gap: 8px; }
+.mmail input {
+  flex: 1; min-width: 0; font: inherit; font-size: 14.5px; color: var(--ink);
+  padding: 10px 16px; border: 0; border-radius: 999px; background: var(--card-2);
+  box-shadow: inset 0 1px 2px rgba(58,46,40,.06);
+}
+.mmsg { font-size: 13.5px; color: var(--ink); min-height: 1.4em; margin-top: 12px; }
+.mnote { font-size: 12px; color: var(--faint); line-height: 1.7; margin-top: 8px; }
+.mnote details summary { cursor: pointer; color: var(--ink2); }
+.mnote ul { margin: 8px 0 0 18px; padding: 0; }
+.mclose { position: absolute; top: 12px; right: 14px; }
+.mclose button { border: 0; background: none; font-size: 22px; color: var(--faint); cursor: pointer; line-height: 1; padding: 6px; }
+.mcheck { display: flex; gap: 10px; align-items: flex-start; margin: 18px 0 0; font-size: 14px; color: var(--ink); cursor: pointer; }
+.mcheck input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--ink); flex: none; }
+.mme p { color: var(--ink2); font-size: 14px; margin: 6px 0 16px; word-break: break-all; }
+.mme .mrow { display: flex; flex-direction: column; gap: 10px; }
+.mme .danger { color: #b3261e; }
+/* 會員內容區：沒登入顯示 .member-off，登入後顯示 .member-on（課文由 member.js 從 Firestore lessons/ 讀進來） */
+.member-on { display: none; }
+.is-member .member-off { display: none; }
+.is-member .member-on { display: block; }
+/* 三種通知勾選（10/15） */
+.mchecks { margin: 18px 0 0; display: flex; flex-direction: column; gap: 10px; }
+.mchecks .mcheck { margin: 0; font-size: 13.5px; line-height: 1.55; }
+.mchecks .mcheck b { font-weight: 600; }
+.mchecks .mcheck span { color: var(--ink2); }
+.mchecks .mcheck b { color: var(--ink); }
+.mhint { font-size: 12px; color: var(--faint); margin: 2px 0 0; }
+.mme .mnotify { margin: 0 0 6px; }

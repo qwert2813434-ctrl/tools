@@ -366,6 +366,7 @@
     <div class="label">研究 · 實測過才寫 · 新的在前</div>
   </div>
   <div class="rgrid">
+    <a class="rcard" href="research/ig-comment-autodm.html"><div class="rid">R-11</div><h3>留言關鍵字自動私訊：用 Meta 官方 API 自建</h3><p><b>你會知道：</b>IG 留言「STB」就自動私訊連結，用官方 API 自己蓋、取代 ManyChat、主機費 0 元；按鈕怎麼綁進對話框裡。完整施工圖登入會員就能看（免費）。</p><div class="rmeta"><span>工具實作</span><span>實測</span><span>驗證 10.15</span></div></a>
     <a class="rcard" href="research/ai-learning-loop.html"><div class="rid">R-10</div><h3>讓 AI 自己學：一條迴圈的頭和尾</h3><p><b>你會知道：</b>AI 被糾正過的事怎麼不再犯：一條學習迴圈的觸發、做、對答案、誰看；語音辭典七輪自動升級的實測，和角色分工卡在審核的實話。附 1 分 45 秒說明動畫。</p><div class="rmeta"><span>AI 工作流</span><span>實測</span><span>驗證 10.13</span></div></a>
     <a class="rcard" href="research/voice-input-typeless.html"><div class="rid">R-09</div><h3>用說的跟 AI 工作：Typeless 真的強，自己蓋的差在清稿</h3><p><b>你會知道：</b>Mac 上用說的打繁體中文，Typeless 和自己用 Whisper 架的差在哪；轉文字、清稿各花幾秒；AI 回話要台灣腔該選哪個語音。</p><div class="rmeta"><span>語音輸入</span><span>實測</span><span>驗證 10.12</span></div></a>
     <a class="rcard" href="research/gpt6-chameleon-rig.html"><div class="rid">R-08</div><h3>同一張工作單，Astra 與 Sol 綁同一隻變色龍</h3><p><b>你會知道：</b>兩個模型拿同一張工作單替 3D 變色龍綁骨架、換真眼睛，燈光統一後差在哪；以及公平比較模型的八條做法。</p><div class="rmeta"><span>AI 3D</span><span>實測</span><span>驗證 10.07</span></div></a>
@@ -382,7 +383,6 @@
     <div class="label">工具 · 全部免費 · 附安裝說明</div>
     <div class="seg" role="tablist">
       <button role="tab" aria-selected="true"  data-cat="all">全部</button>
-      <button role="tab" aria-selected="false" data-cat="ae">AE 插件</button>
       <button role="tab" aria-selected="false" data-cat="mac">桌面工具</button>
       <button role="tab" aria-selected="false" data-cat="app">App</button>
       <button role="tab" aria-selected="false" data-cat="web">網頁元件</button>
@@ -642,7 +642,7 @@
     </div>
   </article>
 
-  <article class="tool" data-cat="ae">
+  <article class="tool" data-cat="mac">
     <div class="tool-media">
       <div class="glyph"><svg viewBox="0 0 48 48" stroke-linecap="round" stroke-linejoin="round">
         <path d="M8 36 C 17 36, 19 15, 26 15 S 35 26, 42 26"/>
@@ -666,6 +666,7 @@
 
   <div class="label">更新紀錄</div>
   <div class="list">
+    <div class="row"><time>2026.10.15</time><span><a href="research/ig-comment-autodm.html">R-11 留言關鍵字自動私訊：用 Meta 官方 API 自建</a>；工具間開放免費會員登入（右上角）</span></div>
     <div class="row"><time>2026.10.13</time><span><a href="research/ai-learning-loop.html">R-10 讓 AI 自己學：一條迴圈的頭和尾（附說明動畫、給 AI agent 的建置步驟）</a></span></div>
     <div class="row"><time>2026.10.12</time><span>ALIGNED iOS 1.3.6：設計漸層——頁面底色、圖形與文字都能填漸層，內建六種預設</span></div>
     <div class="row"><time>2026.10.12</time><span><a href="research/fix-edge-tts-403.html">Aloud 2.3／唸書機：微軟換了配音主機，朗讀一度全部沒聲音——修正方式（AI agent 可照做）</a></span></div>
@@ -720,5 +721,10 @@
     });
   });
 </script>
+<script>
+/* Firebase 網頁設定（公開值，不是密碼；權限靠 Firestore 規則＋授權網域） */
+window.MEMBER_CONFIG = { apiKey: "AIzaSyDCF9Of3YphMIVwCUYu6M5uq_r2gALVhKM", authDomain: "molten-plate-239411.firebaseapp.com", projectId: "molten-plate-239411", appId: "1:272425047732:web:3c8aebc3fade64ecefe9e1" };
+</script>
+<script type="module" src="member.js"></script>
 </body>
 </html>

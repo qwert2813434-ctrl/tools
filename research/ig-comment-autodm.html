@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="soft">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>留言關鍵字自動私訊：用 Meta 官方 API 自建 — 小高工具間 研究</title>
+<meta name="description" content="IG 留言關鍵字自動私訊連結：用 Meta 官方 Instagram API（Private Replies）自建、取代 ManyChat，跑在 Cloudflare Workers 免費額度。按鈕範本把連結按鈕綁進對話框（2026-10 實測）、能不能先檢查追蹤，附給 AI agent 的建置骨架；完整施工圖為免費會員內容。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="../assets/theme.js"></script>
+<link rel="stylesheet" href="research.css">
+<link rel="canonical" href="https://tools.arminkao.com/research/ig-comment-autodm.html">
+<link rel="alternate" type="text/markdown" href="https://tools.arminkao.com/research/ig-comment-autodm.md" title="純文字版">
+<script src="https://tools.arminkao.com/assets/hit.js" data-site="tools" defer></script>
+<style>
+.steps4 { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:16px 0 8px; }
+.steps4 > div { padding:14px 14px 12px; border-radius:var(--r-md); background:var(--card); box-shadow:var(--e1); }
+.steps4 b { display:block; font-size:15px; margin-bottom:4px; }
+.steps4 span { font-size:13.5px; color:var(--ink2); }
+.vs { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:18px 0 8px; }
+.chat { padding:16px 14px 14px; border-radius:var(--r-md); background:#0e1014; color:#f2f3f5; font-size:13.5px; line-height:1.45; display:flex; flex-direction:column; gap:8px; }
+.chat .cap { font-size:12px; color:#9097a3; margin-bottom:4px; }
+.chat .in { align-self:flex-start; max-width:86%; padding:10px 13px; border-radius:18px; background:#262a33; }
+.chat .in.links { word-break:break-all; }
+.chat .in .bt { display:block; margin-top:9px; padding:8px 10px; border-radius:10px; background:#31353f; text-align:center; font-weight:600; }
+.chat .in .bt + .bt { margin-top:6px; }
+.chat .out { align-self:flex-end; max-width:80%; padding:8px 14px; border-radius:18px; background:#7c4dff; color:#fff; }
+.chat .qr { align-self:flex-end; padding:6px 14px; border-radius:999px; box-shadow:inset 0 0 0 1px #7c4dff; color:#c9b8ff; font-size:12.5px; }
+.chat .gap { font-size:11.5px; color:#9097a3; align-self:center; }
+.lock { margin:30px 0 8px; padding:22px; border-radius:var(--r-md); background:var(--card); box-shadow:var(--e1); }
+.lock h2 { margin-top:0; }
+.lock button { margin-top:10px; padding:9px 18px; border:0; border-radius:999px; background:var(--ink); color:var(--card); font:inherit; font-weight:600; cursor:pointer; }
+@media (max-width:720px){ .steps4 { grid-template-columns:1fr 1fr; } .vs { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="sky"></div><div class="grain"></div>
+<div class="topbar">
+  <a href="../">TOOL.AI · 小高工具間</a>
+  <div class="topr"><a class="home" href="https://arminkao.com/">作品集 ↗</a><button class="orb" onclick="toggleTheme()" title="明暗切換">◐</button></div>
+</div>
+
+<main class="shell">
+<article>
+  <div class="rid">R-11 · 工具實作 · 實測</div>
+  <h1>留言關鍵字自動私訊：<span style="white-space:nowrap">用 Meta 官方 API 自建</span></h1>
+  <div class="facts"><span>讀 <b>2 分鐘</b>（完整版 8 分鐘）</span><span>最後驗證 <b>2026.10.15</b></span><span>作者自己的 IG 帳號實測</span><span>完整版：<b>免費會員</b></span></div>
+
+  <div class="get"><strong>你會知道：</strong>我的 IG 貼文底下留言「STB」，對方會自動收到私訊，按一下按鈕就拿到下載連結。這是用 Meta 官方 API 自己蓋的，取代 ManyChat，主機費 0 元。不用交出 IG 密碼、不模擬點擊，但一樣要守平台的發送限制。</div>
+
+  <h2>它在做什麼</h2>
+  <div class="steps4">
+    <div><b>1 留言</b><span>留言含關鍵字（STB、ALIGN…）</span></div>
+    <div><b>2 回兩處</b><span>公開回一句＋私訊一顆按鈕（官方 Private Reply）</span></div>
+    <div><b>3 按鈕</b><span>對方按下，代號回到伺服器</span></div>
+    <div><b>4 發連結</b><span>看代號發對應的連結</span></div>
+  </div>
+
+  <h2>按鈕綁在對話框裡：做到了</h2>
+  <div class="vs">
+    <div class="chat"><div class="cap">以前：快速回覆鈕＋純文字網址</div>
+      <div class="in">嗨，我是小高 👋 想要 STB 的下載連結嗎？點下面的按鈕，我馬上發給你！</div>
+      <div class="qr">📥 給我連結</div>
+      <div class="gap">按下後按鈕消失</div>
+      <div class="out">📥 給我連結</div>
+      <div class="in links">來啦！給你 👇<br><br>💻 Mac／🪟 Windows 版（免費）：<br>https://stb-app.github.io/zh-Hant/<br><br>📱 iPad 版：<br>https://apps.apple.com/tw/app/…</div>
+    </div>
+    <div class="chat"><div class="cap">現在：按鈕範本（按鈕綁在對話框裡）</div>
+      <div class="in">嗨，我是小高 👋 想要 STB 的下載連結嗎？<span class="bt">📥 給我連結</span></div>
+      <div class="out">📥 給我連結</div>
+      <div class="in">來啦！給你 👇<br>STB 是廣告前製的腳本 App，免費。<span class="bt">Mac／Windows 版</span><span class="bt">iPad 版</span><span class="bt">原始碼</span></div>
+    </div>
+  </div>
+  <ul>
+    <li><b>官方叫按鈕範本</b>（Button Template）：一段文字＋最多三顆按鈕，按鈕可以直接開網址。回覆留言的第一則私訊也能帶（2026-10-15 實測）。要放圖、多張卡片左右滑，另有通用範本。</li>
+    <li><b>「先追蹤才給連結」也做得到</b>：官方 API 查得到對方有沒有追蹤你（<code>is_user_follow_business</code>），條件是對方先按過一次按鈕。我選擇不做：想拿連結的人不用被逼著追蹤。</li>
+  </ul>
+
+  <section id="agent">
+  <h2>給 AI Agent：建置骨架</h2>
+  <p class="muted">把這頁網址丟給你的 agent，說「照這頁幫我蓋 IG 留言關鍵字自動私訊」。純文字版：<a href="https://tools.arminkao.com/research/ig-comment-autodm.md">ig-comment-autodm.md</a>。</p>
+  <ol>
+    <li>建 Meta App，選「Instagram API with Instagram Login」，權限 <code>instagram_business_basic</code>、<code>instagram_business_manage_comments</code>、<code>instagram_business_manage_messages</code>。</li>
+    <li>授權碼交換拿 60 天長期權杖，只放伺服器端；每天排程檢查，符合條件（例：上次續期滿 7 天）才用 <code>ig_refresh_token</code> 續期。</li>
+    <li>Webhook：驗 <code>X-Hub-Signature-256</code> 簽章、重送只處理一次；訂閱 <code>comments</code>、<code>messages</code>、<code>messaging_postbacks</code>。</li>
+    <li>留言含關鍵字 → 公開回覆＋以 <code>recipient.comment_id</code> 發 Private Reply（按鈕範本，postback）→ 收到代號發連結（按鈕範本，web_url）。</li>
+    <li>放隱私政策網址、App 切「已發佈」；Graph API 版本停用日寫進行事曆。</li>
+  </ol>
+  <p><b>完成</b>：第二個帳號留關鍵字 → 收到按鈕 → 按下拿到連結；無關留言不觸發；簽章錯的假事件被拒。</p>
+  </section>
+
+  <section class="lock" id="lesson" data-member-box>
+    <h2>登入看完整版（免費）</h2>
+    <p>為什麼自己蓋與成本對照、安全上怎麼做、踩過的六個雷（權杖過期停兩週、API 版本到期…）、實際數字，以及逐步施工圖、部署設定、12 項驗收表。</p>
+    <div class="member-off"><button data-member-login>登入看完整版</button></div>
+    <div class="member-on" data-lesson="ig-comment-autodm">讀取中…</div>
+  </section>
+
+  <div class="src">
+    資料來源
+    <ul>
+      <li>作者自建系統的程式與紀錄（2026.07.19 建置；07.20 陌生帳號實測；10.03 權杖自動續期與告警上線）</li>
+      <li>428 則：7/16–8/24 從 IG 對話紀錄回算（含 ManyChat 時期），2026.08.25 算</li>
+      <li>Meta Private Replies 文件、Graph API 版本表、User Profile 文件（2026.10.15 查）；Instagram 訊息範本：Meta 官方 Postman 範例（2026.10.15 查）</li>
+      <li>ManyChat Essential／Pro 方案說明（2026.10.15 查）</li>
+    </ul>
+    以上是一個人、自己帳號的實測；Meta 的規則與價格會變，動工前請查當下的官方文件。
+  </div>
+  <a class="back" href="../#research">← 回到研究列表</a>
+</article>
+</main>
+<footer>高偉鳴 Armin Kao ／ <a href="https://arminkao.com">arminkao.com</a> ／ <a href="https://www.instagram.com/17187kao/">Instagram</a></footer>
+<script>
+window.MEMBER_CONFIG = { apiKey: "AIzaSyDCF9Of3YphMIVwCUYu6M5uq_r2gALVhKM", authDomain: "molten-plate-239411.firebaseapp.com", projectId: "molten-plate-239411", appId: "1:272425047732:web:3c8aebc3fade64ecefe9e1" };
+</script>
+<script type="module" src="../member.js"></script>
+</body>
+</html>

@@ -13,6 +13,7 @@
 
 ## 研究
 
+- [R-11 留言關鍵字自動私訊：用 Meta 官方 API 自建](https://tools.arminkao.com/research/ig-comment-autodm.html)：IG 留言關鍵字自動私訊連結，Meta 官方 Private Replies＋Cloudflare Workers 自建、取代 ManyChat；按鈕範本把連結按鈕綁進對話框；附建置骨架。完整施工圖與驗收表為免費會員內容（登入才看）。純文字版：https://tools.arminkao.com/research/ig-comment-autodm.md （有「給 AI Agent」段）
 - [R-10 讓 AI 自己學：一條迴圈的頭和尾](https://tools.arminkao.com/research/ai-learning-loop.html)：讓 AI 被糾正過的事不再犯——學習迴圈的觸發、做、對答案、誰看；語音辭典自動升級實測、角色分工卡在審核的實話，附幫使用者建學習迴圈的步驟與三情境驗收。純文字版：https://tools.arminkao.com/research/ai-learning-loop.md （有「給 AI Agent」段）
 - [R-09 用說的跟 AI 工作：Typeless 真的強，自己蓋的差在清稿](https://tools.arminkao.com/research/voice-input-typeless.html)：Mac 語音輸入繁中，Typeless 與自架 Whisper 的轉文字、清稿秒數對照。純文字版：https://tools.arminkao.com/research/voice-input-typeless.md （有「給 AI Agent」段）
 - [R-08 同一張工作單，Astra 與 Sol 綁同一隻變色龍](https://tools.arminkao.com/research/gpt6-chameleon-rig.html)：兩個模型替 3D 角色綁骨架的對照，附公平比較模型的八條做法與工作單。純文字版：https://tools.arminkao.com/research/gpt6-chameleon-rig.md （有「給 AI Agent」段）
