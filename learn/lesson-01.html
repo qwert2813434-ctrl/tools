@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="soft">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 1 課　給 AI 一個資料夾 — 小高工具間 教學</title>
+<meta name="description" content="裝好 Claude 桌面版，讓它在你電腦上建出第一個檔案。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="../assets/theme.js"></script>
+<link rel="stylesheet" href="../research/research.css">
+<link rel="canonical" href="https://tools.arminkao.com/learn/lesson-01.html">
+<link rel="alternate" type="text/markdown" href="https://tools.arminkao.com/learn/lesson-01.md" title="純文字版">
+<script src="https://tools.arminkao.com/assets/hit.js" data-site="tools" defer></script>
+<style>
+.lessonhead .rid{margin-bottom:6px}
+.pub{margin:18px 0 6px;padding:18px 20px;border-radius:var(--r-md);background:var(--card);box-shadow:var(--e1)}
+.pub h2{margin-top:0;font-size:17px}
+.lock{margin:26px 0 8px;padding:22px;border-radius:var(--r-md);background:var(--card);box-shadow:var(--e1)}
+.lock h2{margin-top:0}
+.lock button{margin-top:10px;padding:9px 18px;border:0;border-radius:999px;background:var(--ink);color:var(--card);font:inherit;font-weight:600;cursor:pointer}
+.pub pre,.full pre{white-space:pre-wrap;padding:12px 14px;border-radius:var(--r-md);background:rgba(0,0,0,.25);font-size:13.5px}
+.full video{width:100%;border-radius:var(--r-md);background:#000;margin:6px 0 18px}
+figure{margin:14px 0}figure img{width:100%;border-radius:var(--r-md);box-shadow:var(--e1)}figcaption{font-size:13px;color:var(--ink2);margin-top:6px}
+.todo{display:inline-block;padding:4px 10px;border-radius:8px;background:rgba(255,179,168,.18);color:#c0564a;font-size:13px}
+blockquote{margin:12px 0;padding:10px 16px;border-left:3px solid var(--ink2);background:var(--card);border-radius:0 var(--r-md) var(--r-md) 0}
+.nav{display:flex;justify-content:space-between;margin:26px 0 0;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:18px 0}
+.grid a{display:block;padding:16px 18px;border-radius:var(--r-md);background:var(--card);box-shadow:var(--e1);color:inherit;text-decoration:none}
+.grid a b{display:block;font-size:13px;color:var(--ink2);font-weight:600;margin-bottom:4px}
+.grid a span{font-size:16px;font-weight:600}
+.yt{position:relative;aspect-ratio:16/9;margin:6px 0 18px;border-radius:var(--r-md);overflow:hidden;background:#000}
+.yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+@media (max-width:720px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="sky"></div><div class="grain"></div>
+<div class="topbar">
+  <a href="../">TOOL.AI · 小高工具間</a>
+  <div class="topr"><a class="home" href="https://arminkao.com/">作品集 ↗</a><button class="orb" onclick="toggleTheme()" title="明暗切換">◐</button></div>
+</div>
+<main class="shell"><article>
+<div class="lessonhead"><div class="rid">入門基礎：我怎麼做的 · 第 1 課</div>
+<h1>給 AI 一個資料夾</h1>
+<div class="facts"><span>圖文＋動畫</span><span>完整版：<b>免費會員</b></span></div></div>
+<div class="get">這一課做完，你會：裝好 Claude 桌面版，讓它在你電腦上建出第一個檔案。<br>需要：一台 Mac 或 Windows 電腦、Claude 付費方案（Pro 以上，免費方案不能用 Code）。</div>
+<div class="pub"><h2>這一課帶走</h2><ul><li>一個「AI 工作夾」</li><li>一句話：<b>新手選「手動」，看清楚再按「允許一次」。</b></li><li>習慣：想自己動手前，先叫它做。</li></ul></div>
+<section id="agent" class="pub"><h2>給 AI Agent：照這段做</h2><p class="muted">純文字版：<a href="https://tools.arminkao.com/learn/lesson-01.md">lesson-01.md</a></p><p>把這頁網址丟給你的 AI，說「照這頁幫我做」。</p>
+<p>你是使用者的 AI agent，使用者剛裝好 Claude 桌面版、在 Code 分頁選了一個空資料夾。</p>
+<ul><li><b>準備</b>：使用者已選好資料夾（例：「AI 工作夾」），模式是「手動」。</li><li><b>步驟</b>：<ol><li>只在使用者選的這個資料夾裡動作，不碰資料夾外的檔案。</li><li>建立 <code>第一天.md</code>，內容：今天的日期＋一句給使用者的話。寫檔前先說要寫什麼，等使用者按允許。</li><li>用系統指令打開這個資料夾給使用者看（執行前同樣先問）。</li></ol></li><li><b>完成</b>：資料夾裡有 <code>第一天.md</code>，使用者在 Finder／檔案總管看到它。</li><li><b>不要</b>：開「略過權限確認」；動資料夾以外的東西；一次做多件事不說明。</li></ul></section><section class="lock" id="lesson" data-member-box>
+<h2>登入看完整版（免費）</h2>
+<p>完整步驟、每一步的截圖、我踩過的雷，還有這一課的動畫。</p>
+<div class="member-off"><button data-member-login>登入看完整版</button></div>
+<div class="member-on full" data-lesson="basics-01">讀取中…</div>
+</section><div class="nav"><a href="./">← 課程目錄</a><a href="lesson-02.html">下一課 →</a></div>
+</article></main>
+<footer>高偉鳴 Armin Kao ／ <a href="https://arminkao.com">arminkao.com</a> ／ <a href="https://www.instagram.com/17187kao/">Instagram</a></footer>
+<script>
+window.MEMBER_CONFIG = { apiKey: "AIzaSyDCF9Of3YphMIVwCUYu6M5uq_r2gALVhKM", authDomain: "molten-plate-239411.firebaseapp.com", projectId: "molten-plate-239411", appId: "1:272425047732:web:3c8aebc3fade64ecefe9e1" };
+</script>
+<script type="module" src="../member.js"></script>
+</body>
+</html>
