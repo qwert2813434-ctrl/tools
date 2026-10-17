@@ -1,4 +1,4 @@
-# 入門基礎：我怎麼做的｜第 6 課　它說做好了，是真的好了嗎
+# AI Agent 入門基礎：我怎麼做的｜第 6 課　它說做好了，是真的好了嗎
 
 網址：https://tools.arminkao.com/learn/lesson-06.html
 

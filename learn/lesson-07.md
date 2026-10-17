@@ -1,4 +1,4 @@
-# 入門基礎：我怎麼做的｜第 7 課　不會問，就叫它出選擇題
+# AI Agent 入門基礎：我怎麼做的｜第 7 課　不會問，就叫它出選擇題
 
 網址：https://tools.arminkao.com/learn/lesson-07.html
 

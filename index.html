@@ -147,8 +147,8 @@
     box-shadow: var(--e-panel);
   }
 
-  /* ─── HERO：左軸不對稱，力量來自字級落差＋字距＋留白，不靠字重 ─── */
-  .hero { margin-bottom: 0; }
+  /* ─── HERO（10/17 改置中，像 mobbin）：文字置中成菱形，標題字間嵌會輪換的 App 圖示 ─── */
+  .hero { margin-bottom: 0; text-align: center; }
   .eyebrow {
     font-size: 11px; letter-spacing: .26em; text-transform: uppercase;
     color: var(--faint); font-weight: 500;
@@ -162,10 +162,38 @@
   }
   .rule {                                                 /* 短橫線當標點，比整條線安靜 */
     width: 2.6em; height: 1px; background: var(--ink); opacity: .26;
-    margin: clamp(26px, 3.4vw, 38px) 0 22px;
+    margin: clamp(26px, 3.4vw, 38px) auto 22px;
   }
-  .hero p { max-width: 23em; color: var(--ink2); font-size: 16.5px; }
-  .hero p b { color: var(--ink); font-weight: 600; white-space: nowrap; }
+  .hero p { max-width: 30em; margin: 0 auto; color: var(--ink2); font-size: 16.5px; line-height: 1.75; }
+  .hero p .l { display: block; text-wrap: balance; }  .hero p .nw { white-space: nowrap; }      /* 兩行等重的小梯形（鑑賞家 10/17：第一行太短像斷掉、粗體把重心拉偏，改掉） */
+  @media (max-width: 620px) { .hero p { max-width: 23em; text-wrap: balance; } .hero p .l { display: inline; } }   /* 手機整段一起均衡，免得最後一行獨長 */
+  /* 標題裡的圖示槽：一格一組 App icon，每 2.8 秒換下一個（模糊＋縮放交叉淡入），點一下也能換 */
+  .hero h1 .slot {
+    display: inline-block; position: relative; vertical-align: -.08em;
+    width: .84em; height: .84em; margin: 0 .16em;
+    border-radius: 27%; overflow: hidden; cursor: pointer;
+    background: var(--card-2);
+    box-shadow: 0 1px 1px rgba(58,46,40,.06), 0 8px 18px -10px rgba(58,46,40,.35);
+    animation: slot-in .55s cubic-bezier(.16, 1, .3, 1) both;
+  }
+  .hero h1 .slot::after {                                 /* 內嵌髮絲線，白底 icon 才有邊 */
+    content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    box-shadow: inset 0 0 0 1px rgba(27,25,23,.08);
+  }
+  :root[data-theme="dusk"] .hero h1 .slot::after { box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+  .hero h1 .slot img {
+    position: absolute; inset: 0; width: 100%; height: 100%; display: block;
+    opacity: 0; transform: scale(.78); filter: blur(6px);
+    transition: opacity .5s ease, transform .55s cubic-bezier(.2,.8,.3,1), filter .5s ease;
+    -webkit-user-drag: none; user-select: none;
+  }
+  .hero h1 .slot img.on { opacity: 1; transform: none; filter: none; }
+  .hero h1 .slot:hover img.on { transform: scale(1.06); }
+  @keyframes slot-in { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .hero h1 .slot { animation: none; }
+    .hero h1 .slot img { transition: opacity .2s; transform: none; filter: none; }
+  }
 
   /* ─── 清單抬頭：小標左、篩選右，共用一條基線 ─── */
   .listhead {
@@ -332,7 +360,8 @@
   .rcard.soon { opacity: .55; box-shadow: none; background: var(--card-2); }
   @media (max-width: 860px) { .rgrid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 620px) { .rgrid { grid-template-columns: 1fr; gap: 12px; } }
-  .hero .agent-note { margin-top: 10px; font-size: 12px; opacity: .55; }
+  .hero .agent-note { margin-top: 28px; font-size: 12px; letter-spacing: .04em; opacity: .55; max-width: none; white-space: nowrap; }
+  @media (max-width: 620px) { .hero .agent-note { white-space: normal; max-width: 21em; margin-left: auto; margin-right: auto; text-wrap: balance; } }
   .hero .agent-note a { color: inherit; }
 </style>
 <link rel="canonical" href="https://tools.arminkao.com/">
@@ -355,18 +384,18 @@
 <main class="shell">
 
   <header class="hero">
-    <div class="eyebrow">導演自用 · 全部免費</div>
-    <h1>拍片時順手做的<br><span class="g">工具與研究</span></h1>
+    <div class="eyebrow">導演自用 · 多數免費</div>
+    <h1>拍片<span class="slot" data-set="film"></span>時順手做的<br><span class="g">工具<span class="slot" data-set="tools"></span>與<span class="slot" data-set="research"></span>研究</span></h1>
     <div class="rule"></div>
-    <p>影像業十年，遇到重複的事就做一個工具、遇到想不通的就去實測。<b>工具免費下載，</b>研究每一篇都標最後驗證日。</p>
-    <p class="agent-note">給 AI agent：全站目錄在 <a href="llms.txt">llms.txt</a>，每篇研究把網址的 .html 換成 .md 就是純文字版。</p>
+    <p><span class="l">影像業十年，重複的事做成工具、想不通的就去實測。</span><span class="l"><span class="nw">大多數工具免費</span>，研究每篇都標最後驗證日。</span></p>
+    <p class="agent-note">給 AI agent：<a href="llms.txt">llms.txt</a> 是全站目錄，研究頁 .html 換 .md 即純文字</p>
   </header>
 
   <div class="listhead" id="learn">
     <div class="label">教學 · 免費 · 八課</div>
   </div>
   <div class="rgrid">
-    <a class="rcard" href="learn/"><div class="rid">入門基礎</div><h3>入門基礎：我怎麼做的</h3><p><b>你會學到：</b>不寫程式，也能讓 AI 直接幫你動手做事。從給它一個資料夾、讓它記得你，到怎麼確認它說做好了是真的好了。每課有動畫，完整版登入就能看（免費）。</p><div class="rmeta"><span>Claude 桌面版</span><span>新手</span><span>八課</span></div></a>
+    <a class="rcard" href="learn/"><div class="rid">AI Agent 入門</div><h3>AI Agent 入門基礎：我怎麼做的</h3><p><b>你會學到：</b>不寫程式，也能讓 AI 直接幫你動手做事。從給它一個資料夾、讓它記得你，到怎麼確認它說做好了是真的好了。每課有動畫，完整版登入就能看（免費）。</p><div class="rmeta"><span>Claude 桌面版</span><span>新手</span><span>八課</span></div></a>
   </div>
 
   <div class="listhead" id="research">
@@ -387,7 +416,7 @@
   </div>
 
   <div class="listhead">
-    <div class="label">工具 · 全部免費 · 附安裝說明</div>
+    <div class="label">工具 · 多數免費 · 附安裝說明</div>
     <div class="seg" role="tablist">
       <button role="tab" aria-selected="true"  data-cat="all">全部</button>
       <button role="tab" aria-selected="false" data-cat="mac">桌面工具</button>
@@ -734,5 +763,38 @@
 window.MEMBER_CONFIG = { apiKey: "AIzaSyDCF9Of3YphMIVwCUYu6M5uq_r2gALVhKM", authDomain: "molten-plate-239411.firebaseapp.com", projectId: "molten-plate-239411", appId: "1:272425047732:web:3c8aebc3fade64ecefe9e1" };
 </script>
 <script type="module" src="member.js"></script>
+<script>
+/* 標題圖示槽：三組（拍片／工具／研究）各自輪換，錯開起跑；分頁不在前景就不換；減少動態＝不自動換、只能點 */
+(function(){
+  var SETS = {
+    film:     ['vimeo', 'youtube', 'instagram'],
+    tools:    ['aligned', 'obsidian', 'stb', 'ae', 'davinci'],
+    research: ['claude', 'chatgpt', 'higgsfield', 'gemini']
+  };
+  var NAME = { vimeo:'Vimeo', youtube:'YouTube', instagram:'Instagram',
+               aligned:'ALIGNED', obsidian:'Obsidian', stb:'STB', ae:'After Effects', davinci:'DaVinci Resolve',
+               claude:'Claude', chatgpt:'ChatGPT', higgsfield:'Higgsfield', gemini:'Gemini' };
+  var reduce = false;
+  try { reduce = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+  var slots = document.querySelectorAll('.hero h1 .slot');
+  Array.prototype.forEach.call(slots, function (slot, si) {
+    var names = SETS[slot.dataset.set] || [];
+    if (!names.length) { slot.remove(); return; }
+    var imgs = names.map(function (n) {
+      var im = new Image(); im.src = 'assets/hero/' + n + '.png'; im.alt = NAME[n] || n; im.decoding = 'async';
+      slot.appendChild(im); return im;
+    });
+    var i = 0; imgs[0].classList.add('on');
+    slot.style.animationDelay = (120 + si * 140) + 'ms';
+    slot.title = '點一下換下一個';
+    function next() { imgs[i].classList.remove('on'); i = (i + 1) % imgs.length; imgs[i].classList.add('on'); }
+    slot.addEventListener('click', next);
+    if (reduce) return;
+    var t;
+    function arm() { t = setTimeout(function () { if (!document.hidden) next(); arm(); }, 2800); }
+    setTimeout(arm, 1200 + si * 900);
+  });
+})();
+</script>
 </body>
 </html>

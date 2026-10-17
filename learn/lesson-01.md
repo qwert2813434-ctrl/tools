@@ -1,4 +1,4 @@
-# 入門基礎：我怎麼做的｜第 1 課　給 AI 一個資料夾
+# AI Agent 入門基礎：我怎麼做的｜第 1 課　給 AI 一個資料夾
 
 網址：https://tools.arminkao.com/learn/lesson-01.html
 

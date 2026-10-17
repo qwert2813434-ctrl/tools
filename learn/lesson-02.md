@@ -1,4 +1,4 @@
-# 入門基礎：我怎麼做的｜第 2 課　整理你的下載資料夾
+# AI Agent 入門基礎：我怎麼做的｜第 2 課　整理你的下載資料夾
 
 網址：https://tools.arminkao.com/learn/lesson-02.html
 
