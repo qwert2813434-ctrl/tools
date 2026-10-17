@@ -155,6 +155,7 @@ me.innerHTML = `
   </div>
   <p class="mmsg" aria-live="polite"></p>`;
 document.body.appendChild(me);
+import('./member-water.js').then(m => m.attach(me)).catch(() => {});   /* 會員資料框也用同一片冰水玻璃（10/18） */
 const meMsg = me.querySelector('.mmsg');
 let subscribed = { ...NONE };
 function paintMe(){
