@@ -354,7 +354,10 @@ in vec2 a;void main(){gl_Position=vec4(a,0,1);}`;
       setTimeout(() => { if (dlg.open && performance.now() - lastFrame > 300 && (sp.x || sp.y)) home(); }, 1200);
     } catch (e) { dlg.classList.remove('mwater'); home(); }
   };
-  dlg.addEventListener('close', () => { dlg.classList.remove('mwater'); home(); unlock(); });
+  /* 框裡面捲動：畫布跟著位移，玻璃永遠蓋住看得到的那一塊；框本身長高（展開說明）就重量尺寸再畫 */
+  dlg.addEventListener('scroll', () => { cv.style.transform = `translateY(${dlg.scrollTop}px)`; }, { passive: true });
+  if (window.ResizeObserver) new ResizeObserver(() => { if (dlg.open && !dead) { try { measure(); kick(); } catch (e) {} } }).observe(dlg);
+  dlg.addEventListener('close', () => { cv.style.transform = ''; dlg.classList.remove('mwater'); home(); unlock(); });
   const msg = dlg.querySelector('.mmsg');
   if (msg) new MutationObserver(() => { if (/沒成功|失敗/.test(msg.textContent) && dlg.open) { sp.vx += 900; kick(); } })
     .observe(msg, { childList: true, characterData: true, subtree: true });

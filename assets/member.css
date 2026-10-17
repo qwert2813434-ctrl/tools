@@ -34,6 +34,7 @@
 .mnote { font-size: 12px; color: var(--faint); line-height: 1.7; margin-top: 8px; }
 .mnote details summary { cursor: pointer; color: var(--ink2); }
 .mnote ul { margin: 8px 0 0 18px; padding: 0; }
+.mnote details ul { max-height: 30vh; overflow-y: auto; overscroll-behavior: contain; padding-right: 6px; }   /* 10/18 小高：展開後字多到出框 → 說明在框內自己捲，登入框不再被撐長 */
 .mclose { position: absolute; top: 12px; right: 14px; }
 .mclose button { border: 0; background: none; font-size: 22px; color: var(--faint); cursor: pointer; line-height: 1; padding: 6px; }
 .mcheck { display: flex; gap: 10px; align-items: flex-start; margin: 18px 0 0; font-size: 14px; color: var(--ink); cursor: pointer; }
