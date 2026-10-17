@@ -73,6 +73,7 @@ dlg.innerHTML = `
     <li>你的權利：登入後點右上角「會員」可以查看、改通知、刪除全部資料；要更正或有其他要求，用上面的聯絡方式找我。不提供 email 就無法登入，但公開內容照樣能看。</li>
   </ul></details></div>`;
 document.body.appendChild(dlg);
+import('./member-water.js').then(m => m.attach(dlg)).catch(() => {});   /* 登入框玻璃水：失敗就維持原樣（10/17） */
 const msg = dlg.querySelector('.mmsg');
 const picked = (root) => Object.fromEntries([...root.querySelectorAll('[data-k]')].map(i => [i.dataset.k, i.checked]));
 
