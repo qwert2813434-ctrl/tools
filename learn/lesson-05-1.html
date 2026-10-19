@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="soft">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 5 之 1 課　同一份資料，換個樣子餵，更省額度 — 小高工具間 教學</title>
+<meta name="description" content="知道什麼東西最燒額度；養成「一段做完，開新對話」的習慣。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="../assets/theme.js"></script>
+<link rel="stylesheet" href="../research/research.css">
+<link rel="canonical" href="https://tools.arminkao.com/learn/lesson-05-1.html">
+<link rel="alternate" type="text/markdown" href="https://tools.arminkao.com/learn/lesson-05-1.md" title="純文字版">
+<script src="https://tools.arminkao.com/assets/hit.js" data-site="tools" defer></script>
+<style>
+.lessonhead .rid{margin-bottom:6px}
+.pub{margin:18px 0 6px;padding:18px 20px;border-radius:var(--r-md);background:var(--card);box-shadow:var(--e1)}
+.pub h2{margin-top:0;font-size:17px}
+.lock{margin:26px 0 8px;padding:22px;border-radius:var(--r-md);background:var(--card);box-shadow:var(--e1)}
+.lock h2{margin-top:0}
+.lock button{margin-top:10px;padding:9px 18px;border:0;border-radius:999px;background:var(--ink);color:var(--card);font:inherit;font-weight:600;cursor:pointer}
+.pub pre,.full pre{white-space:pre-wrap;padding:12px 14px;border-radius:var(--r-md);background:rgba(0,0,0,.25);font-size:13.5px}
+.full video{width:100%;border-radius:var(--r-md);background:#000;margin:6px 0 18px}
+figure{margin:14px 0}figure img{width:100%;border-radius:var(--r-md);box-shadow:var(--e1)}figcaption{font-size:13px;color:var(--ink2);margin-top:6px}
+.todo{display:inline-block;padding:4px 10px;border-radius:8px;background:rgba(255,179,168,.18);color:#c0564a;font-size:13px}
+blockquote{margin:12px 0;padding:10px 16px;border-left:3px solid var(--ink2);background:var(--card);border-radius:0 var(--r-md) var(--r-md) 0}
+.nav{display:flex;justify-content:space-between;margin:26px 0 0;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:18px 0}
+.grid a{display:block;padding:16px 18px;border-radius:var(--r-md);background:var(--card);box-shadow:var(--e1);color:inherit;text-decoration:none}
+.grid a b{display:block;font-size:13px;color:var(--ink2);font-weight:600;margin-bottom:4px}
+.grid a span{font-size:16px;font-weight:600}
+.yt{position:relative;aspect-ratio:16/9;margin:6px 0 18px;border-radius:var(--r-md);overflow:hidden;background:#000}
+.yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+@media (max-width:720px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="sky"></div><div class="grain"></div>
+<div class="topbar">
+  <a href="../">TOOL.AI · 小高工具間</a>
+  <div class="topr"><a class="home" href="https://arminkao.com/">作品集 ↗</a><button class="orb" onclick="toggleTheme()" title="明暗切換">◐</button></div>
+</div>
+<main class="shell"><article>
+<div class="lessonhead"><div class="rid">AI Agent 入門基礎：我怎麼做的 · 第 5 之 1 課</div>
+<h1>同一份資料，換個樣子餵，更省額度</h1>
+<div class="facts"><span>圖文＋動畫</span><span>完整版：<b>免費會員</b></span></div></div>
+<div class="get">這一課做完，你會：知道什麼東西最燒額度；養成「一段做完，開新對話」的習慣。</div>
+<div class="pub"><h2>這一課帶走</h2><ul><li>一個習慣：一段做完，開新對話（時鐘倒數完也一樣）。</li><li>一個常識：文字最便宜，PDF 貴，影片最貴。</li></ul></div>
+<section id="agent" class="pub"><h2>給 AI Agent：照這段做</h2><p class="muted">純文字版：<a href="https://tools.arminkao.com/learn/lesson-05-1.md">lesson-05-1.md</a></p><p>把這頁網址丟給你的 AI，說「照這頁幫我做」。</p>
+<p>你是使用者的 AI agent。使用者丟檔案給你讀之前，先幫他省 token。</p>
+<ul><li><b>步驟</b>：<ol><li>收到 PDF：另存一份純文字副本（例如 <code>pdftotext</code>），原檔不動；先檢查抽出來的文字完不完整（掃描檔、表格容易漏），只讀使用者要的頁；表格、圖表重要時才讀那幾頁的圖。</li><li>收到影片或錄音：先在本機轉逐字稿（例如 whisper），讀逐字稿；需要看畫面時才抽少量關鍵格。</li><li>收到圖片：字多的先轉文字；只需要局部就先裁切、縮小到看得清楚的最小尺寸。</li><li>對話很長、一段工作做完時，提醒使用者更新 <code>進度與下一步.md</code> 並開新對話。</li><li>需要安裝工具、付費或上傳到外部服務時，先問使用者；工具不能用就回報，不要硬做。</li></ol></li><li><b>完成</b>：說明你用了哪種讀法、轉換後少了什麼資訊（如果有）。有可靠的計數工具才報 token 數；沒有就說明是估算，估不準就直說。</li><li><b>不要</b>：為了省 token 把使用者要的內容刪掉；轉換失敗時假裝讀過原檔。</li></ul></section><section class="lock" id="lesson" data-member-box>
+<h2>登入看完整版（免費）</h2>
+<p>完整步驟、每一步的截圖、我踩過的雷，還有這一課的動畫。</p>
+<div class="member-off"><button data-member-login>登入看完整版</button></div>
+<div class="member-on full" data-lesson="basics-05-1">讀取中…</div>
+</section><div class="nav"><a href="lesson-05.html">← 上一課</a><a href="lesson-06.html">下一課 →</a></div>
+</article></main>
+<footer>高偉鳴 Armin Kao ／ <a href="https://arminkao.com">arminkao.com</a> ／ <a href="https://www.instagram.com/17187kao/">Instagram</a></footer>
+<script>
+window.MEMBER_CONFIG = { apiKey: "AIzaSyDCF9Of3YphMIVwCUYu6M5uq_r2gALVhKM", authDomain: "molten-plate-239411.firebaseapp.com", projectId: "molten-plate-239411", appId: "1:272425047732:web:3c8aebc3fade64ecefe9e1" };
+</script>
+<script type="module" src="../member.js"></script>
+</body>
+</html>
