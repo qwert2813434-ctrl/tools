@@ -19,7 +19,7 @@
 - [第 5 之 1 課　同一份資料，換個樣子餵，更省額度](https://tools.arminkao.com/learn/lesson-05-1.html)：知道什麼東西最燒額度；養成「一段做完，開新對話」的習慣。 純文字版：https://tools.arminkao.com/learn/lesson-05-1.md （有「給 AI Agent」段）
 - [第 6 課　它說做好了，是真的好了嗎](https://tools.arminkao.com/learn/lesson-06.html)：動手前講清楚「完成長什麼樣」，做完知道要去哪裡看。 純文字版：https://tools.arminkao.com/learn/lesson-06.md （有「給 AI Agent」段）
 - [第 7 課　不會問，就叫它出選擇題](https://tools.arminkao.com/learn/lesson-07.html)：不知道怎麼下指令時，讓它出三個選項給你挑。 純文字版：https://tools.arminkao.com/learn/lesson-07.md （有「給 AI Agent」段）
-- [第 8 課（進階）　我為什麼還留在 VS Code](https://tools.arminkao.com/learn/lesson-08.html)：裝好 VS Code 和 Claude Code，在同一個畫面看到檔案和 AI。 純文字版：https://tools.arminkao.com/learn/lesson-08.md （有「給 AI Agent」段）
+- [第 8 課（選修）　我為什麼還留在 VS Code](https://tools.arminkao.com/learn/lesson-08.html)：裝好 VS Code 和 Claude Code，在同一個畫面看到檔案和 AI。 純文字版：https://tools.arminkao.com/learn/lesson-08.md （有「給 AI Agent」段）
 
 ## 修正公告
 

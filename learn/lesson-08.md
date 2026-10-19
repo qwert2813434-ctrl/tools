@@ -1,4 +1,4 @@
-# AI Agent 入門基礎：我怎麼做的｜第 8 課（進階）　我為什麼還留在 VS Code
+# AI Agent 入門基礎：我怎麼做的｜第 8 課（選修）　我為什麼還留在 VS Code
 
 網址：https://tools.arminkao.com/learn/lesson-08.html
 
