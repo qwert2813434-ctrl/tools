@@ -19,6 +19,16 @@ const css = document.createElement('link');
 css.rel = 'stylesheet'; css.href = new URL('assets/member.css', import.meta.url).href;
 document.head.appendChild(css);
 
+/* App 內建瀏覽器（IG／FB／LINE）Google 不給登入：頂端提示改用瀏覽器開（11-11 小高回報 IG 連不進去） */
+const INAPP = /Instagram|FBAN|FBAV|FB_IAB|Line\//i.test(navigator.userAgent);
+if (INAPP) {
+  const bar = document.createElement('div');
+  bar.setAttribute('role', 'note');
+  bar.style.cssText = 'position:sticky;top:0;z-index:50;background:#33363D;color:#F4F6FA;font:500 14px/1.5 -apple-system,"PingFang TC",sans-serif;padding:10px 40px 10px 14px;text-align:left';
+  bar.innerHTML = '你在 App 裡打開這一頁，登入會被擋。請按右上角「⋯」→「在外部瀏覽器開啟」，再登入。<button aria-label="關閉" style="position:absolute;right:8px;top:6px;background:none;border:0;color:inherit;font-size:20px;line-height:1;cursor:pointer">×</button>';
+  bar.querySelector('button').onclick = () => bar.remove();
+  document.body.prepend(bar);
+}
 const CONFIG = window.MEMBER_CONFIG;          /* index.html 裡填 Firebase 網頁設定 */
 const NOTICE = '2026-10-15b';                   /* 告知文字版本；文字改了就換日期 */
 const MAIL_KEY = 'tools.member.mail';
