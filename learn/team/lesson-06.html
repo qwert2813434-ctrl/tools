@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="soft">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 6 課　不用坐在電腦前 — 小高工具間 教學</title>
+<meta name="description" content="讓電腦上的 AI 繼續做事，人去做別的，用手機講話交代它、它做完來找你。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="../../assets/theme.js"></script>
+<link rel="stylesheet" href="../../research/research.css">
+<link rel="canonical" href="https://tools.arminkao.com/learn/team/lesson-06.html">
+<link rel="alternate" type="text/markdown" href="https://tools.arminkao.com/learn/team/lesson-06.md" title="純文字版">
+<script src="https://tools.arminkao.com/assets/hit.js" data-site="tools" defer></script>
+<style>
+.lessonhead .rid{margin-bottom:6px}
+.pub{margin:18px 0 6px;padding:18px 20px;border-radius:var(--r-md);background:var(--card);box-shadow:var(--e1)}
+.pub h2{margin-top:0;font-size:17px}
+.lock{margin:26px 0 8px;padding:22px;border-radius:var(--r-md);background:var(--card);box-shadow:var(--e1)}
+.lock h2{margin-top:0}
+.lock button{margin-top:10px;padding:9px 18px;border:0;border-radius:999px;background:var(--ink);color:var(--card);font:inherit;font-weight:600;cursor:pointer}
+.pub pre,.full pre{white-space:pre-wrap;padding:12px 14px;border-radius:var(--r-md);background:rgba(0,0,0,.25);font-size:13.5px}
+.full video{width:100%;border-radius:var(--r-md);background:#000;margin:6px 0 18px}
+figure{margin:14px 0}figure img{width:100%;border-radius:var(--r-md);box-shadow:var(--e1)}figcaption{font-size:13px;color:var(--ink2);margin-top:6px}
+.todo{display:inline-block;padding:4px 10px;border-radius:8px;background:rgba(255,179,168,.18);color:#c0564a;font-size:13px}
+blockquote{margin:12px 0;padding:10px 16px;border-left:3px solid var(--ink2);background:var(--card);border-radius:0 var(--r-md) var(--r-md) 0}
+.nav{display:flex;justify-content:space-between;margin:26px 0 0;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:18px 0}
+.grid a{display:block;padding:16px 18px;border-radius:var(--r-md);background:var(--card);box-shadow:var(--e1);color:inherit;text-decoration:none}
+.grid a b{display:block;font-size:13px;color:var(--ink2);font-weight:600;margin-bottom:4px}
+.grid a span{font-size:16px;font-weight:600}
+.yt{position:relative;aspect-ratio:16/9;margin:6px 0 18px;border-radius:var(--r-md);overflow:hidden;background:#000}
+.yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+@media (max-width:720px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="sky"></div><div class="grain"></div>
+<div class="topbar">
+  <a href="../../">TOOL.AI · 小高工具間</a>
+  <div class="topr"><a class="home" href="https://arminkao.com/">作品集 ↗</a><button class="orb" onclick="toggleTheme()" title="明暗切換">◐</button></div>
+</div>
+<main class="shell"><article>
+<div class="lessonhead"><div class="rid">普通篇：把 AI 變成你的團隊 · 第 6 課</div>
+<h1>不用坐在電腦前</h1>
+<div class="facts"><span>圖文＋動畫</span><span>完整版：<b>免費會員</b></span></div></div>
+<div class="get">這一課做完，你會：讓電腦上的 AI 繼續做事，人去做別的，用手機講話交代它、它做完來找你。</div>
+<div class="pub"><h2>這一課帶走</h2><ul><li>一句話：<b>AI 在電腦上做事，你不用坐在旁邊：用手機講話交代，讓它做完來找你。</b></li><li>三件事：把門打開、用講的、讓它來找你（帶連結給你審）。</li><li>出門前在家先試一次，兩條路都接好。</li></ul></div>
+<section id="agent" class="pub"><h2>給 AI Agent：照這段做</h2><p class="muted">純文字版：<a href="https://tools.arminkao.com/learn/team/lesson-06.md">lesson-06.md</a></p><p>把這頁網址丟給你的 AI，說「照這頁幫我做」。（只對你信任的網站這樣做；陌生網頁別叫 AI 照做。）</p>
+<p>以下以 Claude Code 為例。用 Codex 等其他產品時，先確認它支援的做法，改用它官方的設定方式（例如 Codex 讀 <code>AGENTS.md</code>），不要直接建立同名檔案。</p>
+<p>你是使用者的 AI agent，在使用者的電腦上。</p>
+<ul><li><b>步驟</b>：<ol><li>問使用者用的是 Claude（VS Code、桌面版或終端機）還是 GPT（ChatGPT 電腦版），手機是 iPhone 還是 Android。</li><li>Claude：問使用者要不要「每個對話都自動接上」，他說好才幫他在 <code>~/.claude/settings.json</code> 加 <code>remoteControlAtStartup: true</code>（或請他自己在 VS Code／桌面版設定裡打開）；只想接這一個就打 <code>/rc</code>；再請他在 <code>/config</code> 打開兩個通知開關。GPT：帶使用者到 ChatGPT 電腦版設定的 Connections 打開手機控制，再用手機掃 QR code，這兩步要使用者自己按。</li><li>檢查電腦插電時會不會睡著；會的話，告訴使用者在哪裡改，不要自己改系統設定。</li><li>出門前用一件不改檔、不送出、不付費的小事測連線；會跳出電腦授權視窗的地方，請使用者當場處理。正式工作遇到授權時再逐項問使用者，不預先放寬權限。要點畫面操作別的 App 的工作，提醒使用者鎖螢幕時做不了。</li><li>請使用者走到別的房間，用手機叫你做一件不會改檔的小事，確認回得來。</li></ol></li><li><b>完成</b>：使用者在別的房間用手機交代一件事，你做完、手機收到通知；要使用者審的成果，附一個手機點得開的連結。</li><li><b>不要</b>：替使用者改系統設定或關掉安全功能；在使用者沒試過之前跟他說「出門也沒問題」。</li></ul></section><section class="lock" id="lesson" data-member-box>
+<h2>登入看完整版（免費）</h2>
+<p>完整內容、我踩過的雷、反例時間，還有這一課的動畫。</p>
+<div class="member-off"><button data-member-login>登入看完整版</button></div>
+<div class="member-on full" data-lesson="team-06">讀取中…</div>
+</section><div class="nav"><a href="lesson-05.html">← 上一課</a><a href="lesson-07.html">下一課 →</a></div>
+</article></main>
+<footer>高偉鳴 Armin Kao ／ <a href="https://arminkao.com">arminkao.com</a> ／ <a href="https://www.instagram.com/17187kao/">Instagram</a></footer>
+<script>
+window.MEMBER_CONFIG = { apiKey: "AIzaSyDCF9Of3YphMIVwCUYu6M5uq_r2gALVhKM", authDomain: "molten-plate-239411.firebaseapp.com", projectId: "molten-plate-239411", appId: "1:272425047732:web:3c8aebc3fade64ecefe9e1" };
+</script>
+<script type="module" src="../../member.js"></script>
+</body>
+</html>

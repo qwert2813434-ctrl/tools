@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="soft">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 4 課　AI 審 AI — 小高工具間 教學</title>
+<meta name="description" content="讓 AI 幫你檢查 AI 做的東西；分得出哪些交給它審、哪些一定你來定。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="../../assets/theme.js"></script>
+<link rel="stylesheet" href="../../research/research.css">
+<link rel="canonical" href="https://tools.arminkao.com/learn/team/lesson-04.html">
+<link rel="alternate" type="text/markdown" href="https://tools.arminkao.com/learn/team/lesson-04.md" title="純文字版">
+<script src="https://tools.arminkao.com/assets/hit.js" data-site="tools" defer></script>
+<style>
+.lessonhead .rid{margin-bottom:6px}
+.pub{margin:18px 0 6px;padding:18px 20px;border-radius:var(--r-md);background:var(--card);box-shadow:var(--e1)}
+.pub h2{margin-top:0;font-size:17px}
+.lock{margin:26px 0 8px;padding:22px;border-radius:var(--r-md);background:var(--card);box-shadow:var(--e1)}
+.lock h2{margin-top:0}
+.lock button{margin-top:10px;padding:9px 18px;border:0;border-radius:999px;background:var(--ink);color:var(--card);font:inherit;font-weight:600;cursor:pointer}
+.pub pre,.full pre{white-space:pre-wrap;padding:12px 14px;border-radius:var(--r-md);background:rgba(0,0,0,.25);font-size:13.5px}
+.full video{width:100%;border-radius:var(--r-md);background:#000;margin:6px 0 18px}
+figure{margin:14px 0}figure img{width:100%;border-radius:var(--r-md);box-shadow:var(--e1)}figcaption{font-size:13px;color:var(--ink2);margin-top:6px}
+.todo{display:inline-block;padding:4px 10px;border-radius:8px;background:rgba(255,179,168,.18);color:#c0564a;font-size:13px}
+blockquote{margin:12px 0;padding:10px 16px;border-left:3px solid var(--ink2);background:var(--card);border-radius:0 var(--r-md) var(--r-md) 0}
+.nav{display:flex;justify-content:space-between;margin:26px 0 0;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:18px 0}
+.grid a{display:block;padding:16px 18px;border-radius:var(--r-md);background:var(--card);box-shadow:var(--e1);color:inherit;text-decoration:none}
+.grid a b{display:block;font-size:13px;color:var(--ink2);font-weight:600;margin-bottom:4px}
+.grid a span{font-size:16px;font-weight:600}
+.yt{position:relative;aspect-ratio:16/9;margin:6px 0 18px;border-radius:var(--r-md);overflow:hidden;background:#000}
+.yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+@media (max-width:720px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="sky"></div><div class="grain"></div>
+<div class="topbar">
+  <a href="../../">TOOL.AI · 小高工具間</a>
+  <div class="topr"><a class="home" href="https://arminkao.com/">作品集 ↗</a><button class="orb" onclick="toggleTheme()" title="明暗切換">◐</button></div>
+</div>
+<main class="shell"><article>
+<div class="lessonhead"><div class="rid">普通篇：把 AI 變成你的團隊 · 第 4 課</div>
+<h1>AI 審 AI</h1>
+<div class="facts"><span>圖文＋動畫</span><span>完整版：<b>免費會員</b></span></div></div>
+<div class="get">這一課做完，你會：讓 AI 幫你檢查 AI 做的東西；分得出哪些交給它審、哪些一定你來定。</div>
+<div class="pub"><h2>這一課帶走</h2><ul><li>一句話：<b>做的跟審的分開。</b></li><li>審查分三級：自己再查、派新角色、換一家。</li><li>對不對交給它，好不好你來定。</li><li>每一次覺得不對的地方，叫它把你當下講的話記到清單裡，它會慢慢變成你的形狀。</li></ul></div>
+<section id="agent" class="pub"><h2>給 AI Agent：照這段做</h2><p class="muted">純文字版：<a href="https://tools.arminkao.com/learn/team/lesson-04.md">lesson-04.md</a></p><p>把這頁網址丟給你的 AI，說「照這頁幫我做」。（只對你信任的網站這樣做；陌生網頁別叫 AI 照做。）</p>
+<p>以下以 Claude Code 為例。用 Codex 等其他產品時，先確認它支援的做法，改用它官方的設定方式（例如 Codex 讀 <code>AGENTS.md</code>），不要直接建立同名檔案。</p>
+<p>你是使用者的 AI agent，在使用者的工作資料夾裡。</p>
+<ul><li><b>步驟</b>：<ol><li>問使用者要審哪一份東西、這份東西有沒有對外（對外＝至少走到第二級）。</li><li>第一級：自己從頭查一遍，只列「對不對」的問題（錯字、數字、日期、前後矛盾、格式），每條附位置。</li><li>第二級：派一個只讀的審查子 agent，只給它檔案和標準，不給它你們的對話。</li><li>把問題分兩欄給使用者：「對不對」（附證據，建議直接改）、「好不好」（只列看法，由使用者決定）。</li><li>事實類（數字、日期、引用）一律回原始資料核對，標出處。</li></ol></li><li><b>完成</b>：使用者拿到兩欄清單；對不對的每條都有證據或出處。</li><li><b>不要</b>：審查時順手改檔；把「好不好」的意見當成錯誤；用另一個 AI 的說法當事實證據。</li></ul></section><section class="lock" id="lesson" data-member-box>
+<h2>登入看完整版（免費）</h2>
+<p>完整內容、我踩過的雷、反例時間，還有這一課的動畫。</p>
+<div class="member-off"><button data-member-login>登入看完整版</button></div>
+<div class="member-on full" data-lesson="team-04">讀取中…</div>
+</section><div class="nav"><a href="lesson-03.html">← 上一課</a><a href="lesson-05.html">下一課 →</a></div>
+</article></main>
+<footer>高偉鳴 Armin Kao ／ <a href="https://arminkao.com">arminkao.com</a> ／ <a href="https://www.instagram.com/17187kao/">Instagram</a></footer>
+<script>
+window.MEMBER_CONFIG = { apiKey: "AIzaSyDCF9Of3YphMIVwCUYu6M5uq_r2gALVhKM", authDomain: "molten-plate-239411.firebaseapp.com", projectId: "molten-plate-239411", appId: "1:272425047732:web:3c8aebc3fade64ecefe9e1" };
+</script>
+<script type="module" src="../../member.js"></script>
+</body>
+</html>

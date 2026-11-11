@@ -21,6 +21,20 @@
 - [第 7 課　不會問，就叫它出選擇題](https://tools.arminkao.com/learn/lesson-07.html)：不知道怎麼下指令時，讓它出三個選項給你挑。 純文字版：https://tools.arminkao.com/learn/lesson-07.md （有「給 AI Agent」段）
 - [第 8 課（選修）　想看、想自己改，再打開 VS Code](https://tools.arminkao.com/learn/lesson-08.html)：裝好 VS Code 和 Claude Code；知道什麼時候打開它、什麼時候留在桌面版。 純文字版：https://tools.arminkao.com/learn/lesson-08.md （有「給 AI Agent」段）
 
+## 教學：普通篇：把 AI 變成你的團隊（免費，入門之後）
+
+目錄：https://tools.arminkao.com/learn/team/　讓好幾個 AI 照你的方法分工做事。每課公開開頭、重點與給 AI Agent 的照做段；完整內容與動畫為免費會員內容（登入才看）。
+
+- [第 0 課（前言）　它說你對，不代表你對](https://tools.arminkao.com/learn/team/lesson-00.html)：知道 AI 會順著你講；會用三句問法，逼它把反例講出來。 純文字版：https://tools.arminkao.com/learn/team/lesson-00.md （有「給 AI Agent」段）
+- [第 1 課　寫得死的，才寫成技能](https://tools.arminkao.com/learn/team/lesson-01.html)：分得出哪些事該寫成技能、哪些不該；把一件做過三次的事變成一個技能。 純文字版：https://tools.arminkao.com/learn/team/lesson-01.md （有「給 AI Agent」段）
+- [第 2 課　角色越多，AI 不會越聰明](https://tools.arminkao.com/learn/team/lesson-02.html)：分得出什麼時候該「派一個角色去做」、什麼時候自己跟它聊就好；做出你的第一個角色。 純文字版：https://tools.arminkao.com/learn/team/lesson-02.md （有「給 AI Agent」段）
+- [第 3 課　一次派很多 Agent](https://tools.arminkao.com/learn/team/lesson-03.html)：分得出哪些事可以一次派很多個 Agent 同時做；派的時候不讓它們互相撞到。 純文字版：https://tools.arminkao.com/learn/team/lesson-03.md （有「給 AI Agent」段）
+- [第 4 課　AI 審 AI](https://tools.arminkao.com/learn/team/lesson-04.html)：讓 AI 幫你檢查 AI 做的東西；分得出哪些交給它審、哪些一定你來定。 純文字版：https://tools.arminkao.com/learn/team/lesson-04.md （有「給 AI Agent」段）
+- [第 5 課　挑腦袋](https://tools.arminkao.com/learn/team/lesson-05.html)：分得出哪些事用便宜的腦袋就好、哪些要用強的，也知道換腦袋的代價。 純文字版：https://tools.arminkao.com/learn/team/lesson-05.md （有「給 AI Agent」段）
+- [第 6 課　不用坐在電腦前](https://tools.arminkao.com/learn/team/lesson-06.html)：讓電腦上的 AI 繼續做事，人去做別的，用手機講話交代它、它做完來找你。 純文字版：https://tools.arminkao.com/learn/team/lesson-06.md （有「給 AI Agent」段）
+- [第 7 課　避免多視窗撞車](https://tools.arminkao.com/learn/team/lesson-07.html)：好幾個對話同時開工，讓它先檢查有沒有別人剛動過；做完的事寫進檔案；一個專案同一時間只給一個對話做。 純文字版：https://tools.arminkao.com/learn/team/lesson-07.md （有「給 AI Agent」段）
+- [第 8 課（結論）　AI 會變，系統化的思考方式不會](https://tools.arminkao.com/learn/team/lesson-08.html)：遇到一件事，用三個問題把它拆開；知道下一步從哪裡開始。 純文字版：https://tools.arminkao.com/learn/team/lesson-08.md （有「給 AI Agent」段）
+
 ## 修正公告
 
 - [朗讀突然沒聲音：微軟換了配音主機（edge-tts 403／429）](https://tools.arminkao.com/research/fix-edge-tts-403.html)：edge-tts 改連新主機＋429 自動重試的整段程式、agent 修復步驟與驗證、Edge 不能用時的台灣腔替代方案（Azure 官方 F0、Mac 美佳、Siri 聲音 2 經捷徑）。純文字版：https://tools.arminkao.com/research/fix-edge-tts-403.md （有「給 AI Agent」段）

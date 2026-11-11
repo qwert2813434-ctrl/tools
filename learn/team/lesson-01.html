@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="soft">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 1 課　寫得死的，才寫成技能 — 小高工具間 教學</title>
+<meta name="description" content="分得出哪些事該寫成技能、哪些不該；把一件做過三次的事變成一個技能。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="../../assets/theme.js"></script>
+<link rel="stylesheet" href="../../research/research.css">
+<link rel="canonical" href="https://tools.arminkao.com/learn/team/lesson-01.html">
+<link rel="alternate" type="text/markdown" href="https://tools.arminkao.com/learn/team/lesson-01.md" title="純文字版">
+<script src="https://tools.arminkao.com/assets/hit.js" data-site="tools" defer></script>
+<style>
+.lessonhead .rid{margin-bottom:6px}
+.pub{margin:18px 0 6px;padding:18px 20px;border-radius:var(--r-md);background:var(--card);box-shadow:var(--e1)}
+.pub h2{margin-top:0;font-size:17px}
+.lock{margin:26px 0 8px;padding:22px;border-radius:var(--r-md);background:var(--card);box-shadow:var(--e1)}
+.lock h2{margin-top:0}
+.lock button{margin-top:10px;padding:9px 18px;border:0;border-radius:999px;background:var(--ink);color:var(--card);font:inherit;font-weight:600;cursor:pointer}
+.pub pre,.full pre{white-space:pre-wrap;padding:12px 14px;border-radius:var(--r-md);background:rgba(0,0,0,.25);font-size:13.5px}
+.full video{width:100%;border-radius:var(--r-md);background:#000;margin:6px 0 18px}
+figure{margin:14px 0}figure img{width:100%;border-radius:var(--r-md);box-shadow:var(--e1)}figcaption{font-size:13px;color:var(--ink2);margin-top:6px}
+.todo{display:inline-block;padding:4px 10px;border-radius:8px;background:rgba(255,179,168,.18);color:#c0564a;font-size:13px}
+blockquote{margin:12px 0;padding:10px 16px;border-left:3px solid var(--ink2);background:var(--card);border-radius:0 var(--r-md) var(--r-md) 0}
+.nav{display:flex;justify-content:space-between;margin:26px 0 0;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:18px 0}
+.grid a{display:block;padding:16px 18px;border-radius:var(--r-md);background:var(--card);box-shadow:var(--e1);color:inherit;text-decoration:none}
+.grid a b{display:block;font-size:13px;color:var(--ink2);font-weight:600;margin-bottom:4px}
+.grid a span{font-size:16px;font-weight:600}
+.yt{position:relative;aspect-ratio:16/9;margin:6px 0 18px;border-radius:var(--r-md);overflow:hidden;background:#000}
+.yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+@media (max-width:720px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="sky"></div><div class="grain"></div>
+<div class="topbar">
+  <a href="../../">TOOL.AI · 小高工具間</a>
+  <div class="topr"><a class="home" href="https://arminkao.com/">作品集 ↗</a><button class="orb" onclick="toggleTheme()" title="明暗切換">◐</button></div>
+</div>
+<main class="shell"><article>
+<div class="lessonhead"><div class="rid">普通篇：把 AI 變成你的團隊 · 第 1 課</div>
+<h1>寫得死的，才寫成技能</h1>
+<div class="facts"><span>圖文＋動畫</span><span>完整版：<b>免費會員</b></span></div></div>
+<div class="get">這一課做完，你會：分得出哪些事該寫成技能、哪些不該；把一件做過三次的事變成一個技能。</div>
+<div class="pub"><h2>這一課帶走</h2><ul><li>判斷句：「這件事我做第幾次了？」</li><li>三個問題：做過三次、步驟一樣了嗎？漏一步會出事嗎？一句話叫得出來嗎？</li><li>一句交代：「欸，把剛剛那樣整理成一個技能，要花錢或要寄出去之前先問我一下。」</li><li>組技能時：要叫，不要抄。</li></ul></div>
+<section id="agent" class="pub"><h2>給 AI Agent：照這段做</h2><p class="muted">純文字版：<a href="https://tools.arminkao.com/learn/team/lesson-01.md">lesson-01.md</a></p><p>把這頁網址丟給你的 AI，說「照這頁幫我做」。（只對你信任的網站這樣做；陌生網頁別叫 AI 照做。）</p>
+<p>以下以 Claude Code 為例。用 Codex 等其他產品時，先確認它支援的做法，改用它官方的設定方式（例如 Codex 讀 <code>AGENTS.md</code>），不要直接建立同名檔案。</p>
+<p>你是使用者的 AI agent，在使用者的工作資料夾裡。</p>
+<ul><li><b>步驟</b>：<ol><li>問使用者最近重複做的事有哪些，列出來，用三個問題（做過三次、步驟都一樣了嗎？漏一步會不會出事？一句話叫得出來、常用嗎？）逐一標「適合／不適合」，附理由。</li><li>使用者挑一件適合的，回顧你們上次做的步驟（找不到就請使用者帶你做一次）。</li><li>寫成技能檔，放在這個資料夾的 <code>.claude/skills/&lt;名字&gt;/SKILL.md</code>：寫清楚每一步；對外送出、刪除、付款的步驟寫「停下來問使用者」。</li><li>請使用者開新對話打 <code>/&lt;名字&gt;</code> 試跑。</li></ol></li><li><b>完成</b>：新對話打 <code>/&lt;名字&gt;</code>，照順序做完，並在該停的地方停下來問。</li><li><b>不要</b>：把還在變的流程寫成技能；技能裡寫帳號密碼。</li></ul></section><section class="lock" id="lesson" data-member-box>
+<h2>登入看完整版（免費）</h2>
+<p>完整內容、我踩過的雷、反例時間，還有這一課的動畫。</p>
+<div class="member-off"><button data-member-login>登入看完整版</button></div>
+<div class="member-on full" data-lesson="team-01">讀取中…</div>
+</section><div class="nav"><a href="lesson-00.html">← 上一課</a><a href="lesson-02.html">下一課 →</a></div>
+</article></main>
+<footer>高偉鳴 Armin Kao ／ <a href="https://arminkao.com">arminkao.com</a> ／ <a href="https://www.instagram.com/17187kao/">Instagram</a></footer>
+<script>
+window.MEMBER_CONFIG = { apiKey: "AIzaSyDCF9Of3YphMIVwCUYu6M5uq_r2gALVhKM", authDomain: "molten-plate-239411.firebaseapp.com", projectId: "molten-plate-239411", appId: "1:272425047732:web:3c8aebc3fade64ecefe9e1" };
+</script>
+<script type="module" src="../../member.js"></script>
+</body>
+</html>
