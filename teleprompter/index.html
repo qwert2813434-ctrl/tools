@@ -135,7 +135,7 @@ input[type=range]::-moz-range-thumb{width:36px;height:36px;border-radius:50%;bac
       <button id="play" aria-label="播放"></button>
       <div class="slw">
         <div class="cap"><span>速度 慢</span><b id="vCpm"></b><span>快</span></div>
-        <input type="range" id="cpm" min="100" max="500" step="10">
+        <input type="range" id="cpm" min="100" max="1000" step="10">
       </div>
       <div class="slw ex">
         <div class="cap"><span>字小</span><b id="vSize"></b><span>字大</span></div>
@@ -310,7 +310,7 @@ function pxPerSec(){
   const cpl=Math.max(1,w/(s.size*(1+s.ls)));
   return s.cpm/60*s.size*s.lh/cpl;
 }
-function bump(d){setS('cpm',Math.min(500,Math.max(100,cur.s.cpm+d)))}
+function bump(d){setS('cpm',Math.min(1000,Math.max(100,cur.s.cpm+d)))}
 /* 播放中螢幕常亮 */
 let wl=null;
 async function lockOn(){try{if(!wl&&'wakeLock' in navigator){wl=await navigator.wakeLock.request('screen');wl.addEventListener('release',()=>{wl=null})}}catch(e){}}
