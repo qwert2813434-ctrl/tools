@@ -33,6 +33,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .mini.del{background:none;color:var(--mute)}
 .mini{min-height:44px;padding:10px 14px;border-radius:10px;background:#26262b;font-size:14px}
 .mini.open{background:var(--acc);color:#111;font-weight:700}
+.sub{max-width:980px;margin:-14px auto 20px;color:var(--mute);font-size:14px}
 .kicker{display:block;max-width:980px;margin:0 auto 6px;font-size:12px;letter-spacing:.24em;color:var(--mute);text-decoration:none}
 .foot{max-width:980px;margin:28px auto 0;color:var(--mute);font-size:13px;line-height:1.7}
 .empty{text-align:center;color:var(--mute);padding:80px 0;grid-column:1/-1;font-size:17px}
@@ -45,7 +46,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 #text.mirror{transform:scaleX(-1)}
 #text.mirrorV{transform:scaleY(-1)}
 #text.mirror.mirrorV{transform:scale(-1,-1)}
-#text:empty:before{content:"點這裡開始打字…";color:#555}
+#text:empty:before{content:"點這裡輸入稿子…";color:#555}
 #guide{position:absolute;left:0;right:0;top:var(--gy,38%);height:0;border-top:2px solid rgba(255,204,51,.55);pointer-events:none}
 #guide:before,#guide:after{content:"";position:absolute;top:-10px;border:9px solid transparent}
 #guide:before{left:0;border-left-color:var(--acc)}
@@ -87,11 +88,12 @@ input[type=range]::-moz-range-thumb{width:36px;height:36px;border-radius:50%;bac
 #stage.playing #hint{animation:hintFade 3s forwards}
 @keyframes hintFade{0%,70%{opacity:1}100%{opacity:0}}
 /* 播放中調速 */
-#live{position:absolute;right:calc(env(safe-area-inset-right) + 12px);top:50%;transform:translateY(-50%);display:none;flex-direction:column;align-items:center;gap:10px;opacity:.35;transition:opacity .2s}
+#live{position:absolute;right:calc(env(safe-area-inset-right) + 12px);top:50%;transform:translateY(-50%);display:none;flex-direction:column;align-items:center;gap:10px}
+#live button{opacity:.35;transition:opacity .2s}
+#live.touch button{opacity:1}
 #stage.playing #live{display:flex}
-#live.touch{opacity:1}
 #live button{width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.16);font-size:30px;line-height:1;color:#fff}
-#live b{font-size:13px;font-weight:600;color:#fff;text-align:center;line-height:1.3}
+#live b{font-size:13px;font-weight:600;color:rgba(255,255,255,.6);text-align:center;line-height:1.3}
 
 #count{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:180px;font-weight:800;color:var(--acc);background:rgba(0,0,0,.5);pointer-events:none}
 
@@ -103,7 +105,10 @@ input[type=range]::-moz-range-thumb{width:36px;height:36px;border-radius:50%;bac
 .mbox .act{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
 .mbox .danger{background:var(--red);color:#fff}
 
-#moreBtn{display:none}
+#moreBtn{display:none;color:var(--fg);background:rgba(255,255,255,.14)}
+#moreBtn.on{color:var(--acc)}
+#pasteBtn{position:absolute;left:50%;top:22%;transform:translateX(-50%);display:none;background:var(--acc);color:#111;font-weight:700;font-size:17px;min-height:52px;padding:14px 26px;border-radius:14px}
+#stage.empty:not(.playing) #pasteBtn{display:block}
 /* 手機（直放或橫放）：平常只留播放＋速度，其他收進「設定」 */
 @media (max-width:760px),(max-height:520px){
   #moreBtn{display:block}
@@ -112,6 +117,11 @@ input[type=range]::-moz-range-thumb{width:36px;height:36px;border-radius:50%;bac
   .trow.r2{flex-wrap:wrap}
   .trow.r2 .sp{display:none}
 }
+@media (max-width:520px){
+  #tools.more{max-height:65vh}
+  #text{padding-right:calc(var(--margin,8%) + 64px)}
+}
+@media (display-mode:standalone){.kicker,.tipadd{display:none}}
 #topbar,#tools{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
 </style>
 </head>
@@ -124,8 +134,9 @@ input[type=range]::-moz-range-thumb{width:36px;height:36px;border-radius:50%;bac
     <h1>提詞器專案</h1>
     <button class="btn" id="newBtn">＋ 新增專案</button>
   </div>
+  <p class="sub">點專案進入，按黃色播放鍵開始。</p>
+  <p class="sub">稿子只存在這台裝置，不會上傳；稿子正本請留在原處。<span class="tipadd"><br>iPhone／iPad 建議先「加入主畫面」再用（Safari 分享 → 加入主畫面）：全螢幕、沒網路也打得開，Safari 也比較不會清掉稿子。加入後是另一份空間，稿子要重新貼。</span></p>
   <div class="grid" id="grid"></div>
-  <p class="foot">稿子只存在這台裝置的瀏覽器，不會上傳；稿子正本請留在原處。<br>iPhone／iPad：Safari 分享 →「加入主畫面」，從圖示打開就是全螢幕，沒網路也打得開（加入後是另一份儲存空間，稿子要再貼一次）。</p>
 </section>
 
 <!-- 提詞畫面 -->
@@ -148,15 +159,17 @@ input[type=range]::-moz-range-thumb{width:36px;height:36px;border-radius:50%;bac
         <div class="cap"><span>速度 慢</span><b id="vCpm"></b><span>快</span></div>
         <input type="range" id="cpm" min="100" max="1000" step="10">
       </div>
-      <div class="slw ex">
-        <div class="cap"><span>字小</span><b id="vSize"></b><span>字大</span></div>
+      <button class="tg" id="moreBtn">設定</button>
+    </div>
+    <div class="trow ex">
+      <div class="slw">
+        <div class="cap"><span>字級 小</span><b id="vSize"></b><span>大</span></div>
         <input type="range" id="size" min="24" max="200" step="2">
       </div>
-      <div class="slw ex">
-        <div class="cap"><span>寬</span><b id="vMargin"></b><span>窄（往中間收）</span></div>
+      <div class="slw">
+        <div class="cap"><span>邊距 寬</span><b id="vMargin"></b><span>窄</span></div>
         <input type="range" id="margin" min="2" max="35" step="1">
       </div>
-      <button class="tg" id="moreBtn">設定</button>
     </div>
     <div class="trow ex">
       <div class="slw">
@@ -182,6 +195,7 @@ input[type=range]::-moz-range-thumb{width:36px;height:36px;border-radius:50%;bac
       <button class="tg" id="topBtn">回到開頭</button>
     </div>
   </div>
+  <button id="pasteBtn">貼上稿子</button>
   <div id="live"><button id="spUp" aria-label="加快">+</button><b id="vLive"></b><button id="spDn" aria-label="放慢">−</button></div>
   <div id="hint">點畫面暫停 ・ 上下滑動可微調位置</div>
   <div id="count" class="hidden"></div>
@@ -269,7 +283,7 @@ function openProject(id){
   $('home').classList.add('hidden');stage.classList.remove('hidden');
   applySettings();sc.scrollTop=cur.at||0;pos=sc.scrollTop;
   location.hash='p-'+id;
-  if(!cur.text)setTimeout(()=>text.focus(),100);
+  markEmpty();
 }
 function back(){
   stop();saveNow();cur=null;
@@ -282,7 +296,12 @@ $('backBtn').onclick=back;
 let saveT=null;
 function saveNow(){if(!cur)return;if(!stage.classList.contains('hidden'))cur.at=Math.round(sc.scrollTop);cur.text=text.innerText.replace(/\n$/,'');cur.name=$('title').value.trim()||cur.name;cur.updated=Date.now();persist();$('saved').textContent='已儲存'}
 function saveSoon(){$('saved').textContent='編輯中…';clearTimeout(saveT);saveT=setTimeout(saveNow,600)}
-text.addEventListener('input',saveSoon);
+function markEmpty(){stage.classList.toggle('empty',!text.textContent.trim())}
+text.addEventListener('input',()=>{markEmpty();saveSoon()});
+$('pasteBtn').onclick=async()=>{
+  try{const t=await navigator.clipboard.readText();if(t.trim()){text.textContent=t;markEmpty();saveNow();sc.scrollTop=pos=0;return}}catch(e){}
+  text.focus();$('saved').textContent='長按文字區，點「貼上」';
+};
 $('title').addEventListener('input',saveSoon);
 
 /* 設定 */
@@ -319,7 +338,7 @@ $('topBtn').onclick=()=>{sc.scrollTop=0;pos=0};
 let playing=false,raf=0,last=0,pos=0,cdT=null;
 // 每分鐘字數 → 每秒捲動像素：一行高 ÷ 一行字數 × 每秒字數
 function pxPerSec(){
-  const s=cur.s,w=text.clientWidth*(1-2*s.margin/100);
+  const s=cur.s,cs=getComputedStyle(text),w=text.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
   const cpl=Math.max(1,w/(s.size*(1+s.ls)));
   return s.cpm/60*s.size*s.lh/cpl;
 }
@@ -390,10 +409,11 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden)saveNow();e
 
 /* 啟動 */
 if(!db.projects.length){
-  db.projects.push({id:uid(),name:'範例稿',updated:Date.now(),s:{...DEF},text:'歡迎使用提詞器。\n\n直接點這段文字就能編輯，打字、貼上都可以，會自動儲存。\n\n下方工具列：\n速度 慢／快 拉桿調整每分鐘念幾個字\n字小／字大 調整字級\n寬／窄 把字往畫面中間收\n\n按黃色播放鍵開始，播放中點一下畫面就暫停。\n\n架在鏡子提詞器上時，打開「左右鏡像」。'});
+  db.projects.push({id:uid(),name:'範例稿',updated:Date.now(),s:{...DEF},text:'這是一段練習稿。按左下黃色播放鍵，字會自己往上走，念到黃色閱讀線那一行就對了。\n\n播放中點一下畫面就暫停，再按播放會接著走。右邊的 ＋／－ 可以邊念邊調速度。\n\n要用自己的稿：按左上「專案」回到列表，按「新增專案」，把稿子貼進來就好。\n\n架在鏡子提詞器上時，打開「左右鏡像」（手機在「設定」裡）。'});
   persist();
 }
 $('play').innerHTML=IC_PLAY;
+try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist().catch(()=>{})}catch(e){}
 renderHome();
 if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
 const h=location.hash.match(/^#p-(.+)$/);if(h&&db.projects.find(p=>p.id===h[1]))openProject(h[1]);
