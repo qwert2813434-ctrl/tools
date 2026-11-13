@@ -75,7 +75,8 @@ input[type=range]::-moz-range-thumb{width:36px;height:36px;border-radius:50%;bac
 #stage.playing #tools{transform:translateY(100%);opacity:0;pointer-events:none}
 #stage.playing #topbar{opacity:0;pointer-events:none}
 #hint{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom) + 18px);transform:translateX(-50%);background:rgba(0,0,0,.6);color:#aaa;font-size:13px;padding:6px 12px;border-radius:20px;pointer-events:none;opacity:0;transition:opacity .4s}
-#stage.playing #hint{opacity:1}
+#stage.playing #hint{animation:hintFade 3s forwards}
+@keyframes hintFade{0%,70%{opacity:1}100%{opacity:0}}
 /* 播放中調速 */
 #live{position:absolute;right:calc(env(safe-area-inset-right) + 12px);top:50%;transform:translateY(-50%);display:none;flex-direction:column;align-items:center;gap:10px;opacity:.35;transition:opacity .2s}
 #stage.playing #live{display:flex}
@@ -93,10 +94,16 @@ input[type=range]::-moz-range-thumb{width:36px;height:36px;border-radius:50%;bac
 .mbox .act{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
 .mbox .danger{background:var(--red);color:#fff}
 
-@media (max-width:760px){
+#moreBtn{display:none}
+/* 手機（直放或橫放）：平常只留播放＋速度，其他收進「設定」 */
+@media (max-width:760px),(max-height:520px){
+  #moreBtn{display:block}
+  #tools:not(.more) .ex{display:none!important}
+  #tools.more{max-height:78vh;overflow-y:auto}
   .trow.r2{flex-wrap:wrap}
   .trow.r2 .sp{display:none}
 }
+#topbar,#tools{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
 </style>
 </head>
 <body>
@@ -130,16 +137,17 @@ input[type=range]::-moz-range-thumb{width:36px;height:36px;border-radius:50%;bac
         <div class="cap"><span>速度 慢</span><b id="vCpm"></b><span>快</span></div>
         <input type="range" id="cpm" min="100" max="500" step="10">
       </div>
-      <div class="slw">
+      <div class="slw ex">
         <div class="cap"><span>字小</span><b id="vSize"></b><span>字大</span></div>
         <input type="range" id="size" min="24" max="200" step="2">
       </div>
-      <div class="slw">
+      <div class="slw ex">
         <div class="cap"><span>寬</span><b id="vMargin"></b><span>窄（往中間收）</span></div>
         <input type="range" id="margin" min="2" max="35" step="1">
       </div>
+      <button class="tg" id="moreBtn">設定</button>
     </div>
-    <div class="trow">
+    <div class="trow ex">
       <div class="slw">
         <div class="cap"><span>行距 緊</span><b id="vLh"></b><span>鬆</span></div>
         <input type="range" id="lh" min="1" max="2.6" step="0.05">
@@ -149,7 +157,7 @@ input[type=range]::-moz-range-thumb{width:36px;height:36px;border-radius:50%;bac
         <input type="range" id="ls" min="-0.05" max="0.5" step="0.01">
       </div>
     </div>
-    <div class="trow r2">
+    <div class="trow r2 ex">
       <div class="seg" id="alignSeg">
         <button data-a="left">靠左</button>
         <button data-a="center">置中</button>
@@ -353,7 +361,9 @@ document.addEventListener('keydown',e=>{
   if(e.key==='PageUp'||e.key==='ArrowLeft'){e.preventDefault();sc.scrollTop-=sc.clientHeight*.5;pos=sc.scrollTop}
 });
 
-/* 全螢幕 */
+/* 全螢幕：iPhone 不支援、主畫面模式本來就全螢幕 → 藏起來 */
+{const el=document.documentElement;if(!(el.requestFullscreen||el.webkitRequestFullscreen)||navigator.standalone||matchMedia('(display-mode: standalone)').matches)$('fsBtn').classList.add('hidden')}
+$('moreBtn').onclick=()=>{const m=$('tools').classList.toggle('more');$('moreBtn').classList.toggle('on',m)};
 $('fsBtn').onclick=()=>{
   const el=document.documentElement;
   try{
