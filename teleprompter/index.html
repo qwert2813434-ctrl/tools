@@ -32,7 +32,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 #stage{position:fixed;inset:0;background:#000}
 #scroller{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 #scroller::-webkit-scrollbar{display:none}
-#text{min-height:100%;padding:45vh var(--margin,8%) 100vh;outline:none;white-space:pre-wrap;word-break:break-word;line-height:1.45;font-weight:600;color:#fff;font-size:var(--fs,64px);text-align:var(--align,left);caret-color:var(--acc)}
+#text{min-height:100%;padding:45vh var(--margin,8%) 100vh;outline:none;white-space:pre-wrap;word-break:break-word;line-height:var(--lh,1.45);letter-spacing:var(--ls,0em);font-weight:600;color:#fff;font-size:var(--fs,64px);text-align:var(--align,left);caret-color:var(--acc)}
 #text.mirror{transform:scaleX(-1)}
 #text.mirrorV{transform:scaleY(-1)}
 #text.mirror.mirrorV{transform:scale(-1,-1)}
@@ -133,6 +133,16 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px;border-radius:50%;bac
         <input type="range" id="margin" min="2" max="35" step="1">
       </div>
     </div>
+    <div class="trow">
+      <div class="slw">
+        <div class="cap"><span>行距 緊</span><b id="vLh"></b><span>鬆</span></div>
+        <input type="range" id="lh" min="1" max="2.6" step="0.05">
+      </div>
+      <div class="slw">
+        <div class="cap"><span>字距 緊</span><b id="vLs"></b><span>鬆</span></div>
+        <input type="range" id="ls" min="-0.05" max="0.5" step="0.01">
+      </div>
+    </div>
     <div class="trow r2">
       <div class="seg" id="alignSeg">
         <button data-a="left">靠左</button>
@@ -160,7 +170,7 @@ let mem=null;
 function load(){try{const s=localStorage.getItem(KEY);if(s)return JSON.parse(s)}catch(e){}return mem||{projects:[]}}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){mem=db}}
 let db=load();
-const DEF={speed:30,size:72,margin:8,align:'left',mirror:false,flip:false,guide:true,countdown:true};
+const DEF={speed:30,size:72,margin:8,align:'left',mirror:false,flip:false,guide:true,countdown:true,lh:1.45,ls:0};
 const $=id=>document.getElementById(id);
 const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let cur=null;
@@ -250,6 +260,9 @@ function applySettings(){
   const s=cur.s;
   $('speed').value=s.speed;$('size').value=s.size;$('margin').value=s.margin;
   $('vSpeed').textContent=s.speed;$('vSize').textContent=s.size+'px';$('vMargin').textContent=s.margin+'%';
+  $('lh').value=s.lh;$('ls').value=s.ls;
+  $('vLh').textContent=(+s.lh).toFixed(2);$('vLs').textContent=(+s.ls).toFixed(2);
+  text.style.setProperty('--lh',s.lh);text.style.setProperty('--ls',s.ls+'em');
   text.style.setProperty('--fs',s.size+'px');
   text.style.setProperty('--margin',s.margin+'%');
   text.style.setProperty('--align',s.align);
@@ -260,9 +273,9 @@ function applySettings(){
   $('guideBtn').classList.toggle('on',s.guide);$('cdBtn').classList.toggle('on',s.countdown);
 }
 function setS(k,v){cur.s[k]=v;applySettings();persist()}
-['speed','size','margin'].forEach(k=>$(k).addEventListener('input',e=>{
+['speed','size','margin','lh','ls'].forEach(k=>$(k).addEventListener('input',e=>{
   // 調字級時保持目前閱讀位置
-  if(k==='size'){const r=sc.scrollTop/Math.max(1,sc.scrollHeight);setS(k,+e.target.value);sc.scrollTop=pos=r*sc.scrollHeight}
+  if(k==='size'||k==='lh'||k==='ls'){const r=sc.scrollTop/Math.max(1,sc.scrollHeight);setS(k,+e.target.value);sc.scrollTop=pos=r*sc.scrollHeight}
   else setS(k,+e.target.value);
 }));
 $('alignSeg').onclick=e=>{const b=e.target.closest('button');if(b)setS('align',b.dataset.a)};
