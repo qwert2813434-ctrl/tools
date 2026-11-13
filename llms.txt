@@ -41,6 +41,7 @@
 
 ## 研究
 
+- [R-12 自製日語旅遊口譯 App：為什麼比較準](https://tools.arminkao.com/research/travel-translator.html)：iPhone 日語旅遊口譯，錄音直接交給 Gemini 一次做完聽寫＋整理、行程寫進提示詞；附四段提示詞、畫面規格、技術配方與建置骨架，關西七天實用。純文字版：https://tools.arminkao.com/research/travel-translator.md （有「給 AI Agent」段）
 - [R-11 留言關鍵字自動私訊：用 Meta 官方 API 自建](https://tools.arminkao.com/research/ig-comment-autodm.html)：IG 留言關鍵字自動私訊連結，Meta 官方 Private Replies＋Cloudflare Workers 自建、取代 ManyChat；按鈕範本把連結按鈕綁進對話框；附建置骨架。完整施工圖與驗收表為免費會員內容（登入才看）。純文字版：https://tools.arminkao.com/research/ig-comment-autodm.md （有「給 AI Agent」段）
 - [R-10 讓 AI 自己學：一條迴圈的頭和尾](https://tools.arminkao.com/research/ai-learning-loop.html)：讓 AI 被糾正過的事不再犯——學習迴圈的觸發、做、對答案、誰看；語音辭典自動升級實測、角色分工卡在審核的實話，附幫使用者建學習迴圈的步驟與三情境驗收。純文字版：https://tools.arminkao.com/research/ai-learning-loop.md （有「給 AI Agent」段）
 - [R-09 用說的跟 AI 工作：Typeless 真的強，自己蓋的差在清稿](https://tools.arminkao.com/research/voice-input-typeless.html)：Mac 語音輸入繁中，Typeless 與自架 Whisper 的轉文字、清稿秒數對照。純文字版：https://tools.arminkao.com/research/voice-input-typeless.md （有「給 AI Agent」段）
