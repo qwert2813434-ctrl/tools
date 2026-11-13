@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>提詞器</title>
+<style>
+:root{--bg:#0b0b0c;--panel:#17171a;--line:#2a2a2f;--fg:#f4f4f5;--mute:#8b8b93;--acc:#ffcc33;--red:#ff5a4f}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);font-family:-apple-system,"PingFang TC","Noto Sans TC",system-ui,sans-serif;overflow:hidden}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.hidden{display:none!important}
+
+/* ---------- 專案列表 ---------- */
+#home{position:fixed;inset:0;overflow:auto;padding:calc(env(safe-area-inset-top) + 28px) 24px calc(env(safe-area-inset-bottom) + 40px)}
+.hhead{display:flex;align-items:center;justify-content:space-between;max-width:980px;margin:0 auto 24px}
+.hhead h1{font-size:30px;margin:0;letter-spacing:.02em}
+.btn{background:var(--acc);color:#111;font-weight:700;padding:12px 20px;border-radius:12px;font-size:16px}
+.grid{max-width:980px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px;min-height:170px}
+.card .t{font-size:19px;font-weight:700;word-break:break-all}
+.card .p{color:var(--mute);font-size:14px;line-height:1.5;flex:1;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+.card .row{display:flex;gap:8px;align-items:center}
+.card .row .d{color:var(--mute);font-size:12px;flex:1}
+.mini{padding:8px 12px;border-radius:10px;background:#26262b;font-size:14px}
+.mini.open{background:var(--acc);color:#111;font-weight:700}
+.empty{text-align:center;color:var(--mute);padding:80px 0;grid-column:1/-1;font-size:17px}
+
+/* ---------- 提詞畫面 ---------- */
+#stage{position:fixed;inset:0;background:#000}
+#scroller{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+#scroller::-webkit-scrollbar{display:none}
+#text{min-height:100%;padding:45vh var(--margin,8%) 100vh;outline:none;white-space:pre-wrap;word-break:break-word;line-height:1.45;font-weight:600;color:#fff;font-size:var(--fs,64px);text-align:var(--align,left);caret-color:var(--acc)}
+#text.mirror{transform:scaleX(-1)}
+#text.mirrorV{transform:scaleY(-1)}
+#text.mirror.mirrorV{transform:scale(-1,-1)}
+#text:empty:before{content:"點這裡開始打字…";color:#555}
+#guide{position:absolute;left:0;right:0;top:var(--gy,38%);height:0;border-top:2px solid rgba(255,204,51,.55);pointer-events:none}
+#guide:before,#guide:after{content:"";position:absolute;top:-10px;border:9px solid transparent}
+#guide:before{left:0;border-left-color:var(--acc)}
+#guide:after{right:0;border-right-color:var(--acc)}
+#fadeTop{position:absolute;left:0;right:0;top:0;height:18%;background:linear-gradient(#000,transparent);pointer-events:none}
+
+#topbar{position:absolute;left:0;right:0;top:0;display:flex;align-items:center;gap:10px;padding:calc(env(safe-area-inset-top) + 10px) 16px 10px;background:linear-gradient(rgba(0,0,0,.85),transparent);transition:opacity .25s}
+#topbar input{flex:1;background:transparent;border:0;color:var(--fg);font:inherit;font-size:18px;font-weight:700;outline:none;min-width:0}
+.tb{padding:9px 14px;border-radius:10px;background:rgba(255,255,255,.1);font-size:15px;white-space:nowrap}
+#saved{color:var(--mute);font-size:12px}
+
+#tools{position:absolute;left:0;right:0;bottom:0;background:rgba(18,18,21,.96);border-top:1px solid var(--line);padding:12px 16px calc(env(safe-area-inset-bottom) + 12px);transition:transform .25s,opacity .25s;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.trow{display:flex;align-items:center;gap:12px;max-width:1100px;margin:0 auto}
+.trow+.trow{margin-top:12px}
+#play{width:64px;height:64px;border-radius:50%;background:var(--acc);color:#111;font-size:26px;flex:none;display:flex;align-items:center;justify-content:center}
+#play.on{background:var(--red);color:#fff}
+.sl{flex:1;display:flex;align-items:center;gap:8px;min-width:0}
+.sl .ic{font-size:20px;flex:none;width:26px;text-align:center}
+.sl .lab{font-size:11px;color:var(--mute);position:absolute;margin-top:-34px}
+.slw{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
+.slw .cap{display:flex;justify-content:space-between;font-size:12px;color:var(--mute)}
+.slw .cap b{color:var(--fg);font-weight:600}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:34px;background:transparent}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:#34343a}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:#fff;margin-top:-11px;box-shadow:0 1px 4px rgba(0,0,0,.5)}
+input[type=range]::-moz-range-track{height:6px;border-radius:3px;background:#34343a}
+input[type=range]::-moz-range-thumb{width:28px;height:28px;border-radius:50%;background:#fff;border:0}
+.seg{display:flex;background:#26262b;border-radius:10px;padding:3px;flex:none}
+.seg button{padding:8px 12px;border-radius:8px;font-size:14px;color:var(--mute)}
+.seg button.on{background:#3d3d44;color:#fff}
+.tg{padding:10px 12px;border-radius:10px;background:#26262b;font-size:14px;color:var(--mute);flex:none}
+.tg.on{background:#3d3d44;color:var(--acc)}
+.sp{flex:1}
+
+/* 播放時收起 */
+#stage.playing #tools{transform:translateY(100%);opacity:0;pointer-events:none}
+#stage.playing #topbar{opacity:0;pointer-events:none}
+#hint{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom) + 18px);transform:translateX(-50%);background:rgba(0,0,0,.6);color:#aaa;font-size:13px;padding:6px 12px;border-radius:20px;pointer-events:none;opacity:0;transition:opacity .4s}
+#stage.playing #hint{opacity:1}
+
+#count{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:180px;font-weight:800;color:var(--acc);background:rgba(0,0,0,.5);pointer-events:none}
+
+/* 對話框 */
+#modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
+.mbox{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px;width:min(420px,100%)}
+.mbox h3{margin:0 0 14px;font-size:19px}
+.mbox input{width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:#0e0e10;color:var(--fg);font:inherit;font-size:17px;outline:none}
+.mbox .act{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
+.mbox .danger{background:var(--red);color:#fff}
+
+@media (max-width:760px){
+  .trow.r2{flex-wrap:wrap}
+  .trow.r2 .sp{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- 專案列表 -->
+<section id="home">
+  <div class="hhead">
+    <h1>提詞器專案</h1>
+    <button class="btn" id="newBtn">＋ 新增專案</button>
+  </div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<!-- 提詞畫面 -->
+<section id="stage" class="hidden">
+  <div id="scroller"><div id="text" spellcheck="false"></div></div>
+  <div id="fadeTop"></div>
+  <div id="guide"></div>
+
+  <div id="topbar">
+    <button class="tb" id="backBtn">‹ 專案</button>
+    <input id="title" maxlength="60">
+    <span id="saved"></span>
+    <button class="tb" id="fsBtn">全螢幕</button>
+  </div>
+
+  <div id="tools">
+    <div class="trow">
+      <button id="play" aria-label="播放">▶</button>
+      <div class="slw">
+        <div class="cap"><span>🐢 速度</span><b id="vSpeed"></b><span>🐇</span></div>
+        <input type="range" id="speed" min="1" max="100" step="1">
+      </div>
+      <div class="slw">
+        <div class="cap"><span>字小</span><b id="vSize"></b><span>字大</span></div>
+        <input type="range" id="size" min="24" max="200" step="2">
+      </div>
+      <div class="slw">
+        <div class="cap"><span>寬</span><b id="vMargin"></b><span>窄（往中間收）</span></div>
+        <input type="range" id="margin" min="2" max="35" step="1">
+      </div>
+    </div>
+    <div class="trow r2">
+      <div class="seg" id="alignSeg">
+        <button data-a="left">靠左</button>
+        <button data-a="center">置中</button>
+        <button data-a="right">靠右</button>
+      </div>
+      <button class="tg" id="mirrorBtn">左右鏡像</button>
+      <button class="tg" id="flipBtn">上下翻轉</button>
+      <button class="tg" id="guideBtn">閱讀線</button>
+      <button class="tg" id="cdBtn">倒數 3 秒</button>
+      <span class="sp"></span>
+      <button class="tg" id="topBtn">⤒ 回到開頭</button>
+    </div>
+  </div>
+  <div id="hint">點畫面暫停 ・ 上下滑動可微調位置</div>
+  <div id="count" class="hidden"></div>
+</section>
+
+<div id="modal" class="hidden"><div class="mbox" id="mbox"></div></div>
+
+<script>
+(function(){
+const KEY='passer-prompter-v1';
+let mem=null;
+function load(){try{const s=localStorage.getItem(KEY);if(s)return JSON.parse(s)}catch(e){}return mem||{projects:[]}}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){mem=db}}
+let db=load();
+const DEF={speed:30,size:72,margin:8,align:'left',mirror:false,flip:false,guide:true,countdown:true};
+const $=id=>document.getElementById(id);
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let cur=null;
+
+/* ---------- 專案列表 ---------- */
+function fmt(t){const d=new Date(t);return (d.getMonth()+1)+'/'+d.getDate()+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')}
+function renderHome(){
+  const g=$('grid');
+  const list=[...db.projects].sort((a,b)=>b.updated-a.updated);
+  if(!list.length){g.innerHTML='<div class="empty">還沒有專案，按右上角「＋ 新增專案」開始</div>';return}
+  g.innerHTML=list.map(p=>`<div class="card">
+    <div class="t">${esc(p.name||'未命名')}</div>
+    <div class="p">${esc((p.text||'').slice(0,160))||'（空白稿）'}</div>
+    <div class="row"><span class="d">${fmt(p.updated)} ・ ${(p.text||'').replace(/\s/g,'').length} 字</span>
+      <button class="mini" data-act="ren" data-id="${p.id}">改名</button>
+      <button class="mini" data-act="dup" data-id="${p.id}">複製</button>
+      <button class="mini" data-act="del" data-id="${p.id}">刪除</button>
+      <button class="mini open" data-act="open" data-id="${p.id}">開啟</button></div>
+  </div>`).join('');
+}
+$('grid').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  const p=db.projects.find(x=>x.id===b.dataset.id);if(!p)return;
+  const a=b.dataset.act;
+  if(a==='open')openProject(p.id);
+  if(a==='ren')ask('專案名稱',p.name,v=>{p.name=v||p.name;p.updated=Date.now();persist();renderHome()});
+  if(a==='dup'){const n=JSON.parse(JSON.stringify(p));n.id=uid();n.name=p.name+' 副本';n.updated=Date.now();db.projects.push(n);persist();renderHome()}
+  if(a==='del')confirmBox('刪除「'+p.name+'」？','刪除後無法復原。',()=>{db.projects=db.projects.filter(x=>x.id!==p.id);persist();renderHome()});
+});
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+$('newBtn').onclick=()=>ask('新專案名稱','',v=>{
+  const p={id:uid(),name:v||'未命名專案',text:'',updated:Date.now(),s:{...DEF}};
+  db.projects.push(p);persist();openProject(p.id);
+});
+
+/* ---------- 對話框 ---------- */
+function closeModal(){$('modal').classList.add('hidden')}
+function ask(title,val,cb){
+  $('mbox').innerHTML=`<h3>${esc(title)}</h3><input id="mIn" value="${esc(val||'')}" placeholder="例如：品牌形象片 口白"><div class="act"><button class="mini" id="mNo">取消</button><button class="mini open" id="mOk">確定</button></div>`;
+  $('modal').classList.remove('hidden');
+  const i=$('mIn');setTimeout(()=>i.focus(),50);
+  const ok=()=>{closeModal();cb(i.value.trim())};
+  $('mOk').onclick=ok;$('mNo').onclick=closeModal;
+  i.onkeydown=e=>{if(e.key==='Enter')ok();if(e.key==='Escape')closeModal()};
+}
+function confirmBox(title,msg,cb){
+  $('mbox').innerHTML=`<h3>${esc(title)}</h3><div style="color:var(--mute)">${esc(msg)}</div><div class="act"><button class="mini" id="mNo">取消</button><button class="mini danger" id="mOk">刪除</button></div>`;
+  $('modal').classList.remove('hidden');
+  $('mOk').onclick=()=>{closeModal();cb()};$('mNo').onclick=closeModal;
+}
+
+/* ---------- 提詞畫面 ---------- */
+const text=$('text'),sc=$('scroller'),stage=$('stage');
+try{text.contentEditable='plaintext-only';if(text.contentEditable!=='plaintext-only')throw 0}catch(e){text.contentEditable='true'}
+text.addEventListener('paste',e=>{
+  if(text.contentEditable==='plaintext-only')return;
+  e.preventDefault();const t=(e.clipboardData||window.clipboardData).getData('text/plain');
+  document.execCommand('insertText',false,t);
+});
+
+function openProject(id){
+  cur=db.projects.find(p=>p.id===id);if(!cur)return;
+  cur.s={...DEF,...(cur.s||{})};
+  text.textContent=cur.text||'';
+  $('title').value=cur.name;
+  $('home').classList.add('hidden');stage.classList.remove('hidden');
+  applySettings();sc.scrollTop=0;pos=0;
+  location.hash='p-'+id;
+  if(!cur.text)setTimeout(()=>text.focus(),100);
+}
+function back(){
+  stop();saveNow();cur=null;
+  stage.classList.add('hidden');$('home').classList.remove('hidden');
+  history.replaceState(null,'',location.pathname+location.search);
+  renderHome();
+}
+$('backBtn').onclick=back;
+
+let saveT=null;
+function saveNow(){if(!cur)return;cur.text=text.innerText.replace(/\n$/,'');cur.name=$('title').value.trim()||cur.name;cur.updated=Date.now();persist();$('saved').textContent='已儲存'}
+function saveSoon(){$('saved').textContent='編輯中…';clearTimeout(saveT);saveT=setTimeout(saveNow,600)}
+text.addEventListener('input',saveSoon);
+$('title').addEventListener('input',saveSoon);
+
+/* 設定 */
+function applySettings(){
+  const s=cur.s;
+  $('speed').value=s.speed;$('size').value=s.size;$('margin').value=s.margin;
+  $('vSpeed').textContent=s.speed;$('vSize').textContent=s.size+'px';$('vMargin').textContent=s.margin+'%';
+  text.style.setProperty('--fs',s.size+'px');
+  text.style.setProperty('--margin',s.margin+'%');
+  text.style.setProperty('--align',s.align);
+  text.classList.toggle('mirror',s.mirror);text.classList.toggle('mirrorV',s.flip);
+  $('guide').classList.toggle('hidden',!s.guide);
+  [...$('alignSeg').children].forEach(b=>b.classList.toggle('on',b.dataset.a===s.align));
+  $('mirrorBtn').classList.toggle('on',s.mirror);$('flipBtn').classList.toggle('on',s.flip);
+  $('guideBtn').classList.toggle('on',s.guide);$('cdBtn').classList.toggle('on',s.countdown);
+}
+function setS(k,v){cur.s[k]=v;applySettings();persist()}
+['speed','size','margin'].forEach(k=>$(k).addEventListener('input',e=>{
+  // 調字級時保持目前閱讀位置
+  if(k==='size'){const r=sc.scrollTop/Math.max(1,sc.scrollHeight);setS(k,+e.target.value);sc.scrollTop=pos=r*sc.scrollHeight}
+  else setS(k,+e.target.value);
+}));
+$('alignSeg').onclick=e=>{const b=e.target.closest('button');if(b)setS('align',b.dataset.a)};
+$('mirrorBtn').onclick=()=>setS('mirror',!cur.s.mirror);
+$('flipBtn').onclick=()=>setS('flip',!cur.s.flip);
+$('guideBtn').onclick=()=>setS('guide',!cur.s.guide);
+$('cdBtn').onclick=()=>setS('countdown',!cur.s.countdown);
+$('topBtn').onclick=()=>{sc.scrollTop=0;pos=0};
+
+/* 播放 */
+let playing=false,raf=0,last=0,pos=0,cdT=null;
+function pxPerSec(){const v=cur.s.speed;return 4+v*v*0.035+v*1.2} // 1→~5px/s, 100→~474px/s，慢速段更細
+function tick(t){
+  if(!playing)return;
+  const dt=Math.min(0.1,(t-last)/1000);last=t;
+  if(Math.abs(sc.scrollTop-pos)>3)pos=sc.scrollTop; // 使用者手動滑過
+  pos+=pxPerSec()*dt;
+  const max=sc.scrollHeight-sc.clientHeight;
+  if(pos>=max){pos=max;sc.scrollTop=pos;stop();return}
+  sc.scrollTop=pos;
+  raf=requestAnimationFrame(tick);
+}
+function start(){
+  if(!cur)return;saveNow();
+  text.contentEditable='false';text.blur();
+  stage.classList.add('playing');$('play').classList.add('on');$('play').textContent='❚❚';
+  const go=()=>{playing=true;pos=sc.scrollTop;last=performance.now();raf=requestAnimationFrame(tick)};
+  if(cur.s.countdown){
+    let n=3;const c=$('count');c.textContent=n;c.classList.remove('hidden');
+    cdT=setInterval(()=>{n--;if(n<=0){clearInterval(cdT);cdT=null;c.classList.add('hidden');go()}else c.textContent=n},800);
+  }else go();
+}
+function stop(){
+  playing=false;cancelAnimationFrame(raf);
+  if(cdT){clearInterval(cdT);cdT=null;$('count').classList.add('hidden')}
+  stage.classList.remove('playing');$('play').classList.remove('on');$('play').textContent='▶';
+  try{text.contentEditable='plaintext-only';if(text.contentEditable!=='plaintext-only')throw 0}catch(e){text.contentEditable='true'}
+}
+$('play').onclick=()=>{(playing||cdT)?stop():start()};
+// 播放中點畫面 = 暫停
+sc.addEventListener('click',()=>{if(playing||cdT)stop()});
+
+/* 鍵盤（外接鍵盤 / 藍牙翻頁器） */
+document.addEventListener('keydown',e=>{
+  if(stage.classList.contains('hidden'))return;
+  const editing=document.activeElement===text||document.activeElement===$('title');
+  if(editing&&!playing){if(e.key==='Escape')text.blur();return}
+  if(e.key===' '||e.key==='Enter'){e.preventDefault();(playing||cdT)?stop():start()}
+  if(e.key==='ArrowUp'){e.preventDefault();const v=Math.min(100,cur.s.speed+3);setS('speed',v)}
+  if(e.key==='ArrowDown'){e.preventDefault();const v=Math.max(1,cur.s.speed-3);setS('speed',v)}
+  if(e.key==='PageDown'||e.key==='ArrowRight'){e.preventDefault();sc.scrollTop+=sc.clientHeight*.5;pos=sc.scrollTop}
+  if(e.key==='PageUp'||e.key==='ArrowLeft'){e.preventDefault();sc.scrollTop-=sc.clientHeight*.5;pos=sc.scrollTop}
+});
+
+/* 全螢幕 */
+$('fsBtn').onclick=()=>{
+  const el=document.documentElement;
+  try{
+    if(document.fullscreenElement||document.webkitFullscreenElement){(document.exitFullscreen||document.webkitExitFullscreen).call(document)}
+    else{const f=el.requestFullscreen||el.webkitRequestFullscreen;const r=f&&f.call(el);if(r&&r.catch)r.catch(()=>{})}
+  }catch(e){}
+};
+
+window.addEventListener('pagehide',saveNow);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)saveNow()});
+
+/* 啟動 */
+if(!db.projects.length){
+  db.projects.push({id:uid(),name:'範例稿',updated:Date.now(),s:{...DEF},text:'歡迎使用提詞器。\n\n直接點這段文字就能編輯，打字、貼上都可以，會自動儲存。\n\n下方工具列：\n🐢🐇 拉桿調整滾動速度\n字小／字大 調整字級\n寬／窄 把字往畫面中間收\n\n按黃色播放鍵開始，播放中點一下畫面就暫停。\n\n架在鏡子提詞器上時，打開「左右鏡像」。'});
+  persist();
+}
+renderHome();
+const h=location.hash.match(/^#p-(.+)$/);if(h&&db.projects.find(p=>p.id===h[1]))openProject(h[1]);
+})();
+</script>
+</body>
+</html>
