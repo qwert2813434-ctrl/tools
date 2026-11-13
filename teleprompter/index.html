@@ -24,7 +24,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .card .p{color:var(--mute);font-size:14px;line-height:1.5;flex:1;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
 .card .row{display:flex;gap:8px;align-items:center}
 .card .row .d{color:var(--mute);font-size:12px;flex:1}
-.mini{padding:8px 12px;border-radius:10px;background:#26262b;font-size:14px}
+.mini{min-height:44px;padding:10px 14px;border-radius:10px;background:#26262b;font-size:14px}
 .mini.open{background:var(--acc);color:#111;font-weight:700}
 .empty{text-align:center;color:var(--mute);padding:80px 0;grid-column:1/-1;font-size:17px}
 
@@ -45,7 +45,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 #topbar{position:absolute;left:0;right:0;top:0;display:flex;align-items:center;gap:10px;padding:calc(env(safe-area-inset-top) + 10px) 16px 10px;background:linear-gradient(rgba(0,0,0,.85),transparent);transition:opacity .25s}
 #topbar input{flex:1;background:transparent;border:0;color:var(--fg);font:inherit;font-size:18px;font-weight:700;outline:none;min-width:0}
-.tb{padding:9px 14px;border-radius:10px;background:rgba(255,255,255,.1);font-size:15px;white-space:nowrap}
+.tb{min-height:48px;padding:12px 16px;border-radius:12px;background:rgba(255,255,255,.1);font-size:15px;white-space:nowrap}
 #saved{color:var(--mute);font-size:12px}
 
 #tools{position:absolute;left:0;right:0;bottom:0;background:rgba(18,18,21,.96);border-top:1px solid var(--line);padding:12px 16px calc(env(safe-area-inset-bottom) + 12px);transition:transform .25s,opacity .25s;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
@@ -57,17 +57,17 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .sl .ic{font-size:20px;flex:none;width:26px;text-align:center}
 .sl .lab{font-size:11px;color:var(--mute);position:absolute;margin-top:-34px}
 .slw{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
-.slw .cap{display:flex;justify-content:space-between;font-size:12px;color:var(--mute)}
-.slw .cap b{color:var(--fg);font-weight:600}
-input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:34px;background:transparent}
-input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:#34343a}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:#fff;margin-top:-11px;box-shadow:0 1px 4px rgba(0,0,0,.5)}
-input[type=range]::-moz-range-track{height:6px;border-radius:3px;background:#34343a}
-input[type=range]::-moz-range-thumb{width:28px;height:28px;border-radius:50%;background:#fff;border:0}
+.slw .cap{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;color:var(--mute)}
+.slw .cap b{color:var(--fg);font-weight:600;font-size:16px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:44px;background:transparent}
+input[type=range]::-webkit-slider-runnable-track{height:8px;border-radius:4px;background:#34343a}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:36px;height:36px;border-radius:50%;background:#fff;margin-top:-14px;box-shadow:0 1px 4px rgba(0,0,0,.5)}
+input[type=range]::-moz-range-track{height:8px;border-radius:4px;background:#34343a}
+input[type=range]::-moz-range-thumb{width:36px;height:36px;border-radius:50%;background:#fff;border:0}
 .seg{display:flex;background:#26262b;border-radius:10px;padding:3px;flex:none}
-.seg button{padding:8px 12px;border-radius:8px;font-size:14px;color:var(--mute)}
+.seg button{min-height:44px;padding:10px 14px;border-radius:8px;font-size:15px;color:var(--mute)}
 .seg button.on{background:#3d3d44;color:#fff}
-.tg{padding:10px 12px;border-radius:10px;background:#26262b;font-size:14px;color:var(--mute);flex:none}
+.tg{min-height:48px;padding:12px 14px;border-radius:12px;background:#26262b;font-size:15px;color:var(--mute);flex:none}
 .tg.on{background:#3d3d44;color:var(--acc)}
 .sp{flex:1}
 
@@ -76,6 +76,12 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px;border-radius:50%;bac
 #stage.playing #topbar{opacity:0;pointer-events:none}
 #hint{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom) + 18px);transform:translateX(-50%);background:rgba(0,0,0,.6);color:#aaa;font-size:13px;padding:6px 12px;border-radius:20px;pointer-events:none;opacity:0;transition:opacity .4s}
 #stage.playing #hint{opacity:1}
+/* 播放中調速 */
+#live{position:absolute;right:calc(env(safe-area-inset-right) + 12px);top:50%;transform:translateY(-50%);display:none;flex-direction:column;align-items:center;gap:10px;opacity:.35;transition:opacity .2s}
+#stage.playing #live{display:flex}
+#live.touch{opacity:1}
+#live button{width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.16);font-size:30px;line-height:1;color:#fff}
+#live b{font-size:13px;font-weight:600;color:#fff;text-align:center;line-height:1.3}
 
 #count{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:180px;font-weight:800;color:var(--acc);background:rgba(0,0,0,.5);pointer-events:none}
 
@@ -119,10 +125,10 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px;border-radius:50%;bac
 
   <div id="tools">
     <div class="trow">
-      <button id="play" aria-label="播放">▶</button>
+      <button id="play" aria-label="播放"></button>
       <div class="slw">
-        <div class="cap"><span>🐢 速度</span><b id="vSpeed"></b><span>🐇</span></div>
-        <input type="range" id="speed" min="1" max="100" step="1">
+        <div class="cap"><span>速度 慢</span><b id="vCpm"></b><span>快</span></div>
+        <input type="range" id="cpm" min="100" max="500" step="10">
       </div>
       <div class="slw">
         <div class="cap"><span>字小</span><b id="vSize"></b><span>字大</span></div>
@@ -154,9 +160,10 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px;border-radius:50%;bac
       <button class="tg" id="guideBtn">閱讀線</button>
       <button class="tg" id="cdBtn">倒數 3 秒</button>
       <span class="sp"></span>
-      <button class="tg" id="topBtn">⤒ 回到開頭</button>
+      <button class="tg" id="topBtn">回到開頭</button>
     </div>
   </div>
+  <div id="live"><button id="spUp" aria-label="加快">+</button><b id="vLive"></b><button id="spDn" aria-label="放慢">−</button></div>
   <div id="hint">點畫面暫停 ・ 上下滑動可微調位置</div>
   <div id="count" class="hidden"></div>
 </section>
@@ -170,8 +177,10 @@ let mem=null;
 function load(){try{const s=localStorage.getItem(KEY);if(s)return JSON.parse(s)}catch(e){}return mem||{projects:[]}}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){mem=db}}
 let db=load();
-const DEF={speed:30,size:72,margin:8,align:'left',mirror:false,flip:false,guide:true,countdown:true,lh:1.45,ls:0};
+const DEF={cpm:260,size:72,margin:8,align:'left',mirror:false,flip:false,guide:true,countdown:true,lh:1.45,ls:0};
 const $=id=>document.getElementById(id);
+const IC_PLAY='<svg viewBox="0 0 24 24" width="28" height="28"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>';
+const IC_PAUSE='<svg viewBox="0 0 24 24" width="28" height="28"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/></svg>';
 const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let cur=null;
 
@@ -237,7 +246,7 @@ function openProject(id){
   text.textContent=cur.text||'';
   $('title').value=cur.name;
   $('home').classList.add('hidden');stage.classList.remove('hidden');
-  applySettings();sc.scrollTop=0;pos=0;
+  applySettings();sc.scrollTop=cur.at||0;pos=sc.scrollTop;
   location.hash='p-'+id;
   if(!cur.text)setTimeout(()=>text.focus(),100);
 }
@@ -250,7 +259,7 @@ function back(){
 $('backBtn').onclick=back;
 
 let saveT=null;
-function saveNow(){if(!cur)return;cur.text=text.innerText.replace(/\n$/,'');cur.name=$('title').value.trim()||cur.name;cur.updated=Date.now();persist();$('saved').textContent='已儲存'}
+function saveNow(){if(!cur)return;if(!stage.classList.contains('hidden'))cur.at=Math.round(sc.scrollTop);cur.text=text.innerText.replace(/\n$/,'');cur.name=$('title').value.trim()||cur.name;cur.updated=Date.now();persist();$('saved').textContent='已儲存'}
 function saveSoon(){$('saved').textContent='編輯中…';clearTimeout(saveT);saveT=setTimeout(saveNow,600)}
 text.addEventListener('input',saveSoon);
 $('title').addEventListener('input',saveSoon);
@@ -258,8 +267,8 @@ $('title').addEventListener('input',saveSoon);
 /* 設定 */
 function applySettings(){
   const s=cur.s;
-  $('speed').value=s.speed;$('size').value=s.size;$('margin').value=s.margin;
-  $('vSpeed').textContent=s.speed;$('vSize').textContent=s.size+'px';$('vMargin').textContent=s.margin+'%';
+  $('cpm').value=s.cpm;$('size').value=s.size;$('margin').value=s.margin;
+  $('vCpm').textContent=s.cpm+' 字/分';$('vLive').innerHTML=s.cpm+'<br>字/分';$('vSize').textContent=s.size+'px';$('vMargin').textContent=s.margin+'%';
   $('lh').value=s.lh;$('ls').value=s.ls;
   $('vLh').textContent=(+s.lh).toFixed(2);$('vLs').textContent=(+s.ls).toFixed(2);
   text.style.setProperty('--lh',s.lh);text.style.setProperty('--ls',s.ls+'em');
@@ -273,7 +282,7 @@ function applySettings(){
   $('guideBtn').classList.toggle('on',s.guide);$('cdBtn').classList.toggle('on',s.countdown);
 }
 function setS(k,v){cur.s[k]=v;applySettings();persist()}
-['speed','size','margin','lh','ls'].forEach(k=>$(k).addEventListener('input',e=>{
+['cpm','size','margin','lh','ls'].forEach(k=>$(k).addEventListener('input',e=>{
   // 調字級時保持目前閱讀位置
   if(k==='size'||k==='lh'||k==='ls'){const r=sc.scrollTop/Math.max(1,sc.scrollHeight);setS(k,+e.target.value);sc.scrollTop=pos=r*sc.scrollHeight}
   else setS(k,+e.target.value);
@@ -287,7 +296,17 @@ $('topBtn').onclick=()=>{sc.scrollTop=0;pos=0};
 
 /* 播放 */
 let playing=false,raf=0,last=0,pos=0,cdT=null;
-function pxPerSec(){const v=cur.s.speed;return 4+v*v*0.035+v*1.2} // 1→~5px/s, 100→~474px/s，慢速段更細
+// 每分鐘字數 → 每秒捲動像素：一行高 ÷ 一行字數 × 每秒字數
+function pxPerSec(){
+  const s=cur.s,w=text.clientWidth*(1-2*s.margin/100);
+  const cpl=Math.max(1,w/(s.size*(1+s.ls)));
+  return s.cpm/60*s.size*s.lh/cpl;
+}
+function bump(d){setS('cpm',Math.min(500,Math.max(100,cur.s.cpm+d)))}
+/* 播放中螢幕常亮 */
+let wl=null;
+async function lockOn(){try{if(!wl&&'wakeLock' in navigator){wl=await navigator.wakeLock.request('screen');wl.addEventListener('release',()=>{wl=null})}}catch(e){}}
+function lockOff(){if(wl){wl.release().catch(()=>{});wl=null}}
 function tick(t){
   if(!playing)return;
   const dt=Math.min(0.1,(t-last)/1000);last=t;
@@ -301,9 +320,9 @@ function tick(t){
 function start(){
   if(!cur)return;saveNow();
   text.contentEditable='false';text.blur();
-  stage.classList.add('playing');$('play').classList.add('on');$('play').textContent='❚❚';
+  stage.classList.add('playing');$('play').classList.add('on');$('play').innerHTML=IC_PAUSE;lockOn();
   const go=()=>{playing=true;pos=sc.scrollTop;last=performance.now();raf=requestAnimationFrame(tick)};
-  if(cur.s.countdown){
+  if(cur.s.countdown&&sc.scrollTop<20){
     let n=3;const c=$('count');c.textContent=n;c.classList.remove('hidden');
     cdT=setInterval(()=>{n--;if(n<=0){clearInterval(cdT);cdT=null;c.classList.add('hidden');go()}else c.textContent=n},800);
   }else go();
@@ -311,12 +330,16 @@ function start(){
 function stop(){
   playing=false;cancelAnimationFrame(raf);
   if(cdT){clearInterval(cdT);cdT=null;$('count').classList.add('hidden')}
-  stage.classList.remove('playing');$('play').classList.remove('on');$('play').textContent='▶';
+  stage.classList.remove('playing');$('play').classList.remove('on');$('play').innerHTML=IC_PLAY;lockOff();
   try{text.contentEditable='plaintext-only';if(text.contentEditable!=='plaintext-only')throw 0}catch(e){text.contentEditable='true'}
+  saveNow();
 }
 $('play').onclick=()=>{(playing||cdT)?stop():start()};
 // 播放中點畫面 = 暫停
 sc.addEventListener('click',()=>{if(playing||cdT)stop()});
+let liveT=null;
+function liveTap(d){bump(d);$('live').classList.add('touch');clearTimeout(liveT);liveT=setTimeout(()=>$('live').classList.remove('touch'),1500)}
+$('spUp').onclick=()=>liveTap(10);$('spDn').onclick=()=>liveTap(-10);
 
 /* 鍵盤（外接鍵盤 / 藍牙翻頁器） */
 document.addEventListener('keydown',e=>{
@@ -324,8 +347,8 @@ document.addEventListener('keydown',e=>{
   const editing=document.activeElement===text||document.activeElement===$('title');
   if(editing&&!playing){if(e.key==='Escape')text.blur();return}
   if(e.key===' '||e.key==='Enter'){e.preventDefault();(playing||cdT)?stop():start()}
-  if(e.key==='ArrowUp'){e.preventDefault();const v=Math.min(100,cur.s.speed+3);setS('speed',v)}
-  if(e.key==='ArrowDown'){e.preventDefault();const v=Math.max(1,cur.s.speed-3);setS('speed',v)}
+  if(e.key==='ArrowUp'){e.preventDefault();bump(10)}
+  if(e.key==='ArrowDown'){e.preventDefault();bump(-10)}
   if(e.key==='PageDown'||e.key==='ArrowRight'){e.preventDefault();sc.scrollTop+=sc.clientHeight*.5;pos=sc.scrollTop}
   if(e.key==='PageUp'||e.key==='ArrowLeft'){e.preventDefault();sc.scrollTop-=sc.clientHeight*.5;pos=sc.scrollTop}
 });
@@ -340,13 +363,14 @@ $('fsBtn').onclick=()=>{
 };
 
 window.addEventListener('pagehide',saveNow);
-document.addEventListener('visibilitychange',()=>{if(document.hidden)saveNow()});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)saveNow();else if(playing||cdT)lockOn()});
 
 /* 啟動 */
 if(!db.projects.length){
-  db.projects.push({id:uid(),name:'範例稿',updated:Date.now(),s:{...DEF},text:'歡迎使用提詞器。\n\n直接點這段文字就能編輯，打字、貼上都可以，會自動儲存。\n\n下方工具列：\n🐢🐇 拉桿調整滾動速度\n字小／字大 調整字級\n寬／窄 把字往畫面中間收\n\n按黃色播放鍵開始，播放中點一下畫面就暫停。\n\n架在鏡子提詞器上時，打開「左右鏡像」。'});
+  db.projects.push({id:uid(),name:'範例稿',updated:Date.now(),s:{...DEF},text:'歡迎使用提詞器。\n\n直接點這段文字就能編輯，打字、貼上都可以，會自動儲存。\n\n下方工具列：\n速度 慢／快 拉桿調整每分鐘念幾個字\n字小／字大 調整字級\n寬／窄 把字往畫面中間收\n\n按黃色播放鍵開始，播放中點一下畫面就暫停。\n\n架在鏡子提詞器上時，打開「左右鏡像」。'});
   persist();
 }
+$('play').innerHTML=IC_PLAY;
 renderHome();
 const h=location.hash.match(/^#p-(.+)$/);if(h&&db.projects.find(p=>p.id===h[1]))openProject(h[1]);
 })();
