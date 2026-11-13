@@ -68,6 +68,7 @@
 
 ## 網頁工具（免安裝，在瀏覽器裡用）
 
+- [提詞器](https://tools.arminkao.com/teleprompter/)：iPad／手機網頁提詞器，速度以每分鐘字數設定，鏡像、閱讀線、倒數；稿子只存在本機，可加入主畫面離線使用。
 - [濾鏡工坊](https://tools.arminkao.com/filter-lab.html)：照片轉孔版印刷（Risograph）質感，分色、過網、疊印。
 - [幾何 icon 工坊](https://tools.arminkao.com/geo-icon.html)：在格點上做對齊像素的幾何 icon，支援旋轉複製。
 - [隱形 QR 產生器](https://tools.arminkao.com/invisible-qr.html)：人眼找不到、相機掃得到的動態 QR 視覺。
